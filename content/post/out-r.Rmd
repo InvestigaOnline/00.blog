@@ -1,0 +1,267 @@
+---
+title: "outliers con R"
+author: "Roberto Gil Saura"
+date: "2020-08-25"
+slug: outliers
+categories:
+  - analisis
+  - R
+tags:
+  - outliers
+  - atipicos
+  - grubbs
+  - dixon
+  - hampel
+  - rosner
+  - cuantiles
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+
+```{r setup, include=FALSE}
+library(highcharter)
+library(outliers)
+library(ggplot2)
+library(EnvStats)
+knitr::opts_chunk$set(echo = TRUE, comment=NA)
+```
+
+<img src='https://algoritmosyfinanzas.files.wordpress.com/2019/07/outlier.png' width='50%'>
+
+Tras acabar estas diferentes vacaciones, escribo acerca de un tema simple, pero con mucho interés en el ámbito del EDA (*exploratory descriptive analysis*): los *outliers* o con su término en castellano los valores atípicos. 
+
+
+## Introducción
+
+Un valor atípico o *outlier* es una observación de una variable de la cual hemos recogido una medida, cuyo grado excede por su límite superior o inferior significativamente de los valores típicos de la distribución. Una observación siempre debe ser comparada con otras observaciones realizadas sobre la misma variable, antes de catalorgarlo como *outlier* y siempre teniendo en cuanta las condiciones en las que se ha relizado la medida de fiabilidad y veracidad. 
+
+Un valor atípico puede deberse a la dispersión o variaciones de la variable que estamos midiendo u observando. Por ejemplo, suele darse el caso de que existan valores atípicos al recopilar datos sobre cifras de ventas en las PYME. Pueden exisitir PYMEs cuyas cifras de ventas superen en mucho incluso a empresas más pequeñassalarios, ya que algunas personas ganan mucho más dinero que el resto. Los valores atípicos también pueden surgir debido a un error experimental, de medición o de codificación. Por ejemplo, un ser humano que pesa 786 kg claramente un error al registrar el dato del peso del inidividuo. Lo más probable es que su peso sea de 78,6 kg o 7,86 kg), dependiendo de si se han medido los pesos de adultos o bebés.
+
+Presentamos en este post diferentes formas de cálculo de los *outliers* (las más habituales y sencillas) que todo investigador debería aplicar en la exploración descriptiva de sus datos para decidir los mejor, si editar los mismos (errores) o eliminar su presencia en el banco de datos a analizar para no distorsionar los resultados del análisis.
+
+La decisión de editar y mantener o de eliminar los atípicos, depende de los siguientes factores:
+
+* el contexto de análisis; a menudo ocurren debido a un proceso de recogida o registro defectuoso. 
+* el efecto de su presencia, los análisis se realizan dos veces, una con y otra sin valores atípicos para evaluar su impacto en las conclusiones.
+* la robustez del análisis a ejecutar con distribución manejada: una regresión lineal simple puede variar significativamente con solo un valor atípico, mientras que las pruebas no paramétricas como la prueba de Wilcoxon suelen ser robustas a los valores atípicos.
+* nunca debemos perder sin embargo nuestro poder de decisión subjetivo, comprender el entorno y el proceso en el que el dato se ha obtenido; no somos máquinas, trabajamos para analizar.
+
+Por último, en este post sólo se estudia el caso de *outliers* univariantes. Dejamos para posteriores post el análisis de situaciones en las que pueda serr necesario evaluar los *outliers* de tipo multivariante.
+
+### Análisis básico de descriptivos
+
+#### Mínimo y máximo
+
+Estas dos simples medidas ya nos pueden proporcionar una aproximación muy simple a como se distribuye la variable, y nuestro conocimiento del rango de la distribución en la población ya nos puede aportar información objetiva. Con R son muchas las formas de poder calcularlo, pero siguiendo nuestra costumbre de minimizar el número de paquetes a usar, podemos hacerlo con instrucciones básicas de `R` y  usando el archivo `mpg` del paquete `ggplot2` y particularmente el campo que refiere al gasto de combustible (hwy).
+
+```{r}
+mpg
+```
+
+Calculamos el mínimo y el máximo entre otras mediciones con la orden `summary` básica en R, particularizada para el campo `hwy`.
+
+```{r}
+summary(mpg$hwy)
+```
+
+Alternativamente, también se pueden calcular con las funciones min () y max (), funciones también básicas de R que no necesitan de carga de ningún paquete en especial:
+
+```{r}
+min(mpg$hwy)
+max(mpg$hwy)
+```
+
+Estos datos por sí solos, tampoco nos dicen mucho, sin verlo en perspectiva. por tanto, seguimos adelante nuestro proceso, sabiendo cuáles son los límites de nuestra distribución, calculando ahora el histograma de frecuencias de nuestro campo.
+
+### Histograma
+
+El histograma es otra forma de apreciar los valores atipicos a partir de nuestro conocimiento de los datos. Vamos a usar en este caso el paquete `highcharter` del cual como sabéis somos fans absolutos para hacer gráficos interactivos y animados.
+
+```{r}
+hchart(mpg$hwy, name = "horse power")
+```
+
+Parecen existir dos observaciones que presentan diferencias respecto al resto, pero tampoco podemos afirmar gran cosa acerca de las mismas. Podemos ir más allá y presentar el gráfico de caja y aquí sí existen las primeras reglas para ver la existencia de atípicos.
+
+### Boxplot o diagrama de caja
+
+El diagrama de caja o *boxplot* por definición sí es una buena forma de aproximarse a los datos sin contexto, pues existen unas reglas que determinan como se dibuja el mismo. `highcharter`en su nueva versión nos facilita mucho la labor de obtención de los datos con la función `data_to_boxplot` que ya prepara los datos para este tipo de gráfico. 
+
+```{r}
+df <- data_to_boxplot(mpg, hwy, add_outliers=TRUE)
+highchart() %>%
+  hc_add_series_list(df)
+```
+
+Un diagrama de caja ayuda a visualizar una variable cuantitativa al mostrar cinco resúmenes de ubicaciones comunes (mínimo, mediana, primer y tercer cuartiles y máximo) y cualquier observación que se haya clasificado como un valor atípico sospechoso utilizando el criterio de rango intercuartílico (IQR). 
+
+I=[q<sub>0.25</sub>−1.5⋅IQR;q<sub>0.7</sub>5+1.5⋅IQR]
+
+Las observaciones consideradas como posibles valores atípicos por el criterio IQR se muestran como puntos en la gráfica de caja. Según este criterio, hay 2 posibles valores atípicos (consulte los 2 puntos sobre la línea vertical, en la parte superior de la gráfica de caja).
+
+Recuerda que no porque el criterio IQR considere una observación como un valor atípico potencial, se debe eliminarla. Eliminar o mantener un valor atípico depende de:
+
+* el contexto de su análisis, 
+* si las pruebas que va a realizar en el conjunto de datos son robustas a los valores atípicos o no, 
+* y lo lejos que está el valor atípico de otras observaciones.
+
+Como se puede ver en el gráfico, hay dos medidas que son consideradas outliers. Veamos cuáles son esas medidas en el banco de datos o *dataframe*.
+
+```{r}
+boxplot.stats(mpg$hwy)$out
+```
+
+Estas son las medidas (3 casos con dos medidas), pero ¿a qué observaciones refieren? Utilizando la función `which`, podemos saber qué observaciones son éstas.
+
+```{r}
+which(mpg$hwy %in% boxplot.stats(mpg$hwy)$out)
+```
+
+Estos son los casos que podrías decidir eliminar o mantener.
+
+### Percentiles
+
+Este método de detección de valores atípicos se basa en los percentiles. Con el método de percentiles, todas las observaciones que se encuentran fuera del intervalo formado por los percentiles 0.025 y 0.975 se considerarán como valores atípicos potenciales. Otros percentiles como los percentiles 0.01 y 0.99, o los percentiles 0.05 y 0.95 también se pueden considerar para construir el intervalo.
+
+Los valores de los percentiles superior e inferior (y, por tanto, los límites superior e inferior del intervalo) se pueden calcular con la función cuantile ():
+
+```{r}
+quantile(mpg$hwy, 0.025) #valor inferior
+quantile(mpg$hwy, 0.975) #valor superior
+```
+
+De acuerdo con este método, todas las observaciones por debajo de 14 y por encima de 35.175 se considerarán valores atípìcos potenciales. Los números de fila de las observaciones fuera del intervalo se pueden extraer con la función `which`. En este caso, guardamos el resultado en el objeto `outlier_ind` para facilitar la legibilidad de la expresión en posteriores usos. 
+
+```{r}
+outlier_ind <- which(mpg$hwy < (quantile(mpg$hwy, 0.025)) | mpg$hwy > quantile(mpg$hwy, 0.975))
+outlier_ind #listamos los valores de intervalo
+mpg[outlier_ind, "hwy"] #listamos los identificadores de casos
+```
+
+Hay 11 valores atípicos potenciales según el método de percentiles. Sin embargo, si establecemos los límites en 0.01 y 0.99, el resultado nos da los mismos valores atípicos potenciales que con el criterio IQR.
+
+```{r}
+outlier_ind <- which(mpg$hwy < (quantile(mpg$hwy, 0.01)) | mpg$hwy > quantile(mpg$hwy, 0.99))
+outlier_ind
+mpg[outlier_ind, "hwy"]
+```
+
+## Hampel filter
+
+Otro método, conocido como filtro de Hampel, consiste en considerar como valores atípicos los valores fuera del intervalo formado por [mediana−3⋅MAD ; mediana+3⋅MAD], donde MAD es la mediana de las desviaciones absolutas de la mediana de los datos. Para este método, primero establecemos los límites de intervalo gracias a las funciones `median` y `mad`:
+
+```{r}
+(median(mpg$hwy) - 3 * mad(mpg$hwy)) # valor menor de intervalo
+(median(mpg$hwy) + 3 * mad(mpg$hwy)) # valor mayor de intervalo
+
+outlier_ind <- which(mpg$hwy < (median(mpg$hwy) - 3 * mad(mpg$hwy)) | mpg$hwy > (median(mpg$hwy) + 3 * mad(mpg$hwy)))
+outlier_ind
+```
+
+De acuerdo con este método, todas las observaciones por debajo de 1.761 y por encima de 46.239 se considerarán valores atípicos potenciales. Los números de fila de las observaciones fuera del intervalo se han extraído con la función `which`. Según el filtro Hampel, no existe un valor atípico potencial para esta variable.
+
+
+## Pruebas estadísticas de test para valores atípicos
+
+En esta sección, presentamos 3 técnicas más formales para detectar valores atípicos:
+
+* Prueba de Grubbs
+* Prueba de Dixon
+* Prueba de Rosner
+
+Estas 3 pruebas estadísticas son parte de técnicas más formales de detección de valores atípicos, ya que todas implican el cálculo de una inferencia estadística que compara con valores críticos (que se basan en el tamaño de la muestra y el nivel de confianza deseado).
+
+Tener en cuenta que las 3 pruebas son apropiadas solo cuando los datos (sin valores atípicos) tienen una distribución aproximadamente normal. Por lo tanto, el supuesto de normalidad debe verificarse antes de aplicar estas pruebas para valores atípicos (Kolmogorov-Smirnov o Shapiro-Wilk).
+
+### Prueba de Grubbs
+
+La prueba de Grubbs permite detectar si el valor más alto o más bajo en un conjunto de datos es un valor atípico. Se detecta un valor atípico a la vez (valor más alto o más bajo), por lo que las hipótesis nula y alternativa son H<sub>0</sub>: el valor más alto no es un valor atípico y H<sub>1</sub>: el valor más alto es un valor atípico, si queremos probar el valor más alto; H<sub>0</sub>: el valor más bajo no es un valor atípico, H<sub>1</sub>: el valor más bajo es un valor atípico, si queremos probar el valor más bajo.
+
+Como para cualquier prueba estadística, si el valor `p` es menor que el umbral de significancia elegido (generalmente α = 0.05), entonces se rechaza la hipótesis nula y concluiremos que el valor más bajo / más alto es un valor atípico. Por el contrario, si el valor p es mayor o igual que el nivel de significancia, la hipótesis nula no se rechaza y concluiremos que, con base en los datos, no rechazamos la hipótesis de que el valor más bajo / más alto no es un valor atípico. **Tenga en cuenta que la prueba de Grubbs no es apropiada para un tamaño de muestra de 6 o menos (n ≤ 6)**. Para realizar la prueba de Grubbs en R, usamos la función `grubbs.test` del paquete `outliers`.
+
+```{r}
+test <- grubbs.test(mpg$hwy)
+test
+```
+
+El valor p es 0.056. En el nivel de significancia del 5%, no rechazamos la hipótesis de que el valor más alto 44 no es un valor atípico. 
+
+Nótese que por defecto, la prueba se realiza en el valor más alto (como se muestra en la salida R: hipótesis alternativa: el valor más alto 44 es un valor atípico). Si desea hacer la prueba para el valor más bajo, simplemente agregue el argumento `opposite = TRUE` en la función `grubbs.test`.
+
+```{r}
+test <- grubbs.test(mpg$hwy, opposite = TRUE)
+test
+```
+
+El valor p es 1. Al nivel de significancia del 5%, no rechazamos la hipótesis de que el valor más bajo 12 no es un valor atípico.
+
+Por tanto, para esta prueba no hay *outliers* en el banco de datos. Nótese la diferencia con las pruebas descriptivas antes presentadas.
+
+### Prueba de Dixon
+
+Similar a la prueba de Grubbs, la prueba de Dixon se usa para probar si un valor alto o bajo es un valor atípico. Por lo tanto, si se sospecha más de un valor atípico, la prueba debe realizarse en estos valores atípicos sospechosos de forma individual. Para realizar la prueba de Dixon en R, usamos la función `dixon.test` del paquete `outliers`. A diferencia de la prueba de Grubbs, la prueba de Dixon es más útil para muestras de pequeño tamaño (normalmente n ≤ 25), por lo que restringimos nuestro conjunto de datos a las 20 primeras observaciones (creamos `subdat`), ya que la prueba de Dixon solo se puede realizar en un tamaño de muestra pequeño, produciendo error si la muestra es más grande.  Al igual que antes, para probar el valor más alto, simplemente agregue el argumento `opposite = TRUE` a la función `dixon.test`.
+
+```{r}
+subdat <- mpg[1:20, ]
+test <- dixon.test(subdat$hwy)
+test
+test <- dixon.test(subdat$hwy, opposite = TRUE)
+test
+```
+Los resultados muestran que el valor más bajo 15 es un valor atípico (valor p = 0.007) y que el valor más alto 31 no es un valor atípico (valor p = 0.858).
+
+Recuperando la vista gráfica en este nuevo subconjunto de datos... 
+
+```{r}
+df <- data_to_boxplot(subdat, hwy, add_outliers=TRUE)
+highchart() %>%
+  hc_add_series_list(df)
+```
+
+Nótese la existencia en el gráfico de un valor `20` que nos cataloga como *outlier* el diagrama de caja. ¿Como podemos testar si este valor 20 es también realmente un *outlier*? Deberíamos eliminar el valor 15, para que el valor 20 fuera analizado en la prueba de Dixon.
+
+```{r}
+# find and exclude lowest value
+remove_ind <- which.min(subdat$hwy)
+subsubdat <- subdat[-remove_ind, ]
+
+# Dixon test on dataset without the minimum
+test <- dixon.test(subsubdat$hwy)
+test
+
+df <- data_to_boxplot(subsubdat, hwy, add_outliers=TRUE)
+highchart() %>%
+  hc_add_series_list(df)
+```
+
+Los resultados muestran que el segundo valor más bajo 20 no es un valor atípico (valor p = 0,13), aunque el digrama de caja (menos restrictivo el criterio IQR) así lo demuestre.
+
+### Prueba de Rosner
+
+La prueba de Rosner para valores atípicos tiene las ventajas de que: 
+
+* se utiliza para detectar conjuntos de valores atípicos (a diferencia de la prueba de Grubbs y Dixon, que muestran valores individuales), 
+* está diseñado para evitar el problema del enmascaramiento, donde un valor atípico que tiene un valor cercano a otro valor atípico puede pasar desapercibido y, 
+* es más apropiada cuando el tamaño de la muestra es grande (n ≥ 20).
+
+Para realizar la prueba de Rosner usamos la función `rosnerTest` del paquete `EnvStats`. Esta función requiere al menos 2 argumentos: los datos y el número de valores atípicos sospechosos k (con k = 3 como el número predeterminado de valores atípicos sospechosos). En nuestro caso usamos que el número de valores atípicos sospechosos sea igual a 3, como sugiere el número de *outliers* potenciales descritos en el diagrama de caja al comienzo del artículo.
+
+Los resultados interesantes se proporcionan en la tabla final:
+
+```{r}
+test <- rosnerTest(mpg$hwy,k = 3)
+test
+```
+
+Vemos que solo hay un valor atípico (ver la columna de *Outlier*), y que es la observación 34 (ver `Obs.Num)` con un valor de 212 (ver columna `Value` de la tabla).
+
+Y aquí finalizamos este post, nos emplazamos a una posterior entrada donde trataremos los *outliers* de tipo multivariante*. Espero haya sido de ayuda. Hasta el próximo post ...
+
+## Referencias
+<hr>
+[Este artículo es una traducción / adaptación de Antoine Soetewey.](https://www.statsandr.com/blog/outliers-detection-in-r/)
+<hr>
+* Hawkins, D. M. (1980). Identification of outliers (Vol. 11). London: Chapman and Hall.
+* Aldás Manzano, J., & Uriel Jimenez, E. (2017). Análisis multivariante aplicado con R. Ediciones Paraninfo, SA.

@@ -1,0 +1,85 @@
+---
+title: "¿qué es y para qué un dashboard?"
+author: "Roberto Gil-Saura"
+date: '2019-12-06'
+slug: dashboard
+categories:
+  - analisis
+tags:
+  - dashboard
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dashboard o cuadro de control
+
+**¿Qué es un dashboard?**
+
+Un dashboard es una representación gráfica de las principales métricas o KPIs que intervienen en una investigación.
+
+**¿Para qué sirve?**
+
+El objetivo principal de un dashboard es ofrecer visibilidad sobre los indicadores que deben alcanzar determinado valor para alcanzar los objetivos de la empresa. Además permite conocer datos de valor, analizar tendencias y fijar líneas de actuación.
+
+**¿Por qué es importante?**
+
+Cuando diseñamos una investigación o un elemento de control siempre hemos de establecer primero una serie de metas a cumplir, por ejemplo, __mantenernos en unos niveles de NPS (net promoter score) fijados a priori__, en todas nuestra unidades de noegocio y en las diferentes áreas de la organización.
+
+**¿Qué funciones cumple?**
+
+* Realizar un seguimiento objetivo de la consecución de estas metas. 
+* Averiguar el estado actual del estudio.
+* Anticipar los defectos que se producen en el momento. 
+* Mejorar la toma de decisiones durante todo el proceso. 
+* Establecer las acciones a tomar para mejorar la actual o futuras investigaciones. 
+
+**¿Por qué el dashboard es una herramienta útil para la investigación? 
+
+Porque con la información extraída del dashboard serás capaz de tomar decisiones en base a datos e información real. De esta manera, todas tus acciones y estrategias siempre habrán sido configuradas de manera objetiva. 
+
+## Pautas para obtener un perfecto dashboard
+
+**¿Qué necesitas?**
+
+Necesitas establecer de una manera clara y concreta cuáles van a ser los KPIs o medidores de rendimiento en dicha campaña. De una buena o mala elección de KPIs depende en gran parte el éxito de tu campaña. 
+
+**Pondera su relevancia**
+
+Sea cual fuere tu objetivo, ten siempre presente que los KPIs han de reunir una serie de características para que sean relevantes dentro de cualquier estrategia online. 
+
+**¿Qué criterios deben cumplir esos KPIs?**
+
+* Específicos.
+* Objetivos.
+* Medibles. 
+* Realistas. 
+* Continuos.
+* Relevantes. 
+* Cuantificables.
+
+**¿Como debe ser en la práctica?**
+
+* Visualmente atractivo
+* Auto-explicativo
+* Ser significativo para la audiencia
+* Permitir actuar a CP
+* Impactar en el recuerdo
+
+**¿El análisis de los datos acaba con el dashboard?**
+
+No, el dashboard es como el resumen ejecutivo. Es punto de inicio y final, pero el proceso de análisis no puede ser sustituido totalmente por un dashboard.
+
+**Un ejemplo muy simple**
+
+La empresa NeoEliaValls, SL dispone de un servicio de atención de llamadas, en dos call centers en Madrid y Barcelona. estos centros reciben llamadas de tres tipos, consultas, sugerencias y reclamaciones cuya atención es valorada tras la atención con una pregunta acerca d ela valoración de la atención del equipo del call center. Esta valoración es de 1 a 10, siendo el 1 muy mala y el 10 excelente. Del mismo modo, a aquellas llamadas que suponen una reclamación, se les hace un seguimiento y además de reflejar en el banco de datos si la resolución a la reclamación es poritiva al cliente o no, se detalla también la valoración con la misma escala de 1 a 10.
+
+
+[Aquí tienes un ejemplo ficticio de dashboard ...](https://rpubs.com/robertogil_io/696964)
+
+Los datos entregados reflejan de un solo vistazo en cada pestaña la situación (nada buena) de cada uno de los elementos que marcan la dinámica de la sociedad. NPS desfavorables y valoraciones muy bajas. Esta sociedad tendría mucho trabajo por delante. Nótese la combinación entre tablas, gráficos, datos directos y claros y gráficos indicadores de -100 a 100. Recuerda un -100 es un NPS horroroso, todos son detractores (malos recomendadores) mientras que 100 sería que todos son promotores (excelentes recomendadores).

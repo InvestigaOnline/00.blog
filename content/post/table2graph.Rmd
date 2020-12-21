@@ -1,0 +1,158 @@
+---
+title: "de expss a highcharter"
+author: "Roberto Gil Saura"
+date: "2020-06-14"
+slug: table2graph
+categories:
+  - analisis
+  - R
+tags:
+  - tabla
+  - grafico
+  - expss
+  - highcharter
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+> [ __**Cuando algo va acabando y sus puertas se van cerrando, algo nuevo comienza y otras puertas se van abriendo**__ ]
+
+Hace tiempo que no escribía en el blog. En mi sitio web InvestigaOnline.com puedes ver muchas de las cosas que he estado haciendo este último año, tan difícil para todos. 
+
+
+En este post de esta nueva temporada os presento una combinación fácil para pasar de una tabla **EXPSS** ([vignette](https://cran.r-project.org/web/packages/expss/vignettes/tables-with-labels.html) / [examples](https://cran.r-project.org/web/packages/expss/vignettes/examples.html) / [excel y expss](https://cran.r-project.org/web/packages/expss/vignettes/xlsx-export.html)), ese paquete de tabulación que descubrí hace un año, y que no me canso de agradecer a Gregory Demin por su valiosa y desinteresada aportación al mundo del proceso de datos a un gráfico [Highcharts](https://www.highcharts.com) pero en el entorno R y por tanto utilizando el paquete [highcharteR](http://jkunst.com/highcharter/index.html) de Joshua Kunst al que también debo reconocer su maravillosa aportación. El entorno a utilizar como siempre [RStudio](https://rstudio.com/products/rstudio/) y/o también sólo [R](https://cran.r-project.org/) con alguna pequeña variación. 
+
+Para este ejercicio utilizaremos los paquetes:
+
+* [expss](https://cran.r-project.org/web/packages/expss/index.html)
+* [tidyr](https://cran.r-project.org/web/packages/tidyr/index.html)
+* [highcharter](https://cran.r-project.org/web/packages/highcharter/index.html)
+
+Si no los tienes instalados, utiliza la instrucción :
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+#install.packages(c('expss', 'tidyr', 'highcharter'))
+```
+
+Si ya los tienes instalados de otras veces, simplemente carga los paquetes al inicio de tu script
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+suppressMessages(library(expss, quietly = TRUE))
+suppressMessages(library(tidyr, quietly = TRUE))
+suppressMessages(library(highcharter, quietly = TRUE))
+```
+
+
+Veamos como sería el script. Usaremos uno de los ficheros típicos de ejemplo de R, el archivo `mtcars`.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+data(mtcars)
+mtcars <- apply_labels(mtcars,
+  vs = "Engine", vs = c("V-engine" = 0, "Straight engine" = 1),
+  am = "Transmission", am = c("Automatic" = 0,"Manual"=1)
+  )
+```
+
+Puedes observar que hemos cargado el fichero mtcars y hemos etiquetado sólo las variables que vamos a utilizar. Si por ejmplo cargas un fichero SPSS con la instrucción `read_spss` del paquete `expss` ese fichero ya estaría etiquetado. Es posible que si estás muy habituado a trabajar con `expss` pudieras optar por asignar el texto con `var_lab()` y los códigos con `val_lab()`. El resultado sería el mismo.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+data(mtcars)
+var_lab(mtcars$vs) <- "Engine"
+val_lab(mtcars$vs) <- c("V-engine" = 0, "Straight engine" = 1)
+var_lab(mtcars$am) <- "Transmission"
+val_lab(mtcars$am) <- c("Automatic" = 0,"Manual" = 1)
+```
+
+Sea como fuere, las dos variables que nos interesan están etiquetadas ya.
+
+Pasemos ahora a hacer la tabla, una tabla cruzada de frecuencias donde calcularemos el porcentaje de casos de cada perfil de transmision por pefil de ingeniería de motor. Al principio haremos la tabla completa, tal como la haríamos para ser publicada como tabla y luego la reharemos para ser aprovechada y hacer un gráfico directo con ella.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+mtcars %>% 
+  tab_cols(total(),vs) %>% 
+  tab_cells(am) %>% 
+  tab_stat_cpct() %>% 
+  tab_pivot()
+```
+
+Más simple la tabla, imposible. Esta tabla es bonita, lista para ser presentada, pero realmente lo que nos importa es el cuadrante de datos porcentuales 66.7, 50, 33.3 y 50%. Y por ello vamos a retocar esa tabla para dejar la información bruta.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+mtcars %>% 
+  tab_cols(vs) %>% 
+  tab_cells(am) %>% 
+  tab_stat_cpct(total_row_position = 'none') %>% 
+  tab_pivot()
+```
+
+Hemos quitado los totales de columna y fila. Ya tenemos solo los datos, pero nos molestan todavía algunos datos. Vamos a mirar esta tabla en estructura, en formato bruto, transformándola en un dataframe. Queda así:
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+as.data.frame(mtcars %>% 
+  tab_cols(vs) %>% 
+  tab_cells(am) %>% 
+  tab_stat_cpct(total_row_position = 'none') %>% 
+  tab_pivot())
+```
+
+Ummm .... no nos gustan, imagino, los textos de fila y los textos de columna; vienen bien para publicar la tabla, ya que como ves el `|` se utiliza para separar y no repetir el texto extra de la variable. Así que vamos a utilizar algunas herramientas del paquete `expss`. Usaremos dos trucos para mejorar la salida de cara a obtener una matriz simple de datos. El uso de `'|'`como asignación de texto a las variables y el uso de `unvr()` para eliminar cualquier vestigio de texto anterior de la misma. Mira el resultado.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+tab <- mtcars %>% 
+  tab_cols('|'=unvr(vs)) %>% 
+  tab_cells('|'=unvr(am)) %>% 
+  tab_stat_cpct(total_row_position = 'none') %>% 
+  tab_pivot()
+tab
+```
+
+Ha mejorado la cosa, ¿no?. Ahora convirtamos esta tabla (que es un dataframe de tipo `etable`) en un dataframe como el que necesitan los gráficos. Para eso usaremos una opción magnífica del paquete `tidyr` denominada `pivot_longer()` que nos creará nuestro fichero necesario para `highcharteR` con una sola instrucción. Nóteses que hemos guardado la tabla en un objeto llamado `tab` para no tener que repetirla nuevamente. Guardaremos esa transformación nuevamente en un objeto llamado df y que será nuestro dataframe final. Aprovechamos también para cambiar los textos que quiero salgan en el gráfico para x, y y las series con la función `colnames()`.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+tab <- as.data.frame(tab)
+colnames(tab) <- c('am', 'transmission', 'pct') # cambia el nombre de las columnas
+
+df <- tab %>% pivot_longer(-am, names_to='transmission', values_to='pct')
+df
+```
+
+Fíjate, hemos conseguido tener lo que va a necesitar el gráfico. Un campo x (`am`) que usaremos para categorizar, un campo group (`transmission`) que usaremos para agrupar por series y un campo y (`pct`) que contiene los datos a representar. Hagamos el gráfico. 
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+hchart(df, 'column', hcaes(x=am, y=pct, group=transmission))
+```
+
+Como una muestra más, una vez tenemos los datos ...
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+hchart(df, 'bar', hcaes(x=am, y=pct, group=transmission))
+```
+
+Y éste es el gráfico por defecto. En posteriores posts veremos como mejorar y aplicar todas las características que nos pueda ofrecer la [api de Highcharts](https://api.highcharts.com) desde el paquete `highcharter`.
+
+Hacemos un resumen global en un sólo paso de todo, lo que sería necesario.
+
+```{r comment=NA, messages=FALSE, warning = FALSE}
+#hacemos la tabla
+tab <- mtcars %>% 
+  tab_cols('|'=unvr(vs)) %>% 
+  tab_cells('|'=unvr(am)) %>% 
+  tab_stat_cpct(total_row_position = 'none') %>% 
+  tab_pivot()
+#la convertimos en objeto dataframe
+tab <- as.data.frame(tab)
+
+#asignamos nombres 
+colnames(tab) <- c('am', 'transmission', 'pct') # cambia el nombre de las variables
+
+#convertimos el dataframe de la tabla al dataframe del gráfico
+df <- tab %>% pivot_longer(-am, names_to='transmission', values_to='pct')
+
+#hacemos los dos gráficos
+hchart(df, 'column', hcaes(x=am, y=pct, group=transmission))
+hchart(df, 'bar', hcaes(x=am, y=pct, group=transmission))
+```
+
+
+Esto ha sido todo, hasta el próximo post ...

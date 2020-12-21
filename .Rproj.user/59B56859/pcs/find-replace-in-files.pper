@@ -1,0 +1,13 @@
+{
+    "dialog-state": {
+        "query": "(/images",
+        "path": "~/_datos/00.blog00/content",
+        "regex": false,
+        "caseSensitive": false,
+        "filePatterns": [],
+        "excludeFilePatterns": [],
+        "resultsCount": 5,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

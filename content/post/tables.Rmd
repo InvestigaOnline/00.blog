@@ -1,0 +1,30 @@
+---
+title: "tablas con expss"
+author: "Roberto Gil Saura"
+date: "2020-08-24"
+slug: outliers
+categories:
+  - analisis
+  - R
+tags:
+  - tables
+  - kableExtra
+  - highcharter
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+```{r setup, include=FALSE}
+library(highcharter)
+library(expss)
+knitr::opts_chunk$set(echo = TRUE, comment=NA)
+```
+
+Escribo estas líneas para anunciar un trabajo más completo con el que puedas aprender a hacer tablas y gráficos utilizando R. La documentación está escrita para ayudar a los usuarios de SegmentaNet, pero puede ser usada por cualquiera que utilice R / RStudio o cualquier otro IDE y esté interesado en trabajar con los paquetes `expss` y `highcharter` para obtener un gran rendimiento en la presentación de tablas marginales y cruzadas y en su conversión, cuando sea necesario, en atractivos gráficos realizdos con la libería __Highcharts__ utilizando como intermediario el paquete ya mencionado `highcharter`.
+
+La documentación se acerca a conceptos menos habituales como son los subgrupos en los cuadros, los nets, los subtotales, o las pruebas de significación más utilizadas en el ámbito de la investigación de mercados (t y Chi), dedicando también a la visualización de cuadros más atractivos formateados con el paquete `kableExtra`.
+
+No más palabras, aquí te dejo el [enlace](https://tables.investigaonline.com) para que lo puedas ver por ti mismo.
+
+¡Hasta la próxima entrada!

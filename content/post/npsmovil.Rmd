@@ -1,0 +1,144 @@
+---
+title: "NPS con media móvil"
+author: "Roberto Gil-Saura"
+date: "2020-08-16"
+slug: npsmovil
+categories:
+  - analisis
+  - R
+tags:
+  - nps
+  - media movil
+  - highcharter
+  - expss
+  - dashboard
+  - flexdashboard
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+```{r include=FALSE, warning=FALSE, message = FALSE, comment = NA}
+library(flexdashboard)
+library(highcharter)
+library(dplyr)
+library(expss)
+library(zoo)
+
+data <- read_spss('~/_datos/75.neoeliavalls/neoeliavalls.sav')
+data$DTCALL <- as.Date(data$DTCALL, format = "%d/%m/%Y")
+```
+
+## Calcular el NPS con media móvil
+
+En ocasiones resulta interesante ir analizando la evolución de los KPIs de la empresa de forma periódica. Esto cobra suma importancia cuando se introducen cambios en la forma de proceder, en los protocolos de prestación del servicio que se está valorando. Nuevamente recurrimos a nuestra empresa ficticia NeoEliaValls, de la que disponemos los siguientes datos ...
+
+```{r}
+head(data[,1:7],20)
+```
+
+Podemos observar que en esta muestra de 20 registros (los 20 primeros de 6441 llamadas ) las llamadas se van produciendo a lo largo de los días. Si al analizar el KPI vemos que algo no anda bien, y establecemos cambios de protocolo, y queremos seguir analizando la evolución del indicador, la mejor forma de hacerlo es utilizando no la media aritmética que nos daría un dato agregado del período de trabajo, sino la media móvil seleccionando el nº de llamadas (primero) o días (después) que fueran necesarios. 
+ En el siguiente script utilizamos la función `rollmean` del paquete `zoo` que nos permite calcular la media móvil con un agregado de k registros, en nuestro caso `k = 100` por tanto, las últimas 100 llamadas.
+
+```{r echo=TRUE}
+data <- data %>% 
+  select(1:7) %>%  # usa solo las variables de 1 a 7
+  mutate(NPSMOV=round(rollmean(NPS, k = 100 , fill = NA, align = "right"),2)) # calcula
+head(data[90:110, ],20)
+```
+
+¿Son correctos los datos? lo son, pero nótese que hay dos variables que tienen incidencia sobre este cálculo, que por hacerlo fácil no hemos contemplado, la motivación de la llamada (consulta=1, reclamación =2, sugerencia=3) y otra que es el call-center que atiende la llamada. 
+
+También, nótese que en el script, se están mostrando los registros del 90 al 110, ¿por qué? porque los 100 primeros registros no calculan el nps móvil ya que no hay suficientes casos anteriores (100) para ser posible su cómputo.
+
+Vamos pues a tener en cuenta los campos motivación y call center. Para ello calcularemos 
+
+```{r echo=TRUE}
+data11 <- data %>% 
+  filter(MOTIVATION==1 & CALLCENTER==1) %>% # elige valores 1 en ambas variables 
+  select(1:7) %>% # usa solo las variables de 1 a 7
+  mutate(NPSMOV=round(rollmean(NPS, k = 100 , fill = NA, align = "right"),2)) # calcula
+head(data11[90:110, ],20)
+remove(data)
+```
+
+La estructura de la tabla es la misma, pero nótese que ahora las columnas de motivación y de call center tienen ambas valor 1. Para no ser muy reiterativos, dejamos para ti el cálculo de las combinaciones de motivacion (2 tipos más) y call center(1 centro más) y resto de posibles casos.
+
+Presentamos ahora la evolución del NPSmóvil en un gráfico. Para ello utilizaremos `highcharteR` como paquete de gráficos, aunque también `plotly` nos daría una vista óptima.
+
+
+```{r echo=TRUE}
+# hacemos la tabla y la guardamos en el objeto tab
+tab <- data11 %>%
+    tab_subgroup(NPSMOV>=0 | NPSMOV<0) %>% 
+    tab_rows('|'= DTCALL) %>% 
+    tab_cells('|'= unvr(NPSMOV)) %>% 
+    tab_stat_mean(label ='|') %>% 
+    tab_pivot(stat_position='inside_columns')
+
+# renombramos las columnas
+colnames(tab) <- c('date', 'npsmov')
+
+#damos formato de fecha alo que será el eje x (opcional)
+tab$dt <- as.Date(tab$date, format = "%Y-%m-%d")
+#hacemos el gráfico
+hchart(tab, 'line', hcaes(x=date, y=npsmov))
+```
+
+Y el mismo dato pero del último mes ...
+
+```{r echo=TRUE}
+data11 <- data11 %>% filter(DTCALL > (max(DTCALL)-30))
+tab <- data11 %>%
+    tab_subgroup(NPSMOV>=0 | NPSMOV<0) %>% 
+    tab_rows('|'= DTCALL) %>% 
+    tab_cells('|'= unvr(NPSMOV)) %>% 
+    tab_stat_mean(label ='|') %>% 
+    tab_pivot(stat_position='inside_columns')
+colnames(tab) <- c('date', 'npsmov')
+tab$dt <- as.Date(tab$date, format = "%Y-%m-%d")
+hchart(tab, 'line', hcaes(x=date, y=npsmov), color='#eb6909')
+```
+
+En esos 30 últimos días nos encontramos que el último NPS nos indica las siguientes categorías:
+
+```{r echo=TRUE}
+#recodificamos la variable
+data11$VALOR <- recode(data11$VALORCALL, 'detractores' = 0:6 ~1, 'neutrales' = 7:8 ~2, 'promotores' = 9:10 ~ 3)
+
+#obtenemos la tabla con los datos y la guardamos en tab
+tab <- data11 %>%
+    tab_subgroup(NPSMOV>=0 | NPSMOV<0) %>% 
+    tab_cells('|'= unvr(VALOR)) %>% 
+    tab_stat_cpct(label ='|', total_row_position = 'none') %>% 
+    tab_pivot(stat_position='inside_columns')
+# mostramos la tabla
+tab
+
+#renombramos las columnas de la tabla
+colnames(tab) <- c('nps', 'pct')
+
+#hacemos el gráfico
+hchart(tab, 'bar', hcaes(x=nps, y=round(tab$pct,2)), colorByPoint=TRUE) %>%
+  hc_colors(color = c('red', 'orange','green')) %>% 
+  hc_yAxis(title=list(text='Valor NPS'))
+```
+
+La media de los 100 últimos NPS calculados (recordemos que se calculan llamada a llamada) es ...
+
+
+```{r}
+meannpsmov <- round(mean(data11$NPSMOV, na.rm=TRUE),2)
+gauge(value=meannpsmov,min=-100,max=100,label = 'Nps', abbreviate = TRUE, abbreviateDecimals = 1)
+
+```
+
+Y hasta aquí el proceso. Haciendo resumen:
+
+* hemos cargado un archivo de SPSS etiquetado
+* hemos calculado un NPS móvil con los últimos 100 registros de una combinación de valores
+* hemos mostrado el peso de cada categoría del NPS en el conjunto
+* hemos calculado un indicador del NPS, representado por un `gauge` 
+
+Hasta la próxima !!!
+
