@@ -1,5 +1,6 @@
 ---
-title: "intención de voto (electocracia.com)"
+title: "intención de voto"
+subtitle: "electocracia.com"
 author: "Roberto Gil Saura"
 date: "2021-01-10"
 slug: intencion_voto
@@ -24,9 +25,9 @@ library(dplyr)
 library(expss)
 ```
 
-Ya hace un tiempo que quería publicar este gráfico en el blog y he encontrado el momento. En plena situación de tercera oleada de esta maldita COVID-19, mostramos tanto la serie histórica desde 2017 de la evolución de la intención de voto, como también lo sucedido desde la celebración de las elecciones. Los datos ofrecidos han sido ponderados por el campo FIABILIDAD que suponemos ofrece una mejora del dato conjunto. Si en una fecha determinada hay varias publicaciones, para cada día se obtiene la media de los estudios publicados.
+Ya hace un tiempo que quería publicar este gráfico en el blog y he encontrado el momento. En plena situación de tercera oleada de esta maldita COVID-19, mostramos tanto la serie histórica desde 2017 de la evolución de la intención de voto, como también lo sucedido desde la celebración de las elecciones. Los datos ofrecidos han sido ponderados por el campo **fiabilidad**, dato proporcionado por electocracia.com y que suponemos ofrece una mejora del dato obtenido, otrogando mayor valor a campos con más alta magnitud. Si en una fecha determinada hay varias publicaciones, para cada día se obtiene la media de los estudios publicados. En el gráfico se ven reflejados los buenos, malos y peores momentos de gobierno y opsición.
 
-Es un gráfico muy simple, utilizamos los paquetes `readr` para leer los datos en formato texto CSV tras haber sido homogeneizados (tratamiento de fechas de publicacion y agencia de investigación) desde [electocracia.com](https://electocracia.com/#historico).
+Es un gráfico muy simple, utilizamos los paquetes `readr` para leer los datos en formato texto CSV tras haber sido homogeneizados (tratamiento de fechas de publicación y agencia de investigación) desde [electocracia.com](https://electocracia.com/#historico); usamos `expss`para obtener la tabla que representamos con `highcharter`. Por último usamos `dplyr` para obtener la tabla final ordenada por fecha de publicación, para mostrar las últimas publicaciones.
 
 El primer gráfico muestra la serie desde la celebración de las elecciones, mientras que el segundo muestra el total de los datos. Si deseas cualquier otro período intermedio, puedes hacerlo utilizando los intervalos de fecha o ajustando el selector inferior del gráfico.
 
@@ -34,11 +35,11 @@ El primer gráfico muestra la serie desde la celebración de las elecciones, mie
 ```{r echo = FALSE}
 #carga
 options(highcharter.theme = hc_theme_hcrt(tooltip = list(valueDecimals = 2)))
-data0 <- read_delim(file="https://drive.google.com/uc?export=download&id=1vg2KxfhLaT4-FgVIuXvq_YIFyuQxtnkC",
+data0 <- suppressMessages(read_delim(file="https://drive.google.com/uc?export=download&id=1vg2KxfhLaT4-FgVIuXvq_YIFyuQxtnkC",
     delim="\t", 
     escape_double = FALSE, 
     col_types = cols(publicacion = col_date(format = "%d/%m/%Y"), fincampo = col_skip()), 
-    trim_ws = TRUE)
+    trim_ws = TRUE))
 
 #colores institucionales de los partidos
 psoe <- "#ea2d17"
