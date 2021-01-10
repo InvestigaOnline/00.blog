@@ -2,7 +2,7 @@
 title: "intención de voto"
 subtitle: "electocracia.com"
 author: "Roberto Gil Saura"
-date: "2021-01-10"
+date: "2021-01-09"
 slug: intencion_voto
 categories:
   - analisis
