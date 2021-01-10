@@ -1,47 +1,5 @@
 "0","knitr::opts_chunk$set(echo = FALSE)"
-"0","library(DBI)"
-"0","library(RMySQL)"
-"0","library(tidyr)"
+"0","library(readr)"
 "0","library(dplyr)"
-"2","
-Attaching package: ‘dplyr’
-
-"
-"2","The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-"
-"2","The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-"
 "0","library(highcharter)"
-"2","Registered S3 method overwritten by 'htmlwidgets':
-  method           from         
-  print.htmlwidget tools:rstudio
-"
-"2","Registered S3 method overwritten by 'quantmod':
-  method            from
-  as.zoo.data.frame zoo 
-"
-"2","Registered S3 method overwritten by 'data.table':
-  method           from
-  print.data.table     
-"
 "0","library(expss)"
-"2","
-Attaching package: ‘expss’
-
-"
-"2","The following objects are masked from ‘package:dplyr’:
-
-    between, compute, contains, first, last, na_if, recode, vars
-
-"
-"2","The following objects are masked from ‘package:tidyr’:
-
-    contains, nest
-
-"

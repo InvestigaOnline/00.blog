@@ -1,0 +1,7 @@
+"0","colnames(tab) <- c('año', 'catifin','catirech','cawifin','cawirech', 'capifin','capirech')"
+"0","highchart() %>% "
+"0","  hc_chart(type='column') %>%"
+"0","  hc_xAxis(categories=tab$año) %>%"
+"0","  hc_add_series(tab$catifin+tab$catirech, name='total cati', color='teal', dataLabels=list(enabled=TRUE)) %>% "
+"0","  hc_add_series(tab$cawifin+tab$cawirech, name='total cawi', color='salmon', dataLabels=list(enabled=TRUE)) %>% "
+"0","  hc_add_series(tab$capifin+tab$capirech, name='total capi', color='gold', dataLabels=list(enabled=TRUE))"

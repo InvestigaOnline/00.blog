@@ -8,11 +8,38 @@
     <language>es-es</language>
     <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>covid</title>
+      <link>/tags/covid/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/covid/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>grafico</title>
+      <link>/tags/grafico/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/grafico/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>grafico serie</title>
       <link>/tags/grafico-serie/</link>
       <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/grafico-serie/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>integra</title>
+      <link>/tags/integra/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/integra/</guid>
       <description></description>
     </item>
     
@@ -166,15 +193,6 @@
       <pubDate>Sun, 16 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/tags/nps/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>grafico</title>
-      <link>/tags/grafico/</link>
-      <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/grafico/</guid>
       <description></description>
     </item>
     

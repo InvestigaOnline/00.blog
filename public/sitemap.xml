@@ -22,12 +22,32 @@
   </url>
   
   <url>
+    <loc>/tags/covid/</loc>
+    <lastmod>2021-01-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2021/01/10/covidadm/</loc>
+    <lastmod>2021-01-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/</loc>
     <lastmod>2021-01-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
+    <loc>/tags/grafico/</loc>
+    <lastmod>2021-01-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/grafico-serie/</loc>
+    <lastmod>2021-01-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/integra/</loc>
     <lastmod>2021-01-10T00:00:00+00:00</lastmod>
   </url>
   
@@ -148,11 +168,6 @@
   
   <url>
     <loc>/2020/06/14/table2graph/</loc>
-    <lastmod>2020-06-14T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/grafico/</loc>
     <lastmod>2020-06-14T00:00:00+00:00</lastmod>
   </url>
   
