@@ -1,0 +1,32 @@
+---
+title: "conjoint analysis"
+author: "Roberto Gil Saura"
+date: "2019-12-27"
+slug: conjoint
+categories:
+  - analisis
+  - R
+tags:
+  - conjoint
+  - diseño
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+
+
+<p>Hace unos meses, dediqué una entrada a cómo crear diseños experimentales para MaxDiff y ya se mencionó entonces el análisis conjunto como una técnica que en muchos caso se presentaba como similar. Por motivos que no vienen al caso, ha surgido la necesidad de trabajar con esta técnica, y me he puesto manos a la obra con <a href="https://cran.r-project.org/">R</a>.</p>
+<p>El <a href="https://es.wikipedia.org/wiki/An%C3%A1lisis_conjunto">análisis conjunto</a> es un método de marketing que permite conocer las expectativas de los consumidores sobre un producto y modelar sus elecciones. El método de análisis conjunto es en la actualidad extremadamente común en el análisis de mercados ya que como bien sabemos, la modelización de la elección del consumidor es un área determinante en el marketing moderno. Se utiliza cuando una marca quiere saber cuán importantes son los diferentes elementos de una decisión.</p>
+<p>Sabemos por neurociencia que las personas (personas como usted y yo) no pueden poner valores numéricos a lo importante que es, por ejemplo, volar directamente versus volar en su aerolínea preferida. Pero las marcas necesitan valores numéricos cuando buscan maximizar los ingresos, las ganancias, la elección del cliente y la satisfacción. De este modo, el análisis conjunto se utiliza para simular mercados competitivos utilizando un único análisis; esa es su mayor ventaja. Disponemos de dos métodos de análisis conjunto: el análisis conjunto de perfil completo y el análisis conjunto basado en elecciones CBC (Choice Based Conjoint). En esta entrada, nos dedicaremos al análisis conjunto de perfil completo.</p>
+<p>Tras estudiar diferentes alternativas, muchas referencias me llevaron al paquete ‘<a href="https://cran.r-project.org/web/packages/conjoint/conjoint.pdf">Conjoint</a>’ de Andrzej Bak and Tomasz Bartlomowicz y lo cargué en <a href="https://cran.r-project.org/web/packages/conjoint/conjoint.pdf">SegmentaNet</a> de <a href="https://www.tesigandia.com">TESI.</a> Como siempre, utilizando una de las bases de datos de ejemplo, la referente al estudio de té, muestra de 100 casos de valoración de perfiles en estudio conducido por M. Baran en 2007.</p>
+<p>Puedes ver este <a href="https://investigaonline.segmentanet.com/app/analysis.php?op=execAnalysisGuid&amp;guid=bb5f1abe-27e8-11ea-aa0e-42010a9a00a5&amp;lang=en">análisis</a> en formato de SegmentaNet con los comentarios al mismo.</p>
+<div id="referencias" class="section level2">
+<h2>Referencias</h2>
+<ul>
+<li>Bak A. and Bartlomowicz T. (2012), Conjoint analysis method and its implementation in conjoint R package.</li>
+<li>Pociecha J., Decker R. (Eds.), Data analysis methods and its applications, C.H. Beck, p. 239-248.</li>
+</ul>
+</div>

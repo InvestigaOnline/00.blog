@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hampel on Blog InvestigaOnline.com</title>
+    <link>/tags/hampel/</link>
+    <description>Recent content in hampel on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Tue, 25 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/hampel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>outliers con R</title>
+      <link>/2020/08/25/outliers/</link>
+      <pubDate>Tue, 25 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/25/outliers/</guid>
+      <description>Tras acabar estas diferentes vacaciones, escribo acerca de un tema simple, pero con mucho interés en el ámbito del EDA (exploratory descriptive analysis): los outliers o con su término en castellano los valores atípicos.</description>
+    </item>
+    
+  </channel>
+</rss>

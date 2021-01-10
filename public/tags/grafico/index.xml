@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>grafico on Blog InvestigaOnline.com</title>
+    <link>/tags/grafico/</link>
+    <description>Recent content in grafico on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sun, 14 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/grafico/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>de expss a highcharter</title>
+      <link>/2020/06/14/table2graph/</link>
+      <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/06/14/table2graph/</guid>
+      <description>[ Cuando algo va acabando y sus puertas se van cerrando, algo nuevo comienza y otras puertas se van abriendo ]
+Hace tiempo que no escribía en el blog.</description>
+    </item>
+    
+  </channel>
+</rss>

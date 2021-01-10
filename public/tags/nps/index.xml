@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>nps on Blog InvestigaOnline.com</title>
+    <link>/tags/nps/</link>
+    <description>Recent content in nps on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sun, 16 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/nps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NPS con media móvil</title>
+      <link>/2020/08/16/npsmovil/</link>
+      <pubDate>Sun, 16 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/16/npsmovil/</guid>
+      <description>Calcular el NPS con media móvilEn ocasiones resulta interesante ir analizando la evolución de los KPIs de la empresa de forma periódica. Esto cobra suma importancia cuando se introducen cambios en la forma de proceder, en los protocolos de prestación del servicio que se está valorando.</description>
+    </item>
+    
+  </channel>
+</rss>

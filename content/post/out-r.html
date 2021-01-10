@@ -1,0 +1,367 @@
+---
+title: "outliers con R"
+author: "Roberto Gil Saura"
+date: "2020-08-25"
+slug: outliers
+categories:
+  - analisis
+  - R
+tags:
+  - outliers
+  - atipicos
+  - grubbs
+  - dixon
+  - hampel
+  - rosner
+  - cuantiles
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<p><img src='https://algoritmosyfinanzas.files.wordpress.com/2019/07/outlier.png' width='50%'></p>
+<p>Tras acabar estas diferentes vacaciones, escribo acerca de un tema simple, pero con mucho interés en el ámbito del EDA (<em>exploratory descriptive analysis</em>): los <em>outliers</em> o con su término en castellano los valores atípicos.</p>
+<div id="introducción" class="section level2">
+<h2>Introducción</h2>
+<p>Un valor atípico o <em>outlier</em> es una observación de una variable de la cual hemos recogido una medida, cuyo grado excede por su límite superior o inferior significativamente de los valores típicos de la distribución. Una observación siempre debe ser comparada con otras observaciones realizadas sobre la misma variable, antes de catalorgarlo como <em>outlier</em> y siempre teniendo en cuanta las condiciones en las que se ha relizado la medida de fiabilidad y veracidad.</p>
+<p>Un valor atípico puede deberse a la dispersión o variaciones de la variable que estamos midiendo u observando. Por ejemplo, suele darse el caso de que existan valores atípicos al recopilar datos sobre cifras de ventas en las PYME. Pueden exisitir PYMEs cuyas cifras de ventas superen en mucho incluso a empresas más pequeñassalarios, ya que algunas personas ganan mucho más dinero que el resto. Los valores atípicos también pueden surgir debido a un error experimental, de medición o de codificación. Por ejemplo, un ser humano que pesa 786 kg claramente un error al registrar el dato del peso del inidividuo. Lo más probable es que su peso sea de 78,6 kg o 7,86 kg), dependiendo de si se han medido los pesos de adultos o bebés.</p>
+<p>Presentamos en este post diferentes formas de cálculo de los <em>outliers</em> (las más habituales y sencillas) que todo investigador debería aplicar en la exploración descriptiva de sus datos para decidir los mejor, si editar los mismos (errores) o eliminar su presencia en el banco de datos a analizar para no distorsionar los resultados del análisis.</p>
+<p>La decisión de editar y mantener o de eliminar los atípicos, depende de los siguientes factores:</p>
+<ul>
+<li>el contexto de análisis; a menudo ocurren debido a un proceso de recogida o registro defectuoso.</li>
+<li>el efecto de su presencia, los análisis se realizan dos veces, una con y otra sin valores atípicos para evaluar su impacto en las conclusiones.</li>
+<li>la robustez del análisis a ejecutar con distribución manejada: una regresión lineal simple puede variar significativamente con solo un valor atípico, mientras que las pruebas no paramétricas como la prueba de Wilcoxon suelen ser robustas a los valores atípicos.</li>
+<li>nunca debemos perder sin embargo nuestro poder de decisión subjetivo, comprender el entorno y el proceso en el que el dato se ha obtenido; no somos máquinas, trabajamos para analizar.</li>
+</ul>
+<p>Por último, en este post sólo se estudia el caso de <em>outliers</em> univariantes. Dejamos para posteriores post el análisis de situaciones en las que pueda serr necesario evaluar los <em>outliers</em> de tipo multivariante.</p>
+<div id="análisis-básico-de-descriptivos" class="section level3">
+<h3>Análisis básico de descriptivos</h3>
+<div id="mínimo-y-máximo" class="section level4">
+<h4>Mínimo y máximo</h4>
+<p>Estas dos simples medidas ya nos pueden proporcionar una aproximación muy simple a como se distribuye la variable, y nuestro conocimiento del rango de la distribución en la población ya nos puede aportar información objetiva. Con R son muchas las formas de poder calcularlo, pero siguiendo nuestra costumbre de minimizar el número de paquetes a usar, podemos hacerlo con instrucciones básicas de <code>R</code> y usando el archivo <code>mpg</code> del paquete <code>ggplot2</code> y particularmente el campo que refiere al gasto de combustible (hwy).</p>
+<pre class="r"><code>mpg</code></pre>
+<pre><code># A tibble: 234 x 11
+   manufacturer model    displ  year   cyl trans   drv     cty   hwy fl    class
+   &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 audi         a4         1.8  1999     4 auto(l~ f        18    29 p     comp~
+ 2 audi         a4         1.8  1999     4 manual~ f        21    29 p     comp~
+ 3 audi         a4         2    2008     4 manual~ f        20    31 p     comp~
+ 4 audi         a4         2    2008     4 auto(a~ f        21    30 p     comp~
+ 5 audi         a4         2.8  1999     6 auto(l~ f        16    26 p     comp~
+ 6 audi         a4         2.8  1999     6 manual~ f        18    26 p     comp~
+ 7 audi         a4         3.1  2008     6 auto(a~ f        18    27 p     comp~
+ 8 audi         a4 quat~   1.8  1999     4 manual~ 4        18    26 p     comp~
+ 9 audi         a4 quat~   1.8  1999     4 auto(l~ 4        16    25 p     comp~
+10 audi         a4 quat~   2    2008     4 manual~ 4        20    28 p     comp~
+# ... with 224 more rows</code></pre>
+<p>Calculamos el mínimo y el máximo entre otras mediciones con la orden <code>summary</code> básica en R, particularizada para el campo <code>hwy</code>.</p>
+<pre class="r"><code>summary(mpg$hwy)</code></pre>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  12.00   18.00   24.00   23.44   27.00   44.00 </code></pre>
+<p>Alternativamente, también se pueden calcular con las funciones min () y max (), funciones también básicas de R que no necesitan de carga de ningún paquete en especial:</p>
+<pre class="r"><code>min(mpg$hwy)</code></pre>
+<pre><code>[1] 12</code></pre>
+<pre class="r"><code>max(mpg$hwy)</code></pre>
+<pre><code>[1] 44</code></pre>
+<p>Estos datos por sí solos, tampoco nos dicen mucho, sin verlo en perspectiva. por tanto, seguimos adelante nuestro proceso, sabiendo cuáles son los límites de nuestra distribución, calculando ahora el histograma de frecuencias de nuestro campo.</p>
+</div>
+</div>
+<div id="histograma" class="section level3">
+<h3>Histograma</h3>
+<p>El histograma es otra forma de apreciar los valores atipicos a partir de nuestro conocimiento de los datos. Vamos a usar en este caso el paquete <code>highcharter</code> del cual como sabéis somos fans absolutos para hacer gráficos interactivos y animados.</p>
+<pre class="r"><code>hchart(mpg$hwy, name = &quot;horse power&quot;)</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"chart":{"reflow":true,"zoomType":"x"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"tooltip":{"formatter":"function() { return  this.point.name + '<br/>' + this.y; }"},"series":[{"data":[{"x":12.5,"y":17,"name":"(10, 15]"},{"x":17.5,"y":72,"name":"(15, 20]"},{"x":22.5,"y":44,"name":"(20, 25]"},{"x":27.5,"y":79,"name":"(25, 30]"},{"x":32.5,"y":16,"name":"(30, 35]"},{"x":37.5,"y":3,"name":"(35, 40]"},{"x":42.5,"y":3,"name":"(40, 45]"}],"type":"column","pointRange":5,"groupPadding":0,"pointPadding":0,"borderWidth":0,"name":"horse power"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":["hc_opts.tooltip.formatter"],"jsHooks":[]}</script>
+<p>Parecen existir dos observaciones que presentan diferencias respecto al resto, pero tampoco podemos afirmar gran cosa acerca de las mismas. Podemos ir más allá y presentar el gráfico de caja y aquí sí existen las primeras reglas para ver la existencia de atípicos.</p>
+</div>
+<div id="boxplot-o-diagrama-de-caja" class="section level3">
+<h3>Boxplot o diagrama de caja</h3>
+<p>El diagrama de caja o <em>boxplot</em> por definición sí es una buena forma de aproximarse a los datos sin contexto, pues existen unas reglas que determinan como se dibuja el mismo. <code>highcharter</code>en su nueva versión nos facilita mucho la labor de obtención de los datos con la función <code>data_to_boxplot</code> que ya prepara los datos para este tipo de gráfico.</p>
+<pre class="r"><code>df &lt;- data_to_boxplot(mpg, hwy, add_outliers=TRUE)
+highchart() %&gt;%
+  hc_add_series_list(df)</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"name":null,"data":[{"name":0,"low":12,"q1":18,"median":24,"q3":27,"high":37}],"id":null,"type":"boxplot","linkedTo":null,"showInLegend":null},{"name":null,"data":[{"x":0,"y":44},{"x":0,"y":44},{"x":0,"y":41}],"id":null,"type":"scatter","linkedTo":null,"showInLegend":false}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Un diagrama de caja ayuda a visualizar una variable cuantitativa al mostrar cinco resúmenes de ubicaciones comunes (mínimo, mediana, primer y tercer cuartiles y máximo) y cualquier observación que se haya clasificado como un valor atípico sospechoso utilizando el criterio de rango intercuartílico (IQR).</p>
+<p>I=[q<sub>0.25</sub>−1.5⋅IQR;q<sub>0.7</sub>5+1.5⋅IQR]</p>
+<p>Las observaciones consideradas como posibles valores atípicos por el criterio IQR se muestran como puntos en la gráfica de caja. Según este criterio, hay 2 posibles valores atípicos (consulte los 2 puntos sobre la línea vertical, en la parte superior de la gráfica de caja).</p>
+<p>Recuerda que no porque el criterio IQR considere una observación como un valor atípico potencial, se debe eliminarla. Eliminar o mantener un valor atípico depende de:</p>
+<ul>
+<li>el contexto de su análisis,</li>
+<li>si las pruebas que va a realizar en el conjunto de datos son robustas a los valores atípicos o no,</li>
+<li>y lo lejos que está el valor atípico de otras observaciones.</li>
+</ul>
+<p>Como se puede ver en el gráfico, hay dos medidas que son consideradas outliers. Veamos cuáles son esas medidas en el banco de datos o <em>dataframe</em>.</p>
+<pre class="r"><code>boxplot.stats(mpg$hwy)$out</code></pre>
+<pre><code>[1] 44 44 41</code></pre>
+<p>Estas son las medidas (3 casos con dos medidas), pero ¿a qué observaciones refieren? Utilizando la función <code>which</code>, podemos saber qué observaciones son éstas.</p>
+<pre class="r"><code>which(mpg$hwy %in% boxplot.stats(mpg$hwy)$out)</code></pre>
+<pre><code>[1] 213 222 223</code></pre>
+<p>Estos son los casos que podrías decidir eliminar o mantener.</p>
+</div>
+<div id="percentiles" class="section level3">
+<h3>Percentiles</h3>
+<p>Este método de detección de valores atípicos se basa en los percentiles. Con el método de percentiles, todas las observaciones que se encuentran fuera del intervalo formado por los percentiles 0.025 y 0.975 se considerarán como valores atípicos potenciales. Otros percentiles como los percentiles 0.01 y 0.99, o los percentiles 0.05 y 0.95 también se pueden considerar para construir el intervalo.</p>
+<p>Los valores de los percentiles superior e inferior (y, por tanto, los límites superior e inferior del intervalo) se pueden calcular con la función cuantile ():</p>
+<pre class="r"><code>quantile(mpg$hwy, 0.025) #valor inferior</code></pre>
+<pre><code>2.5% 
+  14 </code></pre>
+<pre class="r"><code>quantile(mpg$hwy, 0.975) #valor superior</code></pre>
+<pre><code> 97.5% 
+35.175 </code></pre>
+<p>De acuerdo con este método, todas las observaciones por debajo de 14 y por encima de 35.175 se considerarán valores atípìcos potenciales. Los números de fila de las observaciones fuera del intervalo se pueden extraer con la función <code>which</code>. En este caso, guardamos el resultado en el objeto <code>outlier_ind</code> para facilitar la legibilidad de la expresión en posteriores usos.</p>
+<pre class="r"><code>outlier_ind &lt;- which(mpg$hwy &lt; (quantile(mpg$hwy, 0.025)) | mpg$hwy &gt; quantile(mpg$hwy, 0.975))
+outlier_ind #listamos los valores de intervalo</code></pre>
+<pre><code> [1]  55  60  66  70 106 107 127 197 213 222 223</code></pre>
+<pre class="r"><code>mpg[outlier_ind, &quot;hwy&quot;] #listamos los identificadores de casos</code></pre>
+<pre><code># A tibble: 11 x 1
+     hwy
+   &lt;int&gt;
+ 1    12
+ 2    12
+ 3    12
+ 4    12
+ 5    36
+ 6    36
+ 7    12
+ 8    37
+ 9    44
+10    44
+11    41</code></pre>
+<p>Hay 11 valores atípicos potenciales según el método de percentiles. Sin embargo, si establecemos los límites en 0.01 y 0.99, el resultado nos da los mismos valores atípicos potenciales que con el criterio IQR.</p>
+<pre class="r"><code>outlier_ind &lt;- which(mpg$hwy &lt; (quantile(mpg$hwy, 0.01)) | mpg$hwy &gt; quantile(mpg$hwy, 0.99))
+outlier_ind</code></pre>
+<pre><code>[1] 213 222 223</code></pre>
+<pre class="r"><code>mpg[outlier_ind, &quot;hwy&quot;]</code></pre>
+<pre><code># A tibble: 3 x 1
+    hwy
+  &lt;int&gt;
+1    44
+2    44
+3    41</code></pre>
+</div>
+</div>
+<div id="hampel-filter" class="section level2">
+<h2>Hampel filter</h2>
+<p>Otro método, conocido como filtro de Hampel, consiste en considerar como valores atípicos los valores fuera del intervalo formado por [mediana−3⋅MAD ; mediana+3⋅MAD], donde MAD es la mediana de las desviaciones absolutas de la mediana de los datos. Para este método, primero establecemos los límites de intervalo gracias a las funciones <code>median</code> y <code>mad</code>:</p>
+<pre class="r"><code>(median(mpg$hwy) - 3 * mad(mpg$hwy)) # valor menor de intervalo</code></pre>
+<pre><code>[1] 1.761</code></pre>
+<pre class="r"><code>(median(mpg$hwy) + 3 * mad(mpg$hwy)) # valor mayor de intervalo</code></pre>
+<pre><code>[1] 46.239</code></pre>
+<pre class="r"><code>outlier_ind &lt;- which(mpg$hwy &lt; (median(mpg$hwy) - 3 * mad(mpg$hwy)) | mpg$hwy &gt; (median(mpg$hwy) + 3 * mad(mpg$hwy)))
+outlier_ind</code></pre>
+<pre><code>integer(0)</code></pre>
+<p>De acuerdo con este método, todas las observaciones por debajo de 1.761 y por encima de 46.239 se considerarán valores atípicos potenciales. Los números de fila de las observaciones fuera del intervalo se han extraído con la función <code>which</code>. Según el filtro Hampel, no existe un valor atípico potencial para esta variable.</p>
+</div>
+<div id="pruebas-estadísticas-de-test-para-valores-atípicos" class="section level2">
+<h2>Pruebas estadísticas de test para valores atípicos</h2>
+<p>En esta sección, presentamos 3 técnicas más formales para detectar valores atípicos:</p>
+<ul>
+<li>Prueba de Grubbs</li>
+<li>Prueba de Dixon</li>
+<li>Prueba de Rosner</li>
+</ul>
+<p>Estas 3 pruebas estadísticas son parte de técnicas más formales de detección de valores atípicos, ya que todas implican el cálculo de una inferencia estadística que compara con valores críticos (que se basan en el tamaño de la muestra y el nivel de confianza deseado).</p>
+<p>Tener en cuenta que las 3 pruebas son apropiadas solo cuando los datos (sin valores atípicos) tienen una distribución aproximadamente normal. Por lo tanto, el supuesto de normalidad debe verificarse antes de aplicar estas pruebas para valores atípicos (Kolmogorov-Smirnov o Shapiro-Wilk).</p>
+<div id="prueba-de-grubbs" class="section level3">
+<h3>Prueba de Grubbs</h3>
+<p>La prueba de Grubbs permite detectar si el valor más alto o más bajo en un conjunto de datos es un valor atípico. Se detecta un valor atípico a la vez (valor más alto o más bajo), por lo que las hipótesis nula y alternativa son H<sub>0</sub>: el valor más alto no es un valor atípico y H<sub>1</sub>: el valor más alto es un valor atípico, si queremos probar el valor más alto; H<sub>0</sub>: el valor más bajo no es un valor atípico, H<sub>1</sub>: el valor más bajo es un valor atípico, si queremos probar el valor más bajo.</p>
+<p>Como para cualquier prueba estadística, si el valor <code>p</code> es menor que el umbral de significancia elegido (generalmente α = 0.05), entonces se rechaza la hipótesis nula y concluiremos que el valor más bajo / más alto es un valor atípico. Por el contrario, si el valor p es mayor o igual que el nivel de significancia, la hipótesis nula no se rechaza y concluiremos que, con base en los datos, no rechazamos la hipótesis de que el valor más bajo / más alto no es un valor atípico. <strong>Tenga en cuenta que la prueba de Grubbs no es apropiada para un tamaño de muestra de 6 o menos (n ≤ 6)</strong>. Para realizar la prueba de Grubbs en R, usamos la función <code>grubbs.test</code> del paquete <code>outliers</code>.</p>
+<pre class="r"><code>test &lt;- grubbs.test(mpg$hwy)
+test</code></pre>
+<pre><code>
+    Grubbs test for one outlier
+
+data:  mpg$hwy
+G = 3.45274, U = 0.94862, p-value = 0.05555
+alternative hypothesis: highest value 44 is an outlier</code></pre>
+<p>El valor p es 0.056. En el nivel de significancia del 5%, no rechazamos la hipótesis de que el valor más alto 44 no es un valor atípico.</p>
+<p>Nótese que por defecto, la prueba se realiza en el valor más alto (como se muestra en la salida R: hipótesis alternativa: el valor más alto 44 es un valor atípico). Si desea hacer la prueba para el valor más bajo, simplemente agregue el argumento <code>opposite = TRUE</code> en la función <code>grubbs.test</code>.</p>
+<pre class="r"><code>test &lt;- grubbs.test(mpg$hwy, opposite = TRUE)
+test</code></pre>
+<pre><code>
+    Grubbs test for one outlier
+
+data:  mpg$hwy
+G = 1.92122, U = 0.98409, p-value = 1
+alternative hypothesis: lowest value 12 is an outlier</code></pre>
+<p>El valor p es 1. Al nivel de significancia del 5%, no rechazamos la hipótesis de que el valor más bajo 12 no es un valor atípico.</p>
+<p>Por tanto, para esta prueba no hay <em>outliers</em> en el banco de datos. Nótese la diferencia con las pruebas descriptivas antes presentadas.</p>
+</div>
+<div id="prueba-de-dixon" class="section level3">
+<h3>Prueba de Dixon</h3>
+<p>Similar a la prueba de Grubbs, la prueba de Dixon se usa para probar si un valor alto o bajo es un valor atípico. Por lo tanto, si se sospecha más de un valor atípico, la prueba debe realizarse en estos valores atípicos sospechosos de forma individual. Para realizar la prueba de Dixon en R, usamos la función <code>dixon.test</code> del paquete <code>outliers</code>. A diferencia de la prueba de Grubbs, la prueba de Dixon es más útil para muestras de pequeño tamaño (normalmente n ≤ 25), por lo que restringimos nuestro conjunto de datos a las 20 primeras observaciones (creamos <code>subdat</code>), ya que la prueba de Dixon solo se puede realizar en un tamaño de muestra pequeño, produciendo error si la muestra es más grande. Al igual que antes, para probar el valor más alto, simplemente agregue el argumento <code>opposite = TRUE</code> a la función <code>dixon.test</code>.</p>
+<pre class="r"><code>subdat &lt;- mpg[1:20, ]
+test &lt;- dixon.test(subdat$hwy)
+test</code></pre>
+<pre><code>
+    Dixon test for outliers
+
+data:  subdat$hwy
+Q = 0.57143, p-value = 0.006508
+alternative hypothesis: lowest value 15 is an outlier</code></pre>
+<pre class="r"><code>test &lt;- dixon.test(subdat$hwy, opposite = TRUE)
+test</code></pre>
+<pre><code>
+    Dixon test for outliers
+
+data:  subdat$hwy
+Q = 0.25, p-value = 0.8582
+alternative hypothesis: highest value 31 is an outlier</code></pre>
+<p>Los resultados muestran que el valor más bajo 15 es un valor atípico (valor p = 0.007) y que el valor más alto 31 no es un valor atípico (valor p = 0.858).</p>
+<p>Recuperando la vista gráfica en este nuevo subconjunto de datos…</p>
+<pre class="r"><code>df &lt;- data_to_boxplot(subdat, hwy, add_outliers=TRUE)
+highchart() %&gt;%
+  hc_add_series_list(df)</code></pre>
+<div id="htmlwidget-3" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"name":null,"data":[{"name":0,"low":23,"q1":25,"median":25.5,"q3":27.5,"high":31}],"id":null,"type":"boxplot","linkedTo":null,"showInLegend":null},{"name":null,"data":[{"x":0,"y":20},{"x":0,"y":15}],"id":null,"type":"scatter","linkedTo":null,"showInLegend":false}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Nótese la existencia en el gráfico de un valor <code>20</code> que nos cataloga como <em>outlier</em> el diagrama de caja. ¿Como podemos testar si este valor 20 es también realmente un <em>outlier</em>? Deberíamos eliminar el valor 15, para que el valor 20 fuera analizado en la prueba de Dixon.</p>
+<pre class="r"><code># find and exclude lowest value
+remove_ind &lt;- which.min(subdat$hwy)
+subsubdat &lt;- subdat[-remove_ind, ]
+
+# Dixon test on dataset without the minimum
+test &lt;- dixon.test(subsubdat$hwy)
+test</code></pre>
+<pre><code>
+    Dixon test for outliers
+
+data:  subsubdat$hwy
+Q = 0.44444, p-value = 0.1297
+alternative hypothesis: lowest value 20 is an outlier</code></pre>
+<pre class="r"><code>df &lt;- data_to_boxplot(subsubdat, hwy, add_outliers=TRUE)
+highchart() %&gt;%
+  hc_add_series_list(df)</code></pre>
+<div id="htmlwidget-4" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"name":null,"data":[{"name":0,"low":23,"q1":25,"median":26,"q3":27.5,"high":31}],"id":null,"type":"boxplot","linkedTo":null,"showInLegend":null},{"name":null,"data":[{"x":0,"y":20}],"id":null,"type":"scatter","linkedTo":null,"showInLegend":false}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Los resultados muestran que el segundo valor más bajo 20 no es un valor atípico (valor p = 0,13), aunque el digrama de caja (menos restrictivo el criterio IQR) así lo demuestre.</p>
+</div>
+<div id="prueba-de-rosner" class="section level3">
+<h3>Prueba de Rosner</h3>
+<p>La prueba de Rosner para valores atípicos tiene las ventajas de que:</p>
+<ul>
+<li>se utiliza para detectar conjuntos de valores atípicos (a diferencia de la prueba de Grubbs y Dixon, que muestran valores individuales),</li>
+<li>está diseñado para evitar el problema del enmascaramiento, donde un valor atípico que tiene un valor cercano a otro valor atípico puede pasar desapercibido y,</li>
+<li>es más apropiada cuando el tamaño de la muestra es grande (n ≥ 20).</li>
+</ul>
+<p>Para realizar la prueba de Rosner usamos la función <code>rosnerTest</code> del paquete <code>EnvStats</code>. Esta función requiere al menos 2 argumentos: los datos y el número de valores atípicos sospechosos k (con k = 3 como el número predeterminado de valores atípicos sospechosos). En nuestro caso usamos que el número de valores atípicos sospechosos sea igual a 3, como sugiere el número de <em>outliers</em> potenciales descritos en el diagrama de caja al comienzo del artículo.</p>
+<p>Los resultados interesantes se proporcionan en la tabla final:</p>
+<pre class="r"><code>test &lt;- rosnerTest(mpg$hwy,k = 3)
+test</code></pre>
+<pre><code>$distribution
+[1] &quot;Normal&quot;
+
+$statistic
+     R.1      R.2      R.3 
+3.452739 3.552586 3.131909 
+
+$sample.size
+[1] 234
+
+$parameters
+k 
+3 
+
+$alpha
+[1] 0.05
+
+$crit.value
+lambda.1 lambda.2 lambda.3 
+3.652091 3.650836 3.649575 
+
+$n.outliers
+[1] 0
+
+$alternative
+[1] &quot;Up to 3 observations are not\n                                 from the same Distribution.&quot;
+
+$method
+[1] &quot;Rosner&#39;s Test for Outliers&quot;
+
+$data
+  [1] 29 29 31 30 26 26 27 26 25 28 27 25 25 25 25 24 25 23 20 15 20 17 17 26 23
+ [26] 26 25 24 19 14 15 17 27 30 26 29 26 24 24 22 22 24 24 17 22 21 23 23 19 18
+ [51] 17 17 19 19 12 17 15 17 17 12 17 16 18 15 16 12 17 17 16 12 15 16 17 15 17
+ [76] 17 18 17 19 17 19 19 17 17 17 16 16 17 15 17 26 25 26 24 21 22 23 22 20 33
+[101] 32 32 29 32 34 36 36 29 26 27 30 31 26 26 28 26 29 28 27 24 24 24 22 19 20
+[126] 17 12 19 18 14 15 18 18 15 17 16 18 17 19 19 17 29 27 31 32 27 26 26 25 25
+[151] 17 17 20 18 26 26 27 28 25 25 24 27 25 26 23 26 26 26 26 25 27 25 27 20 20
+[176] 19 17 20 17 29 27 31 31 26 26 28 27 29 31 31 26 26 27 30 33 35 37 35 15 18
+[201] 20 20 22 17 19 18 20 29 26 29 29 24 44 29 26 29 29 29 29 23 24 44 41 29 26
+[226] 28 29 29 29 28 29 26 26 26
+
+$data.name
+[1] &quot;mpg$hwy&quot;
+
+$bad.obs
+[1] 0
+
+$all.stats
+  i   Mean.i     SD.i Value Obs.Num    R.i+1 lambda.i+1 Outlier
+1 0 23.44017 5.954643    44     213 3.452739   3.652091   FALSE
+2 1 23.35193 5.812124    44     222 3.552586   3.650836   FALSE
+3 2 23.26293 5.663340    41     223 3.131909   3.649575   FALSE
+
+attr(,&quot;class&quot;)
+[1] &quot;gofOutlier&quot;</code></pre>
+<p>Vemos que solo hay un valor atípico (ver la columna de <em>Outlier</em>), y que es la observación 34 (ver <code>Obs.Num)</code> con un valor de 212 (ver columna <code>Value</code> de la tabla).</p>
+<p>Y aquí finalizamos este post, nos emplazamos a una posterior entrada donde trataremos los <em>outliers</em> de tipo multivariante*. Espero haya sido de ayuda. Hasta el próximo post …</p>
+</div>
+</div>
+<div id="referencias" class="section level2">
+<h2>Referencias</h2>
+<hr>
+<a href="https://www.statsandr.com/blog/outliers-detection-in-r/">Este artículo es una traducción / adaptación de Antoine Soetewey.</a>
+<hr>
+<ul>
+<li>Hawkins, D. M. (1980). Identification of outliers (Vol. 11). London: Chapman and Hall.</li>
+<li>Aldás Manzano, J., &amp; Uriel Jimenez, E. (2017). Análisis multivariante aplicado con R. Ediciones Paraninfo, SA.</li>
+</ul>
+</div>

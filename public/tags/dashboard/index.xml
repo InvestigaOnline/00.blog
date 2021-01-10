@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dashboard on Blog InvestigaOnline.com</title>
+    <link>/tags/dashboard/</link>
+    <description>Recent content in dashboard on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sun, 16 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/dashboard/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NPS con media móvil</title>
+      <link>/2020/08/16/npsmovil/</link>
+      <pubDate>Sun, 16 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/16/npsmovil/</guid>
+      <description>Calcular el NPS con media móvilEn ocasiones resulta interesante ir analizando la evolución de los KPIs de la empresa de forma periódica. Esto cobra suma importancia cuando se introducen cambios en la forma de proceder, en los protocolos de prestación del servicio que se está valorando.</description>
+    </item>
+    
+    <item>
+      <title>¿qué es y para qué un dashboard?</title>
+      <link>/2019/12/06/dashboard/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/12/06/dashboard/</guid>
+      <description>Dashboard o cuadro de control¿Qué es un dashboard?
+Un dashboard es una representación gráfica de las principales métricas o KPIs que intervienen en una investigación.
+¿Para qué sirve?
+El objetivo principal de un dashboard es ofrecer visibilidad sobre los indicadores que deben alcanzar determinado valor para alcanzar los objetivos de la empresa. Además permite conocer datos de valor, analizar tendencias y fijar líneas de actuación.
+¿Por qué es importante?</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>conjoint on Blog InvestigaOnline.com</title>
+    <link>/tags/conjoint/</link>
+    <description>Recent content in conjoint on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Fri, 27 Dec 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/conjoint/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>conjoint analysis</title>
+      <link>/2019/12/27/conjoint/</link>
+      <pubDate>Fri, 27 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/12/27/conjoint/</guid>
+      <description>Hace unos meses, dediqué una entrada a cómo crear diseños experimentales para MaxDiff y ya se mencionó entonces el análisis conjunto como una técnica que en muchos caso se presentaba como similar. Por motivos que no vienen al caso, ha surgido la necesidad de trabajar con esta técnica, y me he puesto manos a la obra con R.
+El análisis conjunto es un método de marketing que permite conocer las expectativas de los consumidores sobre un producto y modelar sus elecciones.</description>
+    </item>
+    
+  </channel>
+</rss>

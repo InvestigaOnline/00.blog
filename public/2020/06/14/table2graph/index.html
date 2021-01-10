@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es-es">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+<title>de expss a highcharter - Blog InvestigaOnline.com</title>
+<meta property="og:title" content="de expss a highcharter - Blog InvestigaOnline.com">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">Acerca de</a></li>
+    
+    <li><a href="https://www.investigaonline.com">InvestigaOnline.com</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">de expss a highcharter</h1>
+
+    
+    <span class="article-date">2020-06-14</span>
+    
+
+    <div class="article-content">
+      
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<blockquote>
+<p>[ <strong><strong>Cuando algo va acabando y sus puertas se van cerrando, algo nuevo comienza y otras puertas se van abriendo</strong></strong> ]</p>
+</blockquote>
+<p>Hace tiempo que no escribía en el blog. En mi sitio web InvestigaOnline.com puedes ver muchas de las cosas que he estado haciendo este último año, tan difícil para todos.</p>
+<p>En este post de esta nueva temporada os presento una combinación fácil para pasar de una tabla <strong>EXPSS</strong> (<a href="https://cran.r-project.org/web/packages/expss/vignettes/tables-with-labels.html">vignette</a> / <a href="https://cran.r-project.org/web/packages/expss/vignettes/examples.html">examples</a> / <a href="https://cran.r-project.org/web/packages/expss/vignettes/xlsx-export.html">excel y expss</a>), ese paquete de tabulación que descubrí hace un año, y que no me canso de agradecer a Gregory Demin por su valiosa y desinteresada aportación al mundo del proceso de datos a un gráfico <a href="https://www.highcharts.com">Highcharts</a> pero en el entorno R y por tanto utilizando el paquete <a href="http://jkunst.com/highcharter/index.html">highcharteR</a> de Joshua Kunst al que también debo reconocer su maravillosa aportación. El entorno a utilizar como siempre <a href="https://rstudio.com/products/rstudio/">RStudio</a> y/o también sólo <a href="https://cran.r-project.org/">R</a> con alguna pequeña variación.</p>
+<p>Para este ejercicio utilizaremos los paquetes:</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/expss/index.html">expss</a></li>
+<li><a href="https://cran.r-project.org/web/packages/tidyr/index.html">tidyr</a></li>
+<li><a href="https://cran.r-project.org/web/packages/highcharter/index.html">highcharter</a></li>
+</ul>
+<p>Si no los tienes instalados, utiliza la instrucción :</p>
+<pre class="r"><code>#install.packages(c(&#39;expss&#39;, &#39;tidyr&#39;, &#39;highcharter&#39;))</code></pre>
+<p>Si ya los tienes instalados de otras veces, simplemente carga los paquetes al inicio de tu script</p>
+<pre class="r"><code>suppressMessages(library(expss, quietly = TRUE))
+suppressMessages(library(tidyr, quietly = TRUE))
+suppressMessages(library(highcharter, quietly = TRUE))</code></pre>
+<p>Veamos como sería el script. Usaremos uno de los ficheros típicos de ejemplo de R, el archivo <code>mtcars</code>.</p>
+<pre class="r"><code>data(mtcars)
+mtcars &lt;- apply_labels(mtcars,
+  vs = &quot;Engine&quot;, vs = c(&quot;V-engine&quot; = 0, &quot;Straight engine&quot; = 1),
+  am = &quot;Transmission&quot;, am = c(&quot;Automatic&quot; = 0,&quot;Manual&quot;=1)
+  )</code></pre>
+<p>Puedes observar que hemos cargado el fichero mtcars y hemos etiquetado sólo las variables que vamos a utilizar. Si por ejmplo cargas un fichero SPSS con la instrucción <code>read_spss</code> del paquete <code>expss</code> ese fichero ya estaría etiquetado. Es posible que si estás muy habituado a trabajar con <code>expss</code> pudieras optar por asignar el texto con <code>var_lab()</code> y los códigos con <code>val_lab()</code>. El resultado sería el mismo.</p>
+<pre class="r"><code>data(mtcars)
+var_lab(mtcars$vs) &lt;- &quot;Engine&quot;
+val_lab(mtcars$vs) &lt;- c(&quot;V-engine&quot; = 0, &quot;Straight engine&quot; = 1)
+var_lab(mtcars$am) &lt;- &quot;Transmission&quot;
+val_lab(mtcars$am) &lt;- c(&quot;Automatic&quot; = 0,&quot;Manual&quot; = 1)</code></pre>
+<p>Sea como fuere, las dos variables que nos interesan están etiquetadas ya.</p>
+<p>Pasemos ahora a hacer la tabla, una tabla cruzada de frecuencias donde calcularemos el porcentaje de casos de cada perfil de transmision por pefil de ingeniería de motor. Al principio haremos la tabla completa, tal como la haríamos para ser publicada como tabla y luego la reharemos para ser aprovechada y hacer un gráfico directo con ella.</p>
+<pre class="r"><code>mtcars %&gt;% 
+  tab_cols(total(),vs) %&gt;% 
+  tab_cells(am) %&gt;% 
+  tab_stat_cpct() %&gt;% 
+  tab_pivot()</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="1" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+<th style="border-bottom: none; border-top: 2px solid grey;" colspan="1">
+ 
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Engine 
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+ 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;">
+ V-engine 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;">
+ Straight engine 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="5" style="font-weight: 900;">
+ Transmission 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Automatic 
+</td>
+<td style="text-align: right;">
+59.4
+</td>
+<td style="text-align: right;" colspan="1">
+ 
+</td>
+<td style="text-align: right;">
+66.7
+</td>
+<td style="text-align: right;">
+50
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Manual 
+</td>
+<td style="text-align: right;">
+40.6
+</td>
+<td style="text-align: right;" colspan="1">
+ 
+</td>
+<td style="text-align: right;">
+33.3
+</td>
+<td style="text-align: right;">
+50
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   #Total cases 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+32
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;" colspan="1">
+ 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+18
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+14
+</td>
+</tr>
+</tbody>
+</table>
+<p>Más simple la tabla, imposible. Esta tabla es bonita, lista para ser presentada, pero realmente lo que nos importa es el cuadrante de datos porcentuales 66.7, 50, 33.3 y 50%. Y por ello vamos a retocar esa tabla para dejar la información bruta.</p>
+<pre class="r"><code>mtcars %&gt;% 
+  tab_cols(vs) %&gt;% 
+  tab_cells(am) %&gt;% 
+  tab_stat_cpct(total_row_position = &#39;none&#39;) %&gt;% 
+  tab_pivot()</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Engine 
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;">
+ V-engine 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; text-align: center;">
+ Straight engine 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="3" style="font-weight: 900;">
+ Transmission 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Automatic 
+</td>
+<td style="text-align: right;">
+66.7
+</td>
+<td style="text-align: right;">
+50
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   Manual 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+33.3
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+50
+</td>
+</tr>
+</tbody>
+</table>
+<p>Hemos quitado los totales de columna y fila. Ya tenemos solo los datos, pero nos molestan todavía algunos datos. Vamos a mirar esta tabla en estructura, en formato bruto, transformándola en un dataframe. Queda así:</p>
+<pre class="r"><code>as.data.frame(mtcars %&gt;% 
+  tab_cols(vs) %&gt;% 
+  tab_cells(am) %&gt;% 
+  tab_stat_cpct(total_row_position = &#39;none&#39;) %&gt;% 
+  tab_pivot())</code></pre>
+<pre><code>              row_labels Engine|V-engine Engine|Straight engine
+1 Transmission|Automatic        66.66667                     50
+2    Transmission|Manual        33.33333                     50</code></pre>
+<p>Ummm …. no nos gustan, imagino, los textos de fila y los textos de columna; vienen bien para publicar la tabla, ya que como ves el <code>|</code> se utiliza para separar y no repetir el texto extra de la variable. Así que vamos a utilizar algunas herramientas del paquete <code>expss</code>. Usaremos dos trucos para mejorar la salida de cara a obtener una matriz simple de datos. El uso de <code>'|'</code>como asignación de texto a las variables y el uso de <code>unvr()</code> para eliminar cualquier vestigio de texto anterior de la misma. Mira el resultado.</p>
+<pre class="r"><code>tab &lt;- mtcars %&gt;% 
+  tab_cols(&#39;|&#39;=unvr(vs)) %&gt;% 
+  tab_cells(&#39;|&#39;=unvr(am)) %&gt;% 
+  tab_stat_cpct(total_row_position = &#39;none&#39;) %&gt;% 
+  tab_pivot()
+tab</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ V-engine 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ Straight engine 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ Automatic 
+</td>
+<td style="text-align: right;">
+66.7
+</td>
+<td style="text-align: right;">
+50
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ Manual 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+33.3
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+50
+</td>
+</tr>
+</tbody>
+</table>
+<p>Ha mejorado la cosa, ¿no?. Ahora convirtamos esta tabla (que es un dataframe de tipo <code>etable</code>) en un dataframe como el que necesitan los gráficos. Para eso usaremos una opción magnífica del paquete <code>tidyr</code> denominada <code>pivot_longer()</code> que nos creará nuestro fichero necesario para <code>highcharteR</code> con una sola instrucción. Nóteses que hemos guardado la tabla en un objeto llamado <code>tab</code> para no tener que repetirla nuevamente. Guardaremos esa transformación nuevamente en un objeto llamado df y que será nuestro dataframe final. Aprovechamos también para cambiar los textos que quiero salgan en el gráfico para x, y y las series con la función <code>colnames()</code>.</p>
+<pre class="r"><code>tab &lt;- as.data.frame(tab)
+colnames(tab) &lt;- c(&#39;am&#39;, &#39;transmission&#39;, &#39;pct&#39;) # cambia el nombre de las columnas
+
+df &lt;- tab %&gt;% pivot_longer(-am, names_to=&#39;transmission&#39;, values_to=&#39;pct&#39;)
+df</code></pre>
+<pre><code># A tibble: 4 x 3
+  am        transmission   pct
+  &lt;chr&gt;     &lt;chr&gt;        &lt;dbl&gt;
+1 Automatic transmission  66.7
+2 Automatic pct           50  
+3 Manual    transmission  33.3
+4 Manual    pct           50  </code></pre>
+<p>Fíjate, hemos conseguido tener lo que va a necesitar el gráfico. Un campo x (<code>am</code>) que usaremos para categorizar, un campo group (<code>transmission</code>) que usaremos para agrupar por series y un campo y (<code>pct</code>) que contiene los datos a representar. Hagamos el gráfico.</p>
+<pre class="r"><code>hchart(df, &#39;column&#39;, hcaes(x=am, y=pct, group=transmission))</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":"pct"},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"pct","data":[{"am":"Automatic","transmission":"pct","pct":50,"y":50,"name":"Automatic"},{"am":"Manual","transmission":"pct","pct":50,"y":50,"name":"Manual"}],"type":"column"},{"name":"transmission","data":[{"am":"Automatic","transmission":"transmission","pct":66.6666666666667,"y":66.6666666666667,"name":"Automatic"},{"am":"Manual","transmission":"transmission","pct":33.3333333333333,"y":33.3333333333333,"name":"Manual"}],"type":"column"}],"xAxis":{"type":"category","title":{"text":"am"},"categories":null}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Como una muestra más, una vez tenemos los datos …</p>
+<pre class="r"><code>hchart(df, &#39;bar&#39;, hcaes(x=am, y=pct, group=transmission))</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":"pct"},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"pct","data":[{"am":"Automatic","transmission":"pct","pct":50,"y":50,"name":"Automatic"},{"am":"Manual","transmission":"pct","pct":50,"y":50,"name":"Manual"}],"type":"bar"},{"name":"transmission","data":[{"am":"Automatic","transmission":"transmission","pct":66.6666666666667,"y":66.6666666666667,"name":"Automatic"},{"am":"Manual","transmission":"transmission","pct":33.3333333333333,"y":33.3333333333333,"name":"Manual"}],"type":"bar"}],"xAxis":{"type":"category","title":{"text":"am"},"categories":null}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Y éste es el gráfico por defecto. En posteriores posts veremos como mejorar y aplicar todas las características que nos pueda ofrecer la <a href="https://api.highcharts.com">api de Highcharts</a> desde el paquete <code>highcharter</code>.</p>
+<p>Hacemos un resumen global en un sólo paso de todo, lo que sería necesario.</p>
+<pre class="r"><code>#hacemos la tabla
+tab &lt;- mtcars %&gt;% 
+  tab_cols(&#39;|&#39;=unvr(vs)) %&gt;% 
+  tab_cells(&#39;|&#39;=unvr(am)) %&gt;% 
+  tab_stat_cpct(total_row_position = &#39;none&#39;) %&gt;% 
+  tab_pivot()
+#la convertimos en objeto dataframe
+tab &lt;- as.data.frame(tab)
+
+#asignamos nombres 
+colnames(tab) &lt;- c(&#39;am&#39;, &#39;transmission&#39;, &#39;pct&#39;) # cambia el nombre de las variables
+
+#convertimos el dataframe de la tabla al dataframe del gráfico
+df &lt;- tab %&gt;% pivot_longer(-am, names_to=&#39;transmission&#39;, values_to=&#39;pct&#39;)
+
+#hacemos los dos gráficos
+hchart(df, &#39;column&#39;, hcaes(x=am, y=pct, group=transmission))</code></pre>
+<div id="htmlwidget-3" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":"pct"},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"pct","data":[{"am":"Automatic","transmission":"pct","pct":50,"y":50,"name":"Automatic"},{"am":"Manual","transmission":"pct","pct":50,"y":50,"name":"Manual"}],"type":"column"},{"name":"transmission","data":[{"am":"Automatic","transmission":"transmission","pct":66.6666666666667,"y":66.6666666666667,"name":"Automatic"},{"am":"Manual","transmission":"transmission","pct":33.3333333333333,"y":33.3333333333333,"name":"Manual"}],"type":"column"}],"xAxis":{"type":"category","title":{"text":"am"},"categories":null}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>hchart(df, &#39;bar&#39;, hcaes(x=am, y=pct, group=transmission))</code></pre>
+<div id="htmlwidget-4" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":"pct"},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"showInLegend":true},"treemap":{"layoutAlgorithm":"squarified"},"scatter":{"marker":{"symbol":"circle"}}},"series":[{"name":"pct","data":[{"am":"Automatic","transmission":"pct","pct":50,"y":50,"name":"Automatic"},{"am":"Manual","transmission":"pct","pct":50,"y":50,"name":"Manual"}],"type":"bar"},{"name":"transmission","data":[{"am":"Automatic","transmission":"transmission","pct":66.6666666666667,"y":66.6666666666667,"name":"Automatic"},{"am":"Manual","transmission":"transmission","pct":33.3333333333333,"y":33.3333333333333,"name":"Manual"}],"type":"bar"}],"xAxis":{"type":"category","title":{"text":"am"},"categories":null}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Esto ha sido todo, hasta el próximo post …</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

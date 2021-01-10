@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kableExtra on Blog InvestigaOnline.com</title>
+    <link>/tags/kableextra/</link>
+    <description>Recent content in kableExtra on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Mon, 24 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/kableextra/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Entradas</title>
+      <link>/post/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tablas con expss</title>
+      <link>/2020/08/24/outliers/</link>
+      <pubDate>Mon, 24 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/24/outliers/</guid>
+      <description>Escribo estas líneas para anunciar un trabajo más completo con el que puedas aprender a hacer tablas y gráficos utilizando R. La documentación está escrita para ayudar a los usuarios de SegmentaNet, pero puede ser usada por cualquiera que utilice R / RStudio o cualquier otro IDE y esté interesado en trabajar con los paquetes expss y highcharter para obtener un gran rendimiento en la presentación de tablas marginales y cruzadas y en su conversión, cuando sea necesario, en atractivos gráficos realizdos con la libería Highcharts utilizando como intermediario el paquete ya mencionado highcharter.</description>
+    </item>
+    
+  </channel>
+</rss>

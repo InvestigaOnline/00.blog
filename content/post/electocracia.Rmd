@@ -1,0 +1,121 @@
+---
+title: "intención de voto (electocracia.com)"
+author: "Roberto Gil Saura"
+date: "2021-01-10"
+slug: intencion_voto
+categories:
+  - analisis
+  - R
+tags:
+  - politica
+  - intencion voto
+  - grafico serie
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA)
+library(highcharter)
+library(readr)
+library(dplyr)
+library(expss)
+```
+
+Ya hace un tiempo que quería publicar este gráfico en el blog y he encontrado el momento. En plena situación de tercera oleada de esta maldita COVID-19, mostramos tanto la serie histórica desde 2017 de la evolución de la intención de voto, como también lo sucedido desde la celebración de las elecciones. Los datos ofrecidos han sido ponderados por el campo FIABILIDAD que suponemos ofrece una mejora del dato conjunto. Si en una fecha determinada hay varias publicaciones, para cada día se obtiene la media de los estudios publicados.
+
+Es un gráfico muy simple, utilizamos los paquetes `readr` para leer los datos en formato texto CSV tras haber sido homogeneizados (tratamiento de fechas de publicacion y agencia de investigación) desde [electocracia.com](https://electocracia.com/#historico).
+
+El primer gráfico muestra la serie desde la celebración de las elecciones, mientras que el segundo muestra el total de los datos. Si deseas cualquier otro período intermedio, puedes hacerlo utilizando los intervalos de fecha o ajustando el selector inferior del gráfico.
+
+
+```{r echo = FALSE}
+#carga
+options(highcharter.theme = hc_theme_hcrt(tooltip = list(valueDecimals = 2)))
+data0 <- read_delim(file="https://drive.google.com/uc?export=download&id=1vg2KxfhLaT4-FgVIuXvq_YIFyuQxtnkC",
+    delim="\t", 
+    escape_double = FALSE, 
+    col_types = cols(publicacion = col_date(format = "%d/%m/%Y"), fincampo = col_skip()), 
+    trim_ws = TRUE)
+
+#colores institucionales de los partidos
+psoe <- "#ea2d17"
+pp <- "#01a3e1"
+unipod <- "#a565c5"
+cs <- "#ff7d41"
+vox <- "#80c02c"
+maspais <- "#0fdfc5"
+
+data1 <- data0 %>% where(publicacion>'2019-11-10')
+
+#tabla y ajuste de fecha a timestamp
+tab <- data1 %>% 
+        tab_weight(valor) %>% 
+        tab_cols('|'=unvr(publicacion)) %>% 
+        tab_cells(psoe, pp, unipod, cs, vox, maspais) %>%
+        tab_stat_mean(label='|') %>% 
+        tab_pivot() %>% 
+        t()
+colnames(tab) <- c('publicacion', 'psoe', 'pp', 'unipod', 'cs', 'vox', 'maspais')
+tab$publicacion <- datetime_to_timestamp(as.Date(tab$publicacion))
+
+#gráfico
+highchart() %>% 
+        hc_xAxis(type='datetime') %>%
+        hc_legend(enabled=TRUE) %>%
+        hc_tooltip(table=TRUE) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=psoe), name='psoe', color=psoe) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=pp), name='pp', color=pp) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=cs), name='cs', color=cs) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=unipod), name='unipod', color=unipod) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=vox), name='vox', color=vox) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=maspais), name='maspais', color=maspais)
+```
+
+Aquí, el gráfico completo desde que existen datos.
+
+```{r echo = FALSE}
+#tabla y ajuste de fecha a timestamp
+tab <- data0 %>% 
+        tab_weight(fiabilidad) %>% 
+        tab_cols('|'=unvr(publicacion)) %>% 
+        tab_cells(psoe, pp, unipod, cs, vox, maspais) %>%
+        tab_stat_mean(label='|') %>% 
+        tab_pivot() %>% 
+        t()
+colnames(tab) <- c('publicacion', 'psoe', 'pp', 'unipod', 'cs', 'vox', 'maspais')
+tab$publicacion <- datetime_to_timestamp(as.Date(tab$publicacion))
+
+#gráfico
+highchart(type='stock') %>% 
+        hc_xAxis(type='datetime') %>%
+        hc_rangeSelector(enabled=TRUE, allButtonsEnabled=TRUE) %>% 
+        hc_legend(enabled=TRUE) %>%
+        hc_tooltip(table=TRUE) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=psoe), name='psoe', color=psoe) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=pp), name='pp', color=pp) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=cs), name='cs', color=cs) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=unipod), name='unipod', color=unipod) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=vox), name='vox', color=vox) %>% 
+        hc_add_series(tab, type='line', hcaes(x=publicacion, y=maspais), name='maspais', color=maspais)
+```
+
+
+**Últimas 10 publicaciones**
+
+```{r echo = FALSE}
+tab <- data0 %>% 
+        tab_weight(fiabilidad) %>% 
+        tab_cols('|'=unvr(publicacion)) %>%
+        tab_cells(psoe, pp, unipod, cs, vox, maspais) %>%
+        tab_stat_mean(label='|') %>% 
+        tab_pivot() %>% 
+        t()
+colnames(tab) <- c('publicacion', 'psoe', 'pp', 'unipod', 'cs', 'vox', 'maspais')
+tab <- tab %>% arrange(desc(publicacion))
+as.datatable_widget(head(tab,10)) 
+```
+
+Si quieres disponer de los datos para conocer qué agencia publica cada dato, aquí tienes el [link](https://drive.google.com/uc?export=download&id=1vg2KxfhLaT4-FgVIuXvq_YIFyuQxtnkC).

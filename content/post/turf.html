@@ -1,0 +1,1238 @@
+---
+title: "turf (total unduplicated reach and frequency)"
+author: "Roberto Gil Saura"
+date: "2019-12-12"
+slug: turf
+categories:
+  - analisis
+  - R
+tags:
+  - turf
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+<link href="/rmarkdown-libs/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/anchor-sections/anchor-sections.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<div id="introducción" class="section level1">
+<h1>Introducción</h1>
+<p>Hacía tiempo que no escuchaba hablar de él, pero ha vuelto a mi. TURF es un acrónimo anglosajón para Total Unduplicated Reach and Frequency. Este análisis es ampliamente utilizado en el mundo del marketing desde hace años, ya que nos da pistas y repsuestas a dos situaciones muy habituales en el análisis de cartera de productos, aunque su uso se puede extender a otros ámbitos muy diferentes:</p>
+<ul>
+<li><p>Por un lado, cuando una compañía dispone de una cartera de productos que quiere extender, pero teniendo las limitaciones de producción o prespuestarias que le impiden desarrollar sólo algunos de ellos, TURF les ayudará aleegir cuáles son los más apropiados.</p></li>
+<li><p>otro ámbito de trabajo podría ser en qué medios de comunicación debe enfocarse una empresa al distribuir contenido; ¿en qué redes publicitarias y medios debería centrarse?</p></li>
+<li><p>otro ámbito podría ser el político; sabiendo que en un discurso de un líder político solo nos podemos centrar en 4 o 5 temas fundamentales de los 10 que podemos abordar, ¿con qué temas alcanzaríamos más a nuestro target?</p></li>
+</ul>
+<p>Este documento intenta exponer un caso basado en una base de datos obtenida del sitio de displayR y cubre todo, desde la preparación de datos hasta la visualización e informes de datos.</p>
+<p>Los paquetes que vamos a utilizar son básicos para cualquier analista de datos trabajando con R:</p>
+<ul>
+<li>readxl (carga de excel)</li>
+<li>expss (tablas)</li>
+<li>ca (análisis de correspondencias)</li>
+<li>psych (análisis multivariante clásico)</li>
+<li>ggplot2 (gráficos adaptables)</li>
+<li>turfR (análisis TURF)</li>
+</ul>
+</div>
+<div id="descripción-de-la-base-de-datos" class="section level1">
+<h1>Descripción de la base de datos</h1>
+<hr />
+<p>Un estudio TURF requiere un conjunto de datos que consiste en:</p>
+<ul>
+<li><p>Datos de al menos 100 personas, e idealmente muchas más</p></li>
+<li><p>Para cada persona, las mediciones del atractivo de tres o más alternativas diferentes, que generalmente son productos o contenido. Estas mediciones pueden ser de escalas de calificación, datos históricos de compra, MaxDiff o utilidades conjuntas o predicciones de preferencias.</p></li>
+</ul>
+<p>En nuestro caso, la base de datos <a href="bubble_gum_flavors.xlsx">enlace</a> es una hoja de cálculo EXCEL con 712 registros (713 filas) y dispone de 15 columnas (primera fila), donde la primera columna es el id (identificador) del individuo la segunda el peso del individuo en la muestra (representatividad de la pobalación) y el resto son las diferentes alternativas de producto en la cartera de producto de una empresa fabricante de goma de mascar, las 11 siguientes son las diferentes alternativas testadas en un hall test y por último edad y género del individuo. En nuestro caso el peso es en todos los casos igual a 1, de forma que ningún individuo pondera más que otro. No ha existido equilibraje de la muestra.</p>
+<blockquote>
+<p>Un fabricante de chicles estaba vendiendo dos sabores de chicle, Classic y Cola, y decide extender la gama a cuatro sabores.
+Se realizó una encuesta a 712 padres, donde los padres les preguntaron a sus hijos cuál de los 11 sabores les gustaba. Los porcentajes que gustan de cada uno de los sabores se muestran a la derecha. Esto se conoce como alcance total no duplicado, que es un término de la planificación de medios, donde el enfoque se centraba en comprender los medios de comunicación (por ejemplo, qué combinación de cuatro revistas llegaría al mayor número de personas). Por lo general, se llama simplemente “alcance” (<strong>reach</strong>) para abreviar.</p>
+</blockquote>
+<p>Las diferentes alternativas son:</p>
+<ul>
+<li>classic</li>
+<li>strong</li>
+<li>grape</li>
+<li>sour</li>
+<li>orange</li>
+<li>strawberry</li>
+<li>cola</li>
+<li>apple</li>
+<li>chocolate</li>
+<li>peach</li>
+<li>watermelon</li>
+</ul>
+<p>La preparación de datos consiste en convertir cada medida a una variable binaria, donde un 1 indica que a la persona le gusta lo que se está midiendo, un 0 indica lo contrario. Las columnas de las alternativas podrás por tanto ver que son binarias. Aquí te mostramos las 5 primeras observaciones de nuestra tabla de datos.</p>
+<pre class="r"><code>suppressPackageStartupMessages(library(readxl))
+suppressPackageStartupMessages(library(turfR))
+suppressPackageStartupMessages(library(expss))
+suppressPackageStartupMessages(library(ca))
+suppressPackageStartupMessages(library(psych))
+suppressPackageStartupMessages(library(ggplot2))
+
+suppressMessages(data &lt;- read_excel(&quot;bubble_gum_flavors.xlsx&quot;))
+colnames(data)&lt;- c(&#39;id&#39;,&#39;weight&#39;,&#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;,&#39;age&#39;,&#39;gender&#39;)
+head(as.data.frame(data),5)</code></pre>
+<pre><code>  id weight classic strong grape sour orange strawberry cola apple chocolate peach watermelon        age gender
+1  1      1       1      0     1    1      1          0    1     0         0     0          0 13 or more Female
+2  2      1       1      1     0    1      1          0    0     1         0     0          0 13 or more Female
+3  3      1       1      1     1    1      0          0    1     0         0     0          0 13 or more Female
+4  4      1       0      0     0    1      1          0    0     1         1     0          0 13 or more Female
+5  5      1       1      1     0    0      1          1    0     0         1     1          1    Under 8 Female</code></pre>
+</div>
+<div id="análisis" class="section level1">
+<h1>Análisis</h1>
+<div id="análisis-turf-total-unduplicated-reach-frequency" class="section level2">
+<h2>Análisis TURF (total unduplicated reach frequency)</h2>
+<hr />
+<p>Los datos pueden ser medidos de diferentes formas (que luego se binarizan).</p>
+<ul>
+<li><p><strong>Escalas de calificación</strong> como por ejemplo, la intención de compra, se usan comúnmente en los estudios TURF. Para usar estos datos, primero es necesario convertir los datos en formato binario. Por ejemplo, asignar un 1 a todos los que han dicho “Definitivamente comprará” y “Probablemente comprará” y un 0 a todos los demás.</p></li>
+<li><p><strong>Datos MaxDiff</strong> que también se pueden usar en TURF, pero es necesario convertirlos primero a un formato binario. Hay varias formas de hacerlo:</p>
+<ul>
+<li><p><em>Alternativas mejor clasificadas</em>. A las alternativas mejor clasificadas para cada observación se les asigna un valor de 1 y las demás un valor de 0.</p></li>
+<li><p><em>Selección basada en el umbral</em>. Se especifica algún umbral (por ejemplo, servicios públicos por encima del promedio del encuestado), y las alternativas con un servicio público por encima de este valor tienen asignado un valor de 1 y otras un valor de 0.</p></li>
+<li><p>Las <em>reglas basadas en probabilidad</em>, como las alternativas con una probabilidad superior al 10% tienen un valor de 1. Este último enfoque no es aconsejable, ya que los factores de escala significan que el factor determinante clave de las probabilidades es la cantidad de ruido en sus datos, por lo que si Si utiliza un enfoque como éste, terminará sesgando el MaxDiff hacia las personas que fueron indecisas e inconsistentes en su MaxDiff.</p></li>
+</ul></li>
+<li><p>Los <strong>datos de conjoint analysis</strong> también se pueden usar de la misma manera que con MaxDiff, utilizando niveles de un atributo o productos simulados.</p></li>
+</ul>
+<p>En nuestro caso vamos a realizar un análisis TURF para portfolio de productos que tenga de 4 alternativas. De este modo, veremos que conceptos de resultado se manejan en un TURF. Solo mostraremos las cinco alternativas mejores en base a los resultados.</p>
+<pre class="r"><code>data &lt;- as.data.frame(data[,1:13])
+suppressMessages(turfprods &lt;- turf(data, 11, 4))</code></pre>
+<pre><code>4 of 11: 0.5269589 sec
+total time elapsed: 0.527956 sec </code></pre>
+<pre class="r"><code>turf &lt;- turfprods[[&quot;turf&quot;]][[1]]
+colnames(turf)&lt;- c(&#39;combo&#39;,&#39;rchX&#39;, &#39;frqX&#39;,&#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;)</code></pre>
+<p>La forma en que funciona un estudio TURF básico es que examina el alcance de todas las carteras (<strong>combos</strong> = combinaciones) posibles de los cuatro sabores (alternativas) y calcula el alcance de cada uno de ellos. Los resultados se muestran a la derecha. Cada combinación está numerada para su identificación, y la tabla se muestra ordenada por el alcance (<strong>reach</strong>).</p>
+</div>
+<div id="cartera-de-4-sabores" class="section level2">
+<h2>Cartera de 4 sabores</h2>
+<pre class="r"><code>turf</code></pre>
+<pre><code>    combo      rchX      frqX classic strong grape sour orange strawberry cola apple chocolate peach watermelon
+1      38 0.9508427 2.0828652       1      0     1    1      0          1    0     0         0     0          0
+2      71 0.9438202 1.8567416       1      0     0    1      0          1    1     0         0     0          0
+3      50 0.9410112 2.0252809       1      0     1    0      0          1    1     0         0     0          0
+4      10 0.9396067 1.8988764       1      1     0    1      0          1    0     0         0     0          0
+5      44 0.9382022 2.0491573       1      0     1    0      1          1    0     0         0     0          0
+6      46 0.9367978 1.9733146       1      0     1    0      1          0    0     1         0     0          0
+7      47 0.9367978 1.9255618       1      0     1    0      1          0    0     0         1     0          0
+8      86 0.9367978 1.8230337       1      0     0    0      1          1    1     0         0     0          0
+9      45 0.9353933 2.0337079       1      0     1    0      1          0    1     0         0     0          0
+10     51 0.9353933 1.9648876       1      0     1    0      0          1    0     1         0     0          0
+11     40 0.9339888 2.0070225       1      0     1    1      0          0    0     1         0     0          0
+12     41 0.9339888 1.9592697       1      0     1    1      0          0    0     0         1     0          0
+13     52 0.9339888 1.9171348       1      0     1    0      0          1    0     0         1     0          0
+14      3 0.9311798 2.0674157       1      1     1    0      0          1    0     0         0     0          0
+15    122 0.9297753 1.8412921       0      1     1    1      0          1    0     0         0     0          0
+16     72 0.9297753 1.7963483       1      0     0    1      0          1    0     1         0     0          0
+17     73 0.9297753 1.7485955       1      0     0    1      0          1    0     0         1     0          0
+18     48 0.9269663 1.8244382       1      0     1    0      1          0    0     0         0     1          0
+19     37 0.9255618 2.0912921       1      0     1    1      1          0    0     0         0     0          0
+20     42 0.9241573 1.8581461       1      0     1    1      0          0    0     0         0     1          0
+21     74 0.9241573 1.6474719       1      0     0    1      0          1    0     0         0     1          0
+22      2 0.9227528 2.0758427       1      1     1    0      1          0    0     0         0     0          0
+23     39 0.9227528 2.0674157       1      0     1    1      0          0    1     0         0     0          0
+24     16 0.9227528 1.8651685       1      1     0    0      1          1    0     0         0     0          0
+25     23 0.9227528 1.7808989       1      1     0    0      0          1    0     1         0     0          0
+26    101 0.9227528 1.7387640       1      0     0    0      0          1    1     1         0     0          0
+27     65 0.9213483 1.8806180       1      0     0    1      1          1    0     0         0     0          0
+28    211 0.9213483 1.7991573       0      0     1    1      0          1    1     0         0     0          0
+29    102 0.9213483 1.6910112       1      0     0    0      0          1    1     0         1     0          0
+30     49 0.9199438 1.8216292       1      0     1    0      1          0    0     0         0     0          1
+31     88 0.9199438 1.7148876       1      0     0    0      1          1    0     0         1     0          0
+32      1 0.9185393 2.1095506       1      1     1    1      0          0    0     0         0     0          0
+33     43 0.9185393 1.8553371       1      0     1    1      0          0    0     0         0     0          1
+34     53 0.9185393 1.8160112       1      0     1    0      0          1    0     0         0     1          0
+35     59 0.9171348 1.8412921       1      0     1    0      0          0    0     1         1     0          0
+36     87 0.9171348 1.7626404       1      0     0    0      1          1    0     1         0     0          0
+37     91 0.9171348 1.7471910       1      0     0    0      1          0    1     1         0     0          0
+38     75 0.9171348 1.6446629       1      0     0    1      0          1    0     0         0     0          1
+39     54 0.9157303 1.8132022       1      0     1    0      0          1    0     0         0     0          1
+40    128 0.9143258 1.8075843       0      1     1    0      1          1    0     0         0     0          0
+41     24 0.9143258 1.7331461       1      1     0    0      0          1    0     0         1     0          0
+42      5 0.9129213 1.9915730       1      1     1    0      0          0    0     1         0     0          0
+43     55 0.9129213 1.9494382       1      0     1    0      0          0    1     1         0     0          0
+44     92 0.9129213 1.6994382       1      0     0    0      1          0    1     0         1     0          0
+45    226 0.9115169 1.7654494       0      0     1    0      1          1    1     0         0     0          0
+46     22 0.9101124 1.8412921       1      1     0    0      0          1    1     0         0     0          0
+47    134 0.9101124 1.7837079       0      1     1    0      0          1    1     0         0     0          0
+48    135 0.9101124 1.7233146       0      1     1    0      0          1    0     1         0     0          0
+49    131 0.9101124 1.6839888       0      1     1    0      1          0    0     0         1     0          0
+50    105 0.9087079 1.6306180       1      0     0    0      0          1    0     1         1     0          0
+51     18 0.9073034 1.7893258       1      1     0    0      1          0    0     1         0     0          0
+52     95 0.9073034 1.6390449       1      0     0    0      1          0    0     1         1     0          0
+53     93 0.9073034 1.5983146       1      0     0    0      1          0    1     0         0     1          0
+54     76 0.9058989 1.7808989       1      0     0    1      0          0    1     1         0     0          0
+55     80 0.9058989 1.6727528       1      0     0    1      0          0    0     1         1     0          0
+56     66 0.9044944 1.8651685       1      0     0    1      1          0    1     0         0     0          0
+57     19 0.9044944 1.7415730       1      1     0    0      1          0    0     0         1     0          0
+58     60 0.9044944 1.7401685       1      0     1    0      0          0    0     1         0     1          0
+59    212 0.9044944 1.7387640       0      0     1    1      0          1    0     1         0     0          0
+60    130 0.9044944 1.7317416       0      1     1    0      1          0    0     1         0     0          0
+61     89 0.9044944 1.6137640       1      0     0    0      1          1    0     0         0     1          0
+62     56 0.9030899 1.9016854       1      0     1    0      0          0    1     0         1     0          0
+63     68 0.9030899 1.7570225       1      0     0    1      1          0    0     0         1     0          0
+64     77 0.9030899 1.7331461       1      0     0    1      0          0    1     0         1     0          0
+65    213 0.9030899 1.6910112       0      0     1    1      0          1    0     0         1     0          0
+66     12 0.9016854 1.8230337       1      1     0    1      0          0    0     1         0     0          0
+67    205 0.9016854 1.8230337       0      0     1    1      1          1    0     0         0     0          0
+68     13 0.9016854 1.7752809       1      1     0    1      0          0    0     0         1     0          0
+69     62 0.9016854 1.6924157       1      0     1    0      0          0    0     0         1     1          0
+70    136 0.9016854 1.6755618       0      1     1    0      0          1    0     0         1     0          0
+71     94 0.9016854 1.5955056       1      0     0    0      1          0    1     0         0     0          1
+72     98 0.9016854 1.4901685       1      0     0    0      1          0    0     0         1     1          0
+73      6 0.9002809 1.9438202       1      1     1    0      0          0    0     0         1     0          0
+74     61 0.9002809 1.7373596       1      0     1    0      0          0    0     1         0     0          1
+75     63 0.9002809 1.6896067       1      0     1    0      0          0    0     0         1     0          1
+76    232 0.9002809 1.6418539       0      0     1    0      1          0    1     0         1     0          0
+77     90 0.9002809 1.6109551       1      0     0    0      1          1    0     0         0     0          1
+78    104 0.9002809 1.5870787       1      0     0    0      0          1    1     0         0     0          1
+79    125 0.8988764 1.7176966       0      1     1    1      0          0    0     0         1     0          0
+80    103 0.8988764 1.5898876       1      0     0    0      0          1    1     0         0     1          0
+81     83 0.8974719 1.5238764       1      0     0    1      0          0    0     0         1     1          0
+82    121 0.8960674 1.8497191       0      1     1    1      1          0    0     0         0     0          0
+83     67 0.8960674 1.8047753       1      0     0    1      1          0    0     1         0     0          0
+84    129 0.8946629 1.7921348       0      1     1    0      1          0    1     0         0     0          0
+85    124 0.8946629 1.7654494       0      1     1    1      0          0    0     1         0     0          0
+86    241 0.8946629 1.6811798       0      0     1    0      0          1    1     1         0     0          0
+87     69 0.8946629 1.6558989       1      0     0    1      1          0    0     0         0     1          0
+88     78 0.8946629 1.6320225       1      0     0    1      0          0    1     0         0     1          0
+89     99 0.8946629 1.4873596       1      0     0    0      1          0    0     0         1     0          1
+90     17 0.8932584 1.8497191       1      1     0    0      1          0    1     0         0     0          0
+91    208 0.8932584 1.6994382       0      0     1    1      1          0    0     0         1     0          0
+92    206 0.8918539 1.8075843       0      0     1    1      1          0    1     0         0     0          0
+93     57 0.8918539 1.8005618       1      0     1    0      0          0    1     0         0     1          0
+94     58 0.8918539 1.7977528       1      0     1    0      0          0    1     0         0     0          1
+95    231 0.8918539 1.6896067       0      0     1    0      1          0    1     1         0     0          0
+96     20 0.8918539 1.6404494       1      1     0    0      1          0    0     0         0     1          0
+97     26 0.8918539 1.6292135       1      1     0    0      0          1    0     0         0     0          1
+98     82 0.8918539 1.5688202       1      0     0    1      0          0    0     1         0     0          1
+99      9 0.8904494 1.9073034       1      1     0    1      1          0    0     0         0     0          0
+100    31 0.8904494 1.6573034       1      1     0    0      0          0    0     1         1     0          0
+101    25 0.8904494 1.6320225       1      1     0    0      0          1    0     0         0     1          0
+102   235 0.8904494 1.5814607       0      0     1    0      1          0    0     1         1     0          0
+103   106 0.8904494 1.5294944       1      0     0    0      0          1    0     1         0     1          0
+104   109 0.8904494 1.4789326       1      0     0    0      0          1    0     0         1     0          1
+105   227 0.8890449 1.7050562       0      0     1    0      1          1    0     1         0     0          0
+106   228 0.8890449 1.6573034       0      0     1    0      1          1    0     0         1     0          0
+107    79 0.8890449 1.6292135       1      0     0    1      0          0    1     0         0     0          1
+108   220 0.8890449 1.6151685       0      0     1    1      0          0    0     1         1     0          0
+109   214 0.8890449 1.5898876       0      0     1    1      0          1    0     0         0     1          0
+110    81 0.8890449 1.5716292       1      0     0    1      0          0    0     1         0     1          0
+111    96 0.8890449 1.5379213       1      0     0    0      1          0    0     1         0     1          0
+112    97 0.8890449 1.5351124       1      0     0    0      1          0    0     1         0     0          1
+113   107 0.8890449 1.5266854       1      0     0    0      0          1    0     1         0     0          1
+114   108 0.8890449 1.4817416       1      0     0    0      0          1    0     0         1     1          0
+115    14 0.8876404 1.6741573       1      1     0    1      0          0    0     0         0     1          0
+116    21 0.8876404 1.6376404       1      1     0    0      1          0    0     0         0     0          1
+117   111 0.8876404 1.6151685       1      0     0    0      0          0    1     1         1     0          0
+118   215 0.8876404 1.5870787       0      0     1    1      0          1    0     0         0     0          1
+119     7 0.8862360 1.8426966       1      1     1    0      0          0    0     0         0     1          0
+120   217 0.8862360 1.6755618       0      0     1    1      0          0    1     0         1     0          0
+121   242 0.8862360 1.6334270       0      0     1    0      0          1    1     0         1     0          0
+122   132 0.8862360 1.5828652       0      1     1    0      1          0    0     0         0     1          0
+123   138 0.8862360 1.5716292       0      1     1    0      0          1    0     0         0     0          1
+124    84 0.8862360 1.5210674       1      0     0    1      0          0    0     0         1     0          1
+125   207 0.8848315 1.7471910       0      0     1    1      1          0    0     1         0     0          0
+126     8 0.8834270 1.8398876       1      1     1    0      0          0    0     0         0     0          1
+127    70 0.8834270 1.6530899       1      0     0    1      1          0    0     0         0     0          1
+128   155 0.8834270 1.6151685       0      1     0    1      0          1    1     0         0     0          0
+129   216 0.8820225 1.7233146       0      0     1    1      0          0    1     1         0     0          0
+130    15 0.8820225 1.6713483       1      1     0    1      0          0    0     0         0     0          1
+131    64 0.8820225 1.5884831       1      0     1    0      0          0    0     0         0     1          1
+132   133 0.8820225 1.5800562       0      1     1    0      1          0    0     0         0     0          1
+133   137 0.8820225 1.5744382       0      1     1    0      0          1    0     0         0     1          0
+134   233 0.8792135 1.5407303       0      0     1    0      1          0    1     0         0     1          0
+135    85 0.8792135 1.4199438       1      0     0    1      0          0    0     0         0     1          1
+136   234 0.8778090 1.5379213       0      0     1    0      1          0    1     0         0     0          1
+137    11 0.8764045 1.8834270       1      1     0    1      0          0    1     0         0     0          0
+138   127 0.8764045 1.6137640       0      1     1    1      0          0    0     0         0     0          1
+139   143 0.8764045 1.5997191       0      1     1    0      0          0    0     1         1     0          0
+140   100 0.8764045 1.3862360       1      0     0    0      1          0    0     0         0     1          1
+141   123 0.8750000 1.8258427       0      1     1    1      0          0    1     0         0     0          0
+142   126 0.8735955 1.6165730       0      1     1    1      0          0    0     0         0     1          0
+143   244 0.8735955 1.5294944       0      0     1    0      0          1    1     0         0     0          1
+144   239 0.8735955 1.4297753       0      0     1    0      1          0    0     0         1     0          1
+145     4 0.8721910 2.0519663       1      1     1    0      0          0    1     0         0     0          0
+146   238 0.8721910 1.4325843       0      0     1    0      1          0    0     0         1     1          0
+147   209 0.8707865 1.5983146       0      0     1    1      1          0    0     0         0     1          0
+148    27 0.8693820 1.7654494       1      1     0    0      0          0    1     1         0     0          0
+149   229 0.8693820 1.5561798       0      0     1    0      1          1    0     0         0     1          0
+150    33 0.8693820 1.5533708       1      1     0    0      0          0    0     1         0     0          1
+151   113 0.8693820 1.5112360       1      0     0    0      0          0    1     1         0     0          1
+152   245 0.8679775 1.5730337       0      0     1    0      0          1    0     1         1     0          0
+153   219 0.8679775 1.5716292       0      0     1    1      0          0    1     0         0     0          1
+154   230 0.8679775 1.5533708       0      0     1    0      1          1    0     0         0     0          1
+155   112 0.8679775 1.5140449       1      0     0    0      0          0    1     1         0     1          0
+156   114 0.8679775 1.4662921       1      0     0    0      0          0    1     0         1     1          0
+157   224 0.8679775 1.4634831       0      0     1    1      0          0    0     0         1     0          1
+158   243 0.8665730 1.5323034       0      0     1    0      0          1    1     0         0     1          0
+159   222 0.8665730 1.5112360       0      0     1    1      0          0    0     1         0     0          1
+160   117 0.8665730 1.4058989       1      0     0    0      0          0    0     1         1     1          0
+161   223 0.8651685 1.4662921       0      0     1    1      0          0    0     0         1     1          0
+162   210 0.8637640 1.5955056       0      0     1    1      1          0    0     0         0     0          1
+163   218 0.8637640 1.5744382       0      0     1    1      0          0    1     0         0     1          0
+164    32 0.8637640 1.5561798       1      1     0    0      0          0    0     1         0     1          0
+165   156 0.8637640 1.5547753       0      1     0    1      0          1    0     1         0     0          0
+166   118 0.8637640 1.4030899       1      0     0    0      0          0    0     1         1     0          1
+167    34 0.8623596 1.5084270       1      1     0    0      0          0    0     0         1     1          0
+168   237 0.8623596 1.4775281       0      0     1    0      1          0    0     1         0     0          1
+169   170 0.8609551 1.5814607       0      1     0    0      1          1    1     0         0     0          0
+170    35 0.8609551 1.5056180       1      1     0    0      0          0    0     0         1     0          1
+171   115 0.8609551 1.4634831       1      0     0    0      0          0    1     0         1     0          1
+172   110 0.8609551 1.3778090       1      0     0    0      0          1    0     0         0     1          1
+173   251 0.8595506 1.5575843       0      0     1    0      0          0    1     1         1     0          0
+174   236 0.8595506 1.4803371       0      0     1    0      1          0    0     1         0     1          0
+175   221 0.8581461 1.5140449       0      0     1    1      0          0    0     1         0     1          0
+176    28 0.8567416 1.7176966       1      1     0    0      0          0    1     0         1     0          0
+177   157 0.8567416 1.5070225       0      1     0    1      0          1    0     0         1     0          0
+178   149 0.8553371 1.6390449       0      1     0    1      1          1    0     0         0     0          0
+179   139 0.8539326 1.7078652       0      1     1    0      0          0    1     1         0     0          0
+180   147 0.8539326 1.4480337       0      1     1    0      0          0    0     0         1     0          1
+181   140 0.8525281 1.6601124       0      1     1    0      0          0    1     0         1     0          0
+182   145 0.8511236 1.4957865       0      1     1    0      0          0    0     1         0     0          1
+183   246 0.8497191 1.4719101       0      0     1    0      0          1    0     1         0     1          0
+184   247 0.8483146 1.4691011       0      0     1    0      0          1    0     1         0     0          1
+185   146 0.8469101 1.4508427       0      1     1    0      0          0    0     0         1     1          0
+186   185 0.8455056 1.4971910       0      1     0    0      0          1    1     1         0     0          0
+187   249 0.8441011 1.4213483       0      0     1    0      0          1    0     0         1     0          1
+188   144 0.8426966 1.4985955       0      1     1    0      0          0    0     1         0     1          0
+189   186 0.8426966 1.4494382       0      1     0    0      0          1    1     0         1     0          0
+190   225 0.8426966 1.3623596       0      0     1    1      0          0    0     0         0     1          1
+191   159 0.8412921 1.4030899       0      1     0    1      0          1    0     0         0     0          1
+192   116 0.8412921 1.3623596       1      0     0    0      0          0    1     0         0     1          1
+193   240 0.8412921 1.3286517       0      0     1    0      1          0    0     0         0     1          1
+194   276 0.8398876 1.5126404       0      0     0    1      0          1    1     1         0     0          0
+195   158 0.8398876 1.4058989       0      1     0    1      0          1    0     0         0     1          0
+196   119 0.8398876 1.3019663       1      0     0    0      0          0    0     1         0     1          1
+197    29 0.8384831 1.6165730       1      1     0    0      0          0    1     0         0     1          0
+198   171 0.8384831 1.5210674       0      1     0    0      1          1    0     1         0     0          0
+199   175 0.8384831 1.5056180       0      1     0    0      1          0    1     1         0     0          0
+200    30 0.8370787 1.6137640       1      1     0    0      0          0    1     0         0     0          1
+201   248 0.8370787 1.4241573       0      0     1    0      0          1    0     0         1     1          0
+202   255 0.8356742 1.4058989       0      0     1    0      0          0    1     0         1     0          1
+203   120 0.8356742 1.2542135       1      0     0    0      0          0    0     0         1     1          1
+204   142 0.8328652 1.5561798       0      1     1    0      0          0    1     0         0     0          1
+205   176 0.8328652 1.4578652       0      1     0    0      1          0    1     0         1     0          0
+206   253 0.8328652 1.4536517       0      0     1    0      0          0    1     1         0     0          1
+207    36 0.8328652 1.4044944       1      1     0    0      0          0    0     0         0     1          1
+208   152 0.8314607 1.5154494       0      1     0    1      1          0    0     0         1     0          0
+209   172 0.8300562 1.4733146       0      1     0    0      1          1    0     0         1     0          0
+210   179 0.8300562 1.3974719       0      1     0    0      1          0    0     1         1     0          0
+211   261 0.8272472 1.5969101       0      0     0    1      1          1    1     0         0     0          0
+212   141 0.8272472 1.5589888       0      1     1    0      0          0    1     0         0     1          0
+213   277 0.8272472 1.4648876       0      0     0    1      0          1    1     0         1     0          0
+214   252 0.8272472 1.4564607       0      0     1    0      0          0    1     1         0     1          0
+215   254 0.8272472 1.4087079       0      0     1    0      0          0    1     0         1     1          0
+216   258 0.8272472 1.3455056       0      0     1    0      0          0    0     1         1     0          1
+217   150 0.8258427 1.6235955       0      1     0    1      1          0    1     0         0     0          0
+218   164 0.8258427 1.4311798       0      1     0    1      0          0    0     1         1     0          0
+219   151 0.8244382 1.5632022       0      1     0    1      1          0    0     1         0     0          0
+220   257 0.8230337 1.3483146       0      0     1    0      0          0    0     1         1     1          0
+221   160 0.8216292 1.5393258       0      1     0    1      0          0    1     1         0     0          0
+222   189 0.8216292 1.3890449       0      1     0    0      0          1    0     1         1     0          0
+223   161 0.8202247 1.4915730       0      1     0    1      0          0    1     0         1     0          0
+224   148 0.8202247 1.3469101       0      1     1    0      0          0    0     0         0     1          1
+225   296 0.8117978 1.4789326       0      0     0    0      1          1    1     1         0     0          0
+226   188 0.8117978 1.3455056       0      1     0    0      0          1    1     0         0     0          1
+227   250 0.8117978 1.3202247       0      0     1    0      0          1    0     0         0     1          1
+228   266 0.8075843 1.5210674       0      0     0    1      1          0    1     1         0     0          0
+229   297 0.8075843 1.4311798       0      0     0    0      1          1    1     0         1     0          0
+230   306 0.8075843 1.3553371       0      0     0    0      1          0    1     1         1     0          0
+231   278 0.8061798 1.3637640       0      0     0    1      0          1    1     0         0     1          0
+232   177 0.8061798 1.3567416       0      1     0    0      1          0    1     0         0     1          0
+233   267 0.8047753 1.4733146       0      0     0    1      1          0    1     0         1     0          0
+234   279 0.8047753 1.3609551       0      0     0    1      0          1    1     0         0     0          1
+235   178 0.8047753 1.3539326       0      1     0    0      1          0    1     0         0     0          1
+236   256 0.8033708 1.3047753       0      0     1    0      0          0    1     0         0     1          1
+237   286 0.8019663 1.3890449       0      0     0    1      0          0    1     1         1     0          0
+238   173 0.8019663 1.3721910       0      1     0    0      1          1    0     0         0     1          0
+239   174 0.8019663 1.3693820       0      1     0    0      1          1    0     0         0     0          1
+240   153 0.8005618 1.4143258       0      1     0    1      1          0    0     0         0     1          0
+241   187 0.8005618 1.3483146       0      1     0    0      0          1    1     0         0     1          0
+242   154 0.7991573 1.4115169       0      1     0    1      1          0    0     0         0     0          1
+243   166 0.7977528 1.3272472       0      1     0    1      0          0    0     1         0     0          1
+244   163 0.7963483 1.3876404       0      1     0    1      0          0    1     0         0     0          1
+245   181 0.7963483 1.2935393       0      1     0    0      1          0    0     1         0     0          1
+246   191 0.7963483 1.2851124       0      1     0    0      0          1    0     1         0     0          1
+247   182 0.7963483 1.2485955       0      1     0    0      1          0    0     0         1     1          0
+248   183 0.7963483 1.2457865       0      1     0    0      1          0    0     0         1     0          1
+249   162 0.7949438 1.3904494       0      1     0    1      0          0    1     0         0     1          0
+250   167 0.7949438 1.2823034       0      1     0    1      0          0    0     0         1     1          0
+251   168 0.7949438 1.2794944       0      1     0    1      0          0    0     0         1     0          1
+252   195 0.7935393 1.3735955       0      1     0    0      0          0    1     1         1     0          0
+253   316 0.7907303 1.3469101       0      0     0    0      0          1    1     1         1     0          0
+254   259 0.7907303 1.2443820       0      0     1    0      0          0    0     1         0     1          1
+255   180 0.7879213 1.2963483       0      1     0    0      1          0    0     1         0     1          0
+256   190 0.7879213 1.2879213       0      1     0    0      0          1    0     1         0     1          0
+257   260 0.7879213 1.1966292       0      0     1    0      0          0    0     0         1     1          1
+258   193 0.7851124 1.2373596       0      1     0    0      0          1    0     0         1     0          1
+259   165 0.7823034 1.3300562       0      1     0    1      0          0    0     1         0     1          0
+260   268 0.7766854 1.3721910       0      0     0    1      1          0    1     0         0     1          0
+261   299 0.7752809 1.3272472       0      0     0    0      1          1    1     0         0     0          1
+262   192 0.7738764 1.2401685       0      1     0    0      0          1    0     0         1     1          0
+263   269 0.7696629 1.3693820       0      0     0    1      1          0    1     0         0     0          1
+264   298 0.7696629 1.3300562       0      0     0    0      1          1    1     0         0     1          0
+265   288 0.7696629 1.2851124       0      0     0    1      0          0    1     1         0     0          1
+266   309 0.7682584 1.2064607       0      0     0    0      1          0    1     0         1     1          0
+267   310 0.7654494 1.2036517       0      0     0    0      1          0    1     0         1     0          1
+268   280 0.7626404 1.4044944       0      0     0    1      0          1    0     1         1     0          0
+269   289 0.7626404 1.2401685       0      0     0    1      0          0    1     0         1     1          0
+270   287 0.7612360 1.2879213       0      0     0    1      0          0    1     1         0     1          0
+271   308 0.7612360 1.2514045       0      0     0    0      1          0    1     1         0     0          1
+272   262 0.7598315 1.5365169       0      0     0    1      1          1    0     1         0     0          0
+273   307 0.7598315 1.2542135       0      0     0    0      1          0    1     1         0     1          0
+274   169 0.7598315 1.1783708       0      1     0    1      0          0    0     0         0     1          1
+275   197 0.7570225 1.2696629       0      1     0    0      0          0    1     1         0     0          1
+276   318 0.7570225 1.2429775       0      0     0    0      0          1    1     1         0     0          1
+277   290 0.7570225 1.2373596       0      0     0    1      0          0    1     0         1     0          1
+278   263 0.7542135 1.4887640       0      0     0    1      1          1    0     0         1     0          0
+279   199 0.7542135 1.2219101       0      1     0    0      0          0    1     0         1     0          1
+280   202 0.7542135 1.1615169       0      1     0    0      0          0    0     1         1     0          1
+281   184 0.7542135 1.1446629       0      1     0    0      1          0    0     0         0     1          1
+282   270 0.7528090 1.4129213       0      0     0    1      1          0    0     1         1     0          0
+283   198 0.7500000 1.2247191       0      1     0    0      0          0    1     0         1     1          0
+284   320 0.7500000 1.1952247       0      0     0    0      0          1    1     0         1     0          1
+285   317 0.7471910 1.2457865       0      0     0    0      0          1    1     1         0     1          0
+286   196 0.7443820 1.2724719       0      1     0    0      0          0    1     1         0     1          0
+287   201 0.7429775 1.1643258       0      1     0    0      0          0    0     1         1     1          0
+288   282 0.7415730 1.3005618       0      0     0    1      0          1    0     1         0     0          1
+289   319 0.7373596 1.1980337       0      0     0    0      0          1    1     0         1     1          0
+290   194 0.7373596 1.1362360       0      1     0    0      0          1    0     0         0     1          1
+291   281 0.7345506 1.3033708       0      0     0    1      0          1    0     1         0     1          0
+292   284 0.7303371 1.2528090       0      0     0    1      0          1    0     0         1     0          1
+293   265 0.7261236 1.3848315       0      0     0    1      1          1    0     0         0     0          1
+294   283 0.7247191 1.2556180       0      0     0    1      0          1    0     0         1     1          0
+295   264 0.7233146 1.3876404       0      0     0    1      1          1    0     0         0     1          0
+296   291 0.7219101 1.1362360       0      0     0    1      0          0    1     0         0     1          1
+297   273 0.7191011 1.2640449       0      0     0    1      1          0    0     0         1     1          0
+298   327 0.7162921 1.1193820       0      0     0    0      0          0    1     1         1     0          1
+299   311 0.7148876 1.1025281       0      0     0    0      1          0    1     0         0     1          1
+300   300 0.7134831 1.3707865       0      0     0    0      1          1    0     1         1     0          0
+301   272 0.7134831 1.3089888       0      0     0    1      1          0    0     1         0     0          1
+302   274 0.7134831 1.2612360       0      0     0    1      1          0    0     0         1     0          1
+303   326 0.7106742 1.1221910       0      0     0    0      0          0    1     1         1     1          0
+304   271 0.7092697 1.3117978       0      0     0    1      1          0    0     1         0     1          0
+305   293 0.7078652 1.1769663       0      0     0    1      0          0    0     1         1     0          1
+306   200 0.7036517 1.1207865       0      1     0    0      0          0    1     0         0     1          1
+307   292 0.6980337 1.1797753       0      0     0    1      0          0    0     1         1     1          0
+308   285 0.6980337 1.1516854       0      0     0    1      0          1    0     0         0     1          1
+309   203 0.6938202 1.0603933       0      1     0    0      0          0    0     1         0     1          1
+310   204 0.6924157 1.0126404       0      1     0    0      0          0    0     0         1     1          1
+311   321 0.6882022 1.0941011       0      0     0    0      0          1    1     0         0     1          1
+312   313 0.6783708 1.1432584       0      0     0    0      1          0    0     1         1     0          1
+313   275 0.6755618 1.1601124       0      0     0    1      1          0    0     0         0     1          1
+314   302 0.6727528 1.2668539       0      0     0    0      1          1    0     1         0     0          1
+315   304 0.6713483 1.2191011       0      0     0    0      1          1    0     0         1     0          1
+316   312 0.6713483 1.1460674       0      0     0    0      1          0    0     1         1     1          0
+317   301 0.6643258 1.2696629       0      0     0    0      1          1    0     1         0     1          0
+318   294 0.6615169 1.0758427       0      0     0    1      0          0    0     1         0     1          1
+319   303 0.6601124 1.2219101       0      0     0    0      1          1    0     0         1     1          0
+320   295 0.6502809 1.0280899       0      0     0    1      0          0    0     0         1     1          1
+321   329 0.6488764 0.9705056       0      0     0    0      0          0    1     0         1     1          1
+322   328 0.6474719 1.0182584       0      0     0    0      0          0    1     1         0     1          1
+323   323 0.6460674 1.1348315       0      0     0    0      0          1    0     1         1     0          1
+324   322 0.6376404 1.1376404       0      0     0    0      0          1    0     1         1     1          0
+325   315 0.6207865 0.9943820       0      0     0    0      1          0    0     0         1     1          1
+326   305 0.6109551 1.1179775       0      0     0    0      1          1    0     0         0     1          1
+327   314 0.6109551 1.0421348       0      0     0    0      1          0    0     1         0     1          1
+328   324 0.5842697 1.0337079       0      0     0    0      0          1    0     1         0     1          1
+329   325 0.5674157 0.9859551       0      0     0    0      0          1    0     0         1     1          1
+330   330 0.5505618 0.9101124       0      0     0    0      0          0    0     1         1     1          1</code></pre>
+<p>La combinación ganadora es <strong>classic + grape + sour + strawberry</strong> con un <strong>reach</strong> de 95.1%, algo mayor que el 94.4% de la cartera número dos, que tiene <strong>cola</strong> apareciendo en lugar de <strong>grape</strong>. Este 0.7% no es una gran diferencia, representando solo 5 de las 712 personas.</p>
+<blockquote>
+<p>Algunas personas se decepcionan cuando TURF no elige un ganador claro. Sin embargo, es una noticia extremadamente buena, ya que significa que hay mucha flexibilidad para tener en cuenta otros factores (es decir, la investigación no está cerrando oportunidades).</p>
+</blockquote>
+<p>Por otro lado tenemos la columna con el dato de <strong>frecuencia</strong> de cada combinación. La <strong>frecuencia</strong> de 2,08 nos dice que si ofrecemos estos cuatro sabores, el número total de menciones en nuestra muestra a esas cuatro alternativas es 2,08 veces mayor que la muestra.</p>
+<p>También, ten en cuenta que si bien las dos primeras carteras están muy cerca en términos de alcance, hay una gran diferencia en términos de frecuencia, con la segunda alternativa con una frecuencia 11% menor. Mirar la frecuencia hace que la primera, tercera y quinta combinación parezcan las más destacadas.</p>
+</div>
+<div id="tabla-de-duplicaciones" class="section level2">
+<h2>Tabla de duplicaciones</h2>
+<p>El siguiente paso en el análisis es la tabla de duplicaciones. dado que el conjunto de repsuestas puede tratarse como una variable de tipo múltiple (binarizada) el cruce la variable por sí misma nos revelará todas las duplicaciones realizadas en la muestra entre todos los sabores.</p>
+<pre class="r"><code>tab1 &lt;- data %&gt;%
+        tab_cols(mdset(classic %to% watermelon)) %&gt;%
+        tab_cells(mdset(classic %to% watermelon)) %&gt;%
+        tab_stat_tpct(total_row_position=&#39;none&#39;) %&gt;%
+        tab_pivot()
+tab1</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ classic 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ strong 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ grape 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ sour 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ orange 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ strawberry 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ cola 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ apple 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ chocolate 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ peach 
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ watermelon 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ classic 
+</td>
+<td style="text-align: right;">
+65.9
+</td>
+<td style="text-align: right;">
+34.8
+</td>
+<td style="text-align: right;">
+45.4
+</td>
+<td style="text-align: right;">
+28.9
+</td>
+<td style="text-align: right;">
+25.0
+</td>
+<td style="text-align: right;">
+22.5
+</td>
+<td style="text-align: right;">
+28.7
+</td>
+<td style="text-align: right;">
+18.8
+</td>
+<td style="text-align: right;">
+16.4
+</td>
+<td style="text-align: right;">
+8.4
+</td>
+<td style="text-align: right;">
+9.1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ strong 
+</td>
+<td style="text-align: right;">
+34.8
+</td>
+<td style="text-align: right;">
+41.7
+</td>
+<td style="text-align: right;">
+29.6
+</td>
+<td style="text-align: right;">
+19.4
+</td>
+<td style="text-align: right;">
+15.3
+</td>
+<td style="text-align: right;">
+12.1
+</td>
+<td style="text-align: right;">
+22.2
+</td>
+<td style="text-align: right;">
+11.5
+</td>
+<td style="text-align: right;">
+9.3
+</td>
+<td style="text-align: right;">
+6.2
+</td>
+<td style="text-align: right;">
+4.8
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ grape 
+</td>
+<td style="text-align: right;">
+45.4
+</td>
+<td style="text-align: right;">
+29.6
+</td>
+<td style="text-align: right;">
+60.1
+</td>
+<td style="text-align: right;">
+25.7
+</td>
+<td style="text-align: right;">
+21.8
+</td>
+<td style="text-align: right;">
+21.3
+</td>
+<td style="text-align: right;">
+26.4
+</td>
+<td style="text-align: right;">
+18.0
+</td>
+<td style="text-align: right;">
+15.0
+</td>
+<td style="text-align: right;">
+8.7
+</td>
+<td style="text-align: right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ sour 
+</td>
+<td style="text-align: right;">
+28.9
+</td>
+<td style="text-align: right;">
+19.4
+</td>
+<td style="text-align: right;">
+25.7
+</td>
+<td style="text-align: right;">
+43.3
+</td>
+<td style="text-align: right;">
+24.6
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+17.6
+</td>
+<td style="text-align: right;">
+16.2
+</td>
+<td style="text-align: right;">
+12.8
+</td>
+<td style="text-align: right;">
+8.0
+</td>
+<td style="text-align: right;">
+7.6
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ orange 
+</td>
+<td style="text-align: right;">
+25.0
+</td>
+<td style="text-align: right;">
+15.3
+</td>
+<td style="text-align: right;">
+21.8
+</td>
+<td style="text-align: right;">
+24.6
+</td>
+<td style="text-align: right;">
+39.9
+</td>
+<td style="text-align: right;">
+22.8
+</td>
+<td style="text-align: right;">
+13.3
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+11.9
+</td>
+<td style="text-align: right;">
+9.0
+</td>
+<td style="text-align: right;">
+9.1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ strawberry 
+</td>
+<td style="text-align: right;">
+22.5
+</td>
+<td style="text-align: right;">
+12.1
+</td>
+<td style="text-align: right;">
+21.3
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+22.8
+</td>
+<td style="text-align: right;">
+39.0
+</td>
+<td style="text-align: right;">
+11.8
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+14.2
+</td>
+<td style="text-align: right;">
+12.9
+</td>
+<td style="text-align: right;">
+11.4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ cola 
+</td>
+<td style="text-align: right;">
+28.7
+</td>
+<td style="text-align: right;">
+22.2
+</td>
+<td style="text-align: right;">
+26.4
+</td>
+<td style="text-align: right;">
+17.6
+</td>
+<td style="text-align: right;">
+13.3
+</td>
+<td style="text-align: right;">
+11.8
+</td>
+<td style="text-align: right;">
+37.5
+</td>
+<td style="text-align: right;">
+11.7
+</td>
+<td style="text-align: right;">
+9.3
+</td>
+<td style="text-align: right;">
+6.7
+</td>
+<td style="text-align: right;">
+6.0
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ apple 
+</td>
+<td style="text-align: right;">
+18.8
+</td>
+<td style="text-align: right;">
+11.5
+</td>
+<td style="text-align: right;">
+18.0
+</td>
+<td style="text-align: right;">
+16.2
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+16.3
+</td>
+<td style="text-align: right;">
+11.7
+</td>
+<td style="text-align: right;">
+31.5
+</td>
+<td style="text-align: right;">
+9.7
+</td>
+<td style="text-align: right;">
+10.0
+</td>
+<td style="text-align: right;">
+9.6
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ chocolate 
+</td>
+<td style="text-align: right;">
+16.4
+</td>
+<td style="text-align: right;">
+9.3
+</td>
+<td style="text-align: right;">
+15.0
+</td>
+<td style="text-align: right;">
+12.8
+</td>
+<td style="text-align: right;">
+11.9
+</td>
+<td style="text-align: right;">
+14.2
+</td>
+<td style="text-align: right;">
+9.3
+</td>
+<td style="text-align: right;">
+9.7
+</td>
+<td style="text-align: right;">
+26.7
+</td>
+<td style="text-align: right;">
+7.2
+</td>
+<td style="text-align: right;">
+6.2
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ peach 
+</td>
+<td style="text-align: right;">
+8.4
+</td>
+<td style="text-align: right;">
+6.2
+</td>
+<td style="text-align: right;">
+8.7
+</td>
+<td style="text-align: right;">
+8.0
+</td>
+<td style="text-align: right;">
+9.0
+</td>
+<td style="text-align: right;">
+12.9
+</td>
+<td style="text-align: right;">
+6.7
+</td>
+<td style="text-align: right;">
+10.0
+</td>
+<td style="text-align: right;">
+7.2
+</td>
+<td style="text-align: right;">
+16.6
+</td>
+<td style="text-align: right;">
+7.2
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ watermelon 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+9.1
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+4.8
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+8.7
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+7.6
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+9.1
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+11.4
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+6.0
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+9.6
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+6.2
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+7.2
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+16.3
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>tab1 &lt;- tab1[,-1]</code></pre>
+<p>Por otro lado, la diagonal principal de la tabla de duplicaciones, que como puede verse en la tabla inferior es el marginal de la variable múltiple (binarizada) muestra el alcance sobre la muestra de cada sabor por separado.</p>
+<pre class="r"><code>tab2 &lt;- data %&gt;%
+        tab_cells(mdset(classic %to% watermelon)) %&gt;%
+        tab_stat_tpct(total_row_position=&#39;none&#39;) %&gt;%
+        tab_pivot()
+tab2</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">
+ classic 
+</td>
+<td style="text-align: right;">
+65.9
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ strong 
+</td>
+<td style="text-align: right;">
+41.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ grape 
+</td>
+<td style="text-align: right;">
+60.1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ sour 
+</td>
+<td style="text-align: right;">
+43.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ orange 
+</td>
+<td style="text-align: right;">
+39.9
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ strawberry 
+</td>
+<td style="text-align: right;">
+39.0
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ cola 
+</td>
+<td style="text-align: right;">
+37.5
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ apple 
+</td>
+<td style="text-align: right;">
+31.5
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ chocolate 
+</td>
+<td style="text-align: right;">
+26.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+ peach 
+</td>
+<td style="text-align: right;">
+16.6
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+ watermelon 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+16.3
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="análisis-de-correspondencias-de-la-tabla-de-duplicaciones" class="section level2">
+<h2>Análisis de correspondencias de la tabla de duplicaciones</h2>
+<p>La tabla de duplicaciones muestra qué porcentaje de la muestra intersecciona o combina entre sí. Sin embargo, esta tabla de contingencia, puede analizarse con un análisis de correspondencias. Este análisis, revela la relaciones que existen entre los distitnos sabores que se presentan. El gráfico resultante se muestra a continuación, con cada burbuja indicando el atractivo de cada alternativa. Cuanto más separadas están las burbujas, menos son sustitutos. Idealmente, queremos elegir alternativas que estén muy separadas. Esto plantea problemas con nuestra cartera actual preferida de Classic + Grape + Strawberry + Cola, con Classic y Grape superpuestos, y Cola está en la misma vecindad.</p>
+<pre class="r"><code>#analisis de correspondencias (ca)
+caanalysis &lt;- ca(tab1)
+options(width=9999)
+caanalysis</code></pre>
+<pre><code>
+ Principal inertias (eigenvalues):
+           1       2        3        4        5        6        7        8        9       10      
+Value      0.07027 0.019819 0.018315 0.011533 0.009891 0.009422 0.007307 0.005984 0.00359 0.003044
+Percentage 44.15%  12.45%   11.51%   7.25%    6.21%    5.92%    4.59%    3.76%    2.26%   1.91%   
+
+
+ Rows:
+             [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]     [,8]      [,9]    [,10]    [,11]
+Mass     0.143549  0.097711  0.132604  0.104013  0.098706  0.094726  0.090282 0.080000  0.065473 0.047629 0.045307
+ChiDist  0.264729  0.414072  0.280244  0.316469  0.339850  0.399143  0.407249 0.416798  0.525572 0.620450 0.660193
+Inertia  0.010060  0.016753  0.010414  0.010417  0.011400  0.015091  0.014973 0.013898  0.018085 0.018335 0.019747
+Dim. 1  -0.828318 -1.305112 -0.761358 -0.131951  0.555813  1.174242 -1.025841 0.898100  0.750708 1.763769 1.823752
+Dim. 2   0.007731  0.525009  0.227189 -1.540503 -1.614931 -0.148888  1.168586 0.442699 -0.782201 1.695505 1.782193
+
+
+ Columns:
+          classic    strong     grape      sour    orange strawberry      cola    apple chocolate    peach watermelon
+Mass     0.143549  0.097711  0.132604  0.104013  0.098706   0.094726  0.090282 0.080000  0.065473 0.047629   0.045307
+ChiDist  0.264729  0.414072  0.280244  0.316469  0.339850   0.399143  0.407249 0.416798  0.525572 0.620450   0.660193
+Inertia  0.010060  0.016753  0.010414  0.010417  0.011400   0.015091  0.014973 0.013898  0.018085 0.018335   0.019747
+Dim. 1  -0.828318 -1.305112 -0.761358 -0.131951  0.555813   1.174242 -1.025841 0.898100  0.750708 1.763769   1.823752
+Dim. 2   0.007731  0.525009  0.227189 -1.540503 -1.614931  -0.148888  1.168586 0.442699 -0.782201 1.695505   1.782193</code></pre>
+<pre class="r"><code>tab3 &lt;- as.data.frame(caanalysis[[&quot;colcoord&quot;]])
+tab4 &lt;- cbind(tab2,tab3)
+z &lt;- as.numeric(round(tab4$&#39;#Total&#39;),0)
+ggplot(tab4, aes(x=Dim1, y=Dim2, size = z))  +
+  geom_point(alpha=0.1) +
+  scale_size(range = c(5, 10), name=&quot;Atractivo&quot;)+
+  geom_label(label=tab4$row_labels, nudge_x = 0, nudge_y = 0.15, label.size = 0.1, na.rm = FALSE, show.legend = FALSE)+
+  theme_light()</code></pre>
+<p><img src="/post/turf_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="análisis-de-componentes-principales" class="section level2">
+<h2>Análisis de componentes principales</h2>
+<p>El análisis de correspondencia proporciona un gran resumen de los datos. Pero, lo obliga a una trama bidimensional, lo que significa que ofrece algo de información pero no de modo completo. Con un mayor número de alternativas, esto se convierte en un problema grave. De este modo, podemos obtener una comprensión con un enfoque más amplio de la sustitución mediante el uso de análisis de componentes principales.</p>
+<pre class="r"><code>#analisis de componentes principales (psych)
+data &lt;- data[,c(-1,-2)]
+pcaanalysis &lt;- principal(data, nfactors = 3, rotate=&#39;varimax&#39;)
+pcaanalysis</code></pre>
+<pre><code>Principal Components Analysis
+Call: principal(r = data, nfactors = 3, rotate = &quot;varimax&quot;)
+Standardized loadings (pattern matrix) based upon correlation matrix
+             RC1   RC2   RC3   h2   u2 com
+classic    -0.17  0.64  0.04 0.43 0.57 1.2
+strong     -0.13  0.70  0.08 0.51 0.49 1.1
+grape      -0.03  0.57 -0.13 0.35 0.65 1.1
+sour       -0.03  0.09  0.83 0.70 0.30 1.0
+orange      0.24 -0.13  0.75 0.63 0.37 1.3
+strawberry  0.64 -0.22  0.09 0.47 0.53 1.3
+cola        0.07  0.64 -0.01 0.42 0.58 1.0
+apple       0.54  0.02  0.20 0.33 0.67 1.3
+chocolate   0.36 -0.08  0.02 0.13 0.87 1.1
+peach       0.75  0.03 -0.01 0.57 0.43 1.0
+watermelon  0.68 -0.01 -0.01 0.47 0.53 1.0
+
+                       RC1  RC2  RC3
+SS loadings           1.98 1.72 1.32
+Proportion Var        0.18 0.16 0.12
+Cumulative Var        0.18 0.34 0.46
+Proportion Explained  0.39 0.34 0.26
+Cumulative Proportion 0.39 0.74 1.00
+
+Mean item complexity =  1.1
+Test of the hypothesis that 3 components are sufficient.
+
+The root mean square of the residuals (RMSR) is  0.1 
+ with the empirical chi square  821.53  with prob &lt;  3.5e-157 
+
+Fit based upon off diagonal values = 0.57</code></pre>
+<p>Las cargas para los datos se muestran a continuación y sugieren que hay tres grupos básicos de sabores: ácidos, tradicionales y los sabores de fruta y chocolate. Esto sugiere que deberíamos considerar tener uno de Sour / Orange en nuestro portafolio. Como Sour está más lejos de Strawberry (ver el análisis de correspondencia). Esto respalda aún más la opinión de que Classic + Sour + Strawberry + Cola es la mejor cartera. Los gráficos derivados de este nuevo análisis, nos revelan la estructura subyacente de los datos analizados.</p>
+<pre class="r"><code>biplot.psych(pcaanalysis)</code></pre>
+<p><img src="/post/turf_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>plot(pcaanalysis)</code></pre>
+<p><img src="/post/turf_files/figure-html/unnamed-chunk-8-2.png" width="672" /></p>
+<pre class="r"><code>cor.plot(pcaanalysis, numbers=TRUE)</code></pre>
+<p><img src="/post/turf_files/figure-html/unnamed-chunk-8-3.png" width="672" /></p>
+<pre class="r"><code>fa.diagram(pcaanalysis)</code></pre>
+<p><img src="/post/turf_files/figure-html/unnamed-chunk-8-4.png" width="672" /></p>
+</div>
+</div>
+<div id="tamaño-de-la-cartera" class="section level1">
+<h1>Tamaño de la cartera</h1>
+<div id="cuántos-productos" class="section level2">
+<h2>¿Cuántos productos?</h2>
+<p><strong>¿Debería el fabricante de chicles ofrecer 3, 4, 5 o 6 variantes diferentes de chicle? </strong></p>
+<p>La forma en que se hace esta pregunta es ejecutar TURF varias veces, y luego crear una gráfica que represente la aportación de cada nueva incorporación a la cartera de producto. Como regla general, la ganancia incremental en el alcance de cada nuevo producto en la cartera es mucho menor que la anterior.</p>
+<p>Todo parece sugerir que tres o cuatro son probablemente la mayor cantidad de productos que tienen sentido en este ejemplo, pero en última instancia, esta es una compensación que necesita considerar los costos marginales de fabricación, comercialización y distribución de cada producto adicional.</p>
+<p>De la misma forma, se debe pensar en las restricciones. No puede ser una combinación cualquiera, sino que los dos sabores básicos de la empresa Classic y Cola deben figurar sí o sí en la combinación, siendo irrenunciable su partcipación el portfolio de prodcutos de la empresa.</p>
+</div>
+<div id="iteración-del-turf" class="section level2">
+<h2>Iteración del TURF</h2>
+<p>Realizando el TURF y aplicando esta restricción, la tabla resultante es esta …</p>
+<pre class="r"><code>suppressMessages(data &lt;- read_excel(&quot;bubble_gum_flavors.xlsx&quot;))
+colnames(data)&lt;- c(&#39;id&#39;,&#39;weight&#39;,&#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;,&#39;age&#39;,&#39;gender&#39;)
+data &lt;- as.data.frame(data[,1:13])
+
+turfprods &lt;- turf(data, 11, 2)</code></pre>
+<pre><code>2 of 11: 0.07299495 sec
+total time elapsed: 0.07399201 sec </code></pre>
+<pre class="r"><code>turf &lt;- as.data.frame(turfprods[[&quot;turf&quot;]][[1]])
+colnames(turf)&lt;- c(&#39;combo&#39;,&#39;rchX&#39;, &#39;frqX&#39;, &#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;)
+turf &lt;- where(turf, turf$classic==1 &amp; turf$cola==1)
+turf.1a &lt;- turf$rchX[[1]]
+turf</code></pre>
+<pre><code>   combo     rchX     frqX classic strong grape sour orange strawberry cola apple chocolate peach watermelon
+10     6 0.747191 1.033708       1      0     0    0      0          0    1     0         0     0          0</code></pre>
+<p>Podemos observar que el <strong>alcance</strong> de esa combinación es de 74.72% de la muestra. Veamos que sucedería si decidimos añadir un nuevo sabor, pero restringiendo esta combinación.</p>
+<pre class="r"><code>turfprods &lt;- turf(data, 11, 3)</code></pre>
+<pre><code>3 of 11: 0.200186 sec
+total time elapsed: 0.2011821 sec </code></pre>
+<pre class="r"><code>turf &lt;- as.data.frame(turfprods[[&quot;turf&quot;]][[1]])
+colnames(turf)&lt;- c(&#39;combo&#39;,&#39;rchX&#39;, &#39;frqX&#39;, &#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;)
+turf &lt;- where(turf, turf$classic==1 &amp; turf$cola==1) #restringe a que solo saque la combinación classic+cola y otra.
+turf.1b &lt;- round((turf$rchX[[1]]-turf.1a)*100,2)
+turf</code></pre>
+<pre><code>   combo      rchX     frqX classic strong grape sour orange strawberry cola apple chocolate peach watermelon
+6     31 0.8862360 1.424157       1      0     0    0      0          1    1     0         0     0          0
+10    26 0.8750000 1.432584       1      0     0    0      1          0    1     0         0     0          0
+21    20 0.8567416 1.466292       1      0     0    1      0          0    1     0         0     0          0
+26    13 0.8539326 1.634831       1      0     1    0      0          0    1     0         0     0          0
+41    36 0.8426966 1.348315       1      0     0    0      0          0    1     1         0     0          0
+49    37 0.8258427 1.300562       1      0     0    0      0          0    1     0         1     0          0
+61    38 0.8089888 1.199438       1      0     0    0      0          0    1     0         0     1          0
+65    39 0.8047753 1.196629       1      0     0    0      0          0    1     0         0     0          1
+75     5 0.7808989 1.450843       1      1     0    0      0          0    1     0         0     0          0</code></pre>
+<p>Podemos observar en la tabla anterior que la mejor alternativa para tener mayor <strong>alcance</strong> a elegir es incoporar al portfolio es Strawberry, con un alcance de <strong>88.62%</strong>. Así hemos mejorado un alcance del <strong>13.9%</strong>; ¿queremos sólo uno más o dos más?. Dando por buena esta combinación, ¿que aportaría más?</p>
+<pre class="r"><code>turfprods &lt;- turf(data, 11, 4)</code></pre>
+<pre><code>4 of 11: 0.5151482 sec
+total time elapsed: 0.516155 sec </code></pre>
+<pre class="r"><code>turf &lt;- as.data.frame(turfprods[[&quot;turf&quot;]][[1]])
+colnames(turf)&lt;- c(&#39;combo&#39;,&#39;rchX&#39;, &#39;frqX&#39;, &#39;classic&#39;,&#39;strong&#39;,&#39;grape&#39;,&#39;sour&#39;,&#39;orange&#39;,&#39;strawberry&#39;,&#39;cola&#39;,&#39;apple&#39;,&#39;chocolate&#39;,&#39;peach&#39;,&#39;watermelon&#39;)
+turf &lt;- where(turf, turf$classic==1 &amp; turf$cola==1 &amp; turf$strawberry==1)
+turf</code></pre>
+<pre><code>   combo      rchX     frqX classic strong grape sour orange strawberry cola apple chocolate peach watermelon
+2     71 0.9438202 1.856742       1      0     0    1      0          1    1     0         0     0          0
+3     50 0.9410112 2.025281       1      0     1    0      0          1    1     0         0     0          0
+8     86 0.9367978 1.823034       1      0     0    0      1          1    1     0         0     0          0
+26   101 0.9227528 1.738764       1      0     0    0      0          1    1     1         0     0          0
+29   102 0.9213483 1.691011       1      0     0    0      0          1    1     0         1     0          0
+46    22 0.9101124 1.841292       1      1     0    0      0          1    1     0         0     0          0
+78   104 0.9002809 1.587079       1      0     0    0      0          1    1     0         0     0          1
+80   103 0.8988764 1.589888       1      0     0    0      0          1    1     0         0     1          0</code></pre>
+<p>Ya podemos observar que la mejor alternativa sería Sour. Podríamos seguir hasta añadir las 11, pero la decisión de cuántos como ya indicamos anteriormente tiene ya que ver con otras consideraciones como los costos marginales de fabricación, comercialización y distribución de cada producto adicional.</p>
+<p>Espero os haya gustado el post y os pueda ser de utilidad.</p>
+<pre class="r"><code>df &lt;- data.frame(z=c(1,2,3,4,5), rchX=c(36.7, 2.9, 3.6, 7.8, 9.2))
+library(highcharter)</code></pre>
+<pre><code>Registered S3 method overwritten by &#39;quantmod&#39;:
+  method            from
+  as.zoo.data.frame zoo </code></pre>
+<pre class="r"><code>highchart() %&gt;%
+    hc_title(text = &quot;Inrementos de alcance&quot;,style = list(fontSize = &quot;2em&quot;)) %&gt;% 
+    hc_chart(type = &#39;waterfall&#39;) %&gt;% 
+    hc_xAxis(categories = df$z) %&gt;% 
+    hc_yAxis(min=0,max=100) %&gt;% 
+    hc_add_series(df$rchX, name = &quot;Incremento de alcance&quot;, showInLegend = TRUE, colorByPoint=TRUE) </code></pre>
+<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"waterfall"},"title":{"text":"Inrementos de alcance","style":{"fontSize":"2em"}},"yAxis":{"title":{"text":null},"min":0,"max":100},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":[1,2,3,4,5]},"series":[{"data":[36.7,2.9,3.6,7.8,9.2],"name":"Incremento de alcance","showInLegend":true,"colorByPoint":true}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>

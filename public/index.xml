@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog InvestigaOnline.com</title>
+    <link>/</link>
+    <description>Recent content on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Acerca de</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>¿Por qué InvestigaOnline.com?
+InvestigaOnline.com es la &amp;ldquo;marca&amp;rdquo; que utilizo para dar mi opinión en el mundo de la investigación de mercados y fundamentalmente en el ámbito de la investigación online. Son muchos los años viendo como esta industria se está desarrollando en España a un gran nivel y con excelentes profesionales.
+Además tengo la inmensa suerte de estar en una de las empresas líder en este mercado en el ámbito de la tecnología (desarrollo de software).</description>
+    </item>
+    
+    <item>
+      <title>intención de voto (electocracia.com)</title>
+      <link>/2021/01/10/intencion_voto/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/10/intencion_voto/</guid>
+      <description>Ya hace un tiempo que quería publicar este gráfico en el blog y he encontrado el momento. En plena situación de tercera oleada de esta maldita COVID-19, mostramos tanto la serie histórica desde 2017 de la evolución de la intención de voto, como también lo sucedido desde la celebración de las elecciones.</description>
+    </item>
+    
+    <item>
+      <title>outliers con R</title>
+      <link>/2020/08/25/outliers/</link>
+      <pubDate>Tue, 25 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/25/outliers/</guid>
+      <description>Tras acabar estas diferentes vacaciones, escribo acerca de un tema simple, pero con mucho interés en el ámbito del EDA (exploratory descriptive analysis): los outliers o con su término en castellano los valores atípicos.</description>
+    </item>
+    
+    <item>
+      <title>tablas con expss</title>
+      <link>/2020/08/24/outliers/</link>
+      <pubDate>Mon, 24 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/24/outliers/</guid>
+      <description>Escribo estas líneas para anunciar un trabajo más completo con el que puedas aprender a hacer tablas y gráficos utilizando R. La documentación está escrita para ayudar a los usuarios de SegmentaNet, pero puede ser usada por cualquiera que utilice R / RStudio o cualquier otro IDE y esté interesado en trabajar con los paquetes expss y highcharter para obtener un gran rendimiento en la presentación de tablas marginales y cruzadas y en su conversión, cuando sea necesario, en atractivos gráficos realizdos con la libería Highcharts utilizando como intermediario el paquete ya mencionado highcharter.</description>
+    </item>
+    
+    <item>
+      <title>NPS con media móvil</title>
+      <link>/2020/08/16/npsmovil/</link>
+      <pubDate>Sun, 16 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/08/16/npsmovil/</guid>
+      <description>Calcular el NPS con media móvilEn ocasiones resulta interesante ir analizando la evolución de los KPIs de la empresa de forma periódica. Esto cobra suma importancia cuando se introducen cambios en la forma de proceder, en los protocolos de prestación del servicio que se está valorando.</description>
+    </item>
+    
+    <item>
+      <title>de expss a highcharter</title>
+      <link>/2020/06/14/table2graph/</link>
+      <pubDate>Sun, 14 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/06/14/table2graph/</guid>
+      <description>[ Cuando algo va acabando y sus puertas se van cerrando, algo nuevo comienza y otras puertas se van abriendo ]
+Hace tiempo que no escribía en el blog.</description>
+    </item>
+    
+    <item>
+      <title>conjoint analysis</title>
+      <link>/2019/12/27/conjoint/</link>
+      <pubDate>Fri, 27 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/12/27/conjoint/</guid>
+      <description>Hace unos meses, dediqué una entrada a cómo crear diseños experimentales para MaxDiff y ya se mencionó entonces el análisis conjunto como una técnica que en muchos caso se presentaba como similar. Por motivos que no vienen al caso, ha surgido la necesidad de trabajar con esta técnica, y me he puesto manos a la obra con R.
+El análisis conjunto es un método de marketing que permite conocer las expectativas de los consumidores sobre un producto y modelar sus elecciones.</description>
+    </item>
+    
+    <item>
+      <title>turf (total unduplicated reach and frequency)</title>
+      <link>/2019/12/12/turf/</link>
+      <pubDate>Thu, 12 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/12/12/turf/</guid>
+      <description>IntroducciónHacía tiempo que no escuchaba hablar de él, pero ha vuelto a mi. TURF es un acrónimo anglosajón para Total Unduplicated Reach and Frequency. Este análisis es ampliamente utilizado en el mundo del marketing desde hace años, ya que nos da pistas y repsuestas a dos situaciones muy habituales en el análisis de cartera de productos, aunque su uso se puede extender a otros ámbitos muy diferentes:</description>
+    </item>
+    
+    <item>
+      <title>¿qué es y para qué un dashboard?</title>
+      <link>/2019/12/06/dashboard/</link>
+      <pubDate>Fri, 06 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/12/06/dashboard/</guid>
+      <description>Dashboard o cuadro de control¿Qué es un dashboard?
+Un dashboard es una representación gráfica de las principales métricas o KPIs que intervienen en una investigación.
+¿Para qué sirve?
+El objetivo principal de un dashboard es ofrecer visibilidad sobre los indicadores que deben alcanzar determinado valor para alcanzar los objetivos de la empresa. Además permite conocer datos de valor, analizar tendencias y fijar líneas de actuación.
+¿Por qué es importante?</description>
+    </item>
+    
+  </channel>
+</rss>

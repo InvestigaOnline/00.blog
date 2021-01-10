@@ -25,7 +25,7 @@ library(dplyr)
 library(expss)
 library(zoo)
 
-data <- read_spss('~/_datos/75.neoeliavalls/neoeliavalls.sav')
+data <- read_spss('~/R/r-data/75.neoeliavalls/neoeliavalls.sav')
 data$DTCALL <- as.Date(data$DTCALL, format = "%d/%m/%Y")
 ```
 
