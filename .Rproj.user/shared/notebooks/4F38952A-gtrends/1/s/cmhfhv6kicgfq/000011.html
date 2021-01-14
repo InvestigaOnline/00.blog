@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<script src="lib/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="lib/jquery-3.5.0/jquery.min.js"></script>
+<script src="lib/proj4js-2.3.15/proj4.js"></script>
+<link href="lib/highcharts-8.1.2/css/motion.css" rel="stylesheet" />
+<script src="lib/highcharts-8.1.2/highcharts.js"></script>
+<script src="lib/highcharts-8.1.2/highcharts-3d.js"></script>
+<script src="lib/highcharts-8.1.2/highcharts-more.js"></script>
+<script src="lib/highcharts-8.1.2/modules/stock.js"></script>
+<script src="lib/highcharts-8.1.2/modules/map.js"></script>
+<script src="lib/highcharts-8.1.2/modules/annotations.js"></script>
+<script src="lib/highcharts-8.1.2/modules/data.js"></script>
+<script src="lib/highcharts-8.1.2/modules/drilldown.js"></script>
+<script src="lib/highcharts-8.1.2/modules/item-series.js"></script>
+<script src="lib/highcharts-8.1.2/modules/offline-exporting.js"></script>
+<script src="lib/highcharts-8.1.2/modules/overlapping-datalabels.js"></script>
+<script src="lib/highcharts-8.1.2/modules/exporting.js"></script>
+<script src="lib/highcharts-8.1.2/modules/export-data.js"></script>
+<script src="lib/highcharts-8.1.2/modules/funnel.js"></script>
+<script src="lib/highcharts-8.1.2/modules/heatmap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/treemap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/sankey.js"></script>
+<script src="lib/highcharts-8.1.2/modules/dependency-wheel.js"></script>
+<script src="lib/highcharts-8.1.2/modules/organization.js"></script>
+<script src="lib/highcharts-8.1.2/modules/solid-gauge.js"></script>
+<script src="lib/highcharts-8.1.2/modules/streamgraph.js"></script>
+<script src="lib/highcharts-8.1.2/modules/sunburst.js"></script>
+<script src="lib/highcharts-8.1.2/modules/vector.js"></script>
+<script src="lib/highcharts-8.1.2/modules/wordcloud.js"></script>
+<script src="lib/highcharts-8.1.2/modules/xrange.js"></script>
+<script src="lib/highcharts-8.1.2/modules/tilemap.js"></script>
+<script src="lib/highcharts-8.1.2/modules/venn.js"></script>
+<script src="lib/highcharts-8.1.2/modules/gantt.js"></script>
+<script src="lib/highcharts-8.1.2/modules/timeline.js"></script>
+<script src="lib/highcharts-8.1.2/modules/parallel-coordinates.js"></script>
+<script src="lib/highcharts-8.1.2/modules/bullet.js"></script>
+<script src="lib/highcharts-8.1.2/modules/coloraxis.js"></script>
+<script src="lib/highcharts-8.1.2/modules/dumbbell.js"></script>
+<script src="lib/highcharts-8.1.2/modules/lollipop.js"></script>
+<script src="lib/highcharts-8.1.2/modules/series-label.js"></script>
+<script src="lib/highcharts-8.1.2/plugins/motion.js"></script>
+<script src="lib/highcharts-8.1.2/custom/reset.js"></script>
+<script src="lib/highcharts-8.1.2/modules/boost.js"></script>
+<script src="lib/highchart-binding-0.8.2/highchart.js"></script>
+
+</head>
+<body>
+<!-- htmlwidget-container-begin -->
+<div id="htmlwidget-b315550ea3230811baac" style="width:auto;height:500px;" class="highchart html-widget"></div>
+<!-- htmlwidget-container-end -->
+<script type="application/json" data-for="htmlwidget-b315550ea3230811baac">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"line"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":true,"text":"InvestigaOnline.com","href":"https://www.investigaonline.com"},"exporting":{"enabled":true},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["2020-10-14","2020-10-15","2020-10-16","2020-10-17","2020-10-18","2020-10-19","2020-10-20","2020-10-21","2020-10-22","2020-10-23","2020-10-24","2020-10-25","2020-10-26","2020-10-27","2020-10-28","2020-10-29","2020-10-30","2020-10-31","2020-11-01","2020-11-02","2020-11-03","2020-11-04","2020-11-05","2020-11-06","2020-11-07","2020-11-08","2020-11-09","2020-11-10","2020-11-11","2020-11-12","2020-11-13","2020-11-14","2020-11-15","2020-11-16","2020-11-17","2020-11-18","2020-11-19","2020-11-20","2020-11-21","2020-11-22","2020-11-23","2020-11-24","2020-11-25","2020-11-26","2020-11-27","2020-11-28","2020-11-29","2020-11-30","2020-12-01","2020-12-02","2020-12-03","2020-12-04","2020-12-05","2020-12-06","2020-12-07","2020-12-08","2020-12-09","2020-12-10","2020-12-11","2020-12-12","2020-12-13","2020-12-14","2020-12-15","2020-12-16","2020-12-17","2020-12-18","2020-12-19","2020-12-20","2020-12-21","2020-12-22","2020-12-23","2020-12-24","2020-12-25","2020-12-26","2020-12-27","2020-12-28","2020-12-29","2020-12-30","2020-12-31","2021-01-01","2021-01-02","2021-01-03","2021-01-04","2021-01-05","2021-01-06","2021-01-07","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2020-10-14","2020-10-15","2020-10-16","2020-10-17","2020-10-18","2020-10-19","2020-10-20","2020-10-21","2020-10-22","2020-10-23","2020-10-24","2020-10-25","2020-10-26","2020-10-27","2020-10-28","2020-10-29","2020-10-30","2020-10-31","2020-11-01","2020-11-02","2020-11-03","2020-11-04","2020-11-05","2020-11-06","2020-11-07","2020-11-08","2020-11-09","2020-11-10","2020-11-11","2020-11-12","2020-11-13","2020-11-14","2020-11-15","2020-11-16","2020-11-17","2020-11-18","2020-11-19","2020-11-20","2020-11-21","2020-11-22","2020-11-23","2020-11-24","2020-11-25","2020-11-26","2020-11-27","2020-11-28","2020-11-29","2020-11-30","2020-12-01","2020-12-02","2020-12-03","2020-12-04","2020-12-05","2020-12-06","2020-12-07","2020-12-08","2020-12-09","2020-12-10","2020-12-11","2020-12-12","2020-12-13","2020-12-14","2020-12-15","2020-12-16","2020-12-17","2020-12-18","2020-12-19","2020-12-20","2020-12-21","2020-12-22","2020-12-23","2020-12-24","2020-12-25","2020-12-26","2020-12-27","2020-12-28","2020-12-29","2020-12-30","2020-12-31","2021-01-01","2021-01-02","2021-01-03","2021-01-04","2021-01-05","2021-01-06","2021-01-07","2021-01-08","2021-01-09","2021-01-10","2021-01-11","2021-01-12","2020-10-14","2020-10-15","2020-10-16","2020-10-17","2020-10-18","2020-10-19","2020-10-20","2020-10-21","2020-10-22","2020-10-23","2020-10-24","2020-10-25","2020-10-26","2020-10-27","2020-10-28","2020-10-29","2020-10-30","2020-10-31","2020-11-01","2020-11-02","2020-11-03","2020-11-04","2020-11-05","2020-11-06","2020-11-07","2020-11-08","2020-11-09","2020-11-10","2020-11-11","2020-11-12","2020-11-13","2020-11-14","2020-11-15","2020-11-16","2020-11-17","2020-11-18","2020-11-19","2020-11-20","2020-11-21","2020-11-22","2020-11-23","2020-11-24","2020-11-25","2020-11-26","2020-11-27","2020-11-28","2020-11-29","2020-11-30","2020-12-01","2020-12-02","2020-12-03","2020-12-04","2020-12-05","2020-12-06","2020-12-07","2020-12-08","2020-12-09","2020-12-10","2020-12-11","2020-12-12","2020-12-13","2020-12-14","2020-12-15","2020-12-16","2020-12-17","2020-12-18","2020-12-19","2020-12-20","2020-12-21","2020-12-22","2020-12-23","2020-12-24","2020-12-25","2020-12-26","2020-12-27","2020-12-28","2020-12-29","2020-12-30","2020-12-31","2021-01-01","2021-01-02","2021-01-03","2021-01-04","2021-01-05","2021-01-06","2021-01-07","2021-01-08","2021-01-09","2021-01-10","2021-01-11"]},"series":[{"data":[0,0,0,0,0,0,93,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,88,0,0,0,0,91,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100,0,0,0,0,0,92,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"name":"hits Glenfidich","marker":{"enabled":false},"color":"salmon"},{"data":[37,0,0,38,39,0,0,0,37,19,37,38,0,0,36,0,0,36,37,54,71,0,49,17,17,35,17,17,0,17,17,53,36,34,17,70,35,0,0,36,17,17,34,0,17,18,71,0,35,52,17,90,38,0,18,18,18,36,37,0,37,0,18,54,18,57,19,19,38,39,98,65,100,37,54,36,18,18,77,0,55,19,0,0,17,34,17,36,37,0,0],"name":"hits Cardhu","marker":{"enabled":false},"color":"cadetblue"},{"data":[77,16,65,0,65,0,15,15,16,0,16,32,0,30,31,45,31,0,31,45,15,14,27,28,58,30,44,15,44,15,44,45,60,15,29,59,58,15,30,15,44,15,58,41,85,15,75,43,73,15,30,46,32,95,46,60,77,92,31,64,93,45,31,31,62,65,80,33,48,100,33,93,84,32,15,15,15,15,0,48,15,0,14,0,43,43,43,0,16,14],"name":"hits Lagavulin","marker":{"enabled":false},"color":"green"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<!-- htmlwidget-sizing-policy-base64 PHNjcmlwdCB0eXBlPSJhcHBsaWNhdGlvbi9odG1sd2lkZ2V0LXNpemluZyIgZGF0YS1mb3I9Imh0bWx3aWRnZXQtYjMxNTU1MGVhMzIzMDgxMWJhYWMiPnsidmlld2VyIjp7IndpZHRoIjoiYXV0byIsImhlaWdodCI6MzUwLCJwYWRkaW5nIjowLCJmaWxsIjp0cnVlfSwiYnJvd3NlciI6eyJ3aWR0aCI6ImF1dG8iLCJoZWlnaHQiOjUwMCwicGFkZGluZyI6MCwiZmlsbCI6ZmFsc2V9fTwvc2NyaXB0Pg== -->
+</body>
+</html>

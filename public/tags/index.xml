@@ -6,22 +6,67 @@
     <description>Recent content in Tags on Blog InvestigaOnline.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es-es</language>
-    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>covid</title>
       <link>/tags/covid/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/covid/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>google</title>
+      <link>/tags/google/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/google/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>google trends</title>
+      <link>/tags/google-trends/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/google-trends/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>grafico</title>
       <link>/tags/grafico/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/grafico/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>grafico tendencia</title>
+      <link>/tags/grafico-tendencia/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/grafico-tendencia/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>integra</title>
+      <link>/tags/integra/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/integra/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>trends</title>
+      <link>/tags/trends/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/trends/</guid>
       <description></description>
     </item>
     
@@ -31,15 +76,6 @@
       <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/grafico-serie/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>integra</title>
-      <link>/tags/integra/</link>
-      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/integra/</guid>
       <description></description>
     </item>
     

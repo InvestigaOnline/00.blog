@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es-es">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+<title>tendencia en búsquedas Google - Blog InvestigaOnline.com</title>
+<meta property="og:title" content="tendencia en búsquedas Google - Blog InvestigaOnline.com">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">Acerca de</a></li>
+    
+    <li><a href="https://www.investigaonline.com">InvestigaOnline.com</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">23 min read</span>
+    
+
+    <h1 class="article-title">tendencia en búsquedas Google</h1>
+
+    
+    <span class="article-date">2021-01-10</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<div id="tendencia-de-búsquedas" class="section level2">
+<h2>Tendencia de búsquedas</h2>
+<p>R dispone de multitud de paquetes o bibliotecas que nos facilitan la consulta a distintas fuentes de datos web. En concreto, para poder consultar y analizar las tendencias en las búsquedas que se hacen con Google, Google Trends, tenemos entre otros el paquete <code>gtrendsR</code>.</p>
+<p>A nadie se le escapa el interés que comprender la utilidad de la herramienta Google Trends en el momento de la investigación de las palabras clave o de u_topic_ de trabajo que deseamos analizar. Vamos a ver un modo de analizar rápidamente esos datos con R. El paquete de referencia <code>gtrends</code> está alojado en CRAN siendo su uso gratuito. Instálalo en tu entorno de trabajo R y veamos cuales son su posibilidades.</p>
+<p>Instalamos los paquetes necesarios para nuestro trabajo; si ya los tienes, obvia la instalación y sólo carga las librerías.</p>
+<pre class="r"><code>#install.packages(&quot;gtrendsR&quot;)
+#install.packages(&quot;dplyr&quot;)
+#install.packages(&quot;highcharter&quot;)
+library(gtrendsR)
+library(dplyr) 
+library(highcharter)
+
+#añadimos unas opciones básicas de highcharter
+options(highcharter.theme = hc_theme_elementary(tooltip = list(valueDecimals = 2)))
+colors &lt;- colorize(runif(20), c(&quot;#880000&quot;, &quot;#eb6909&quot;))</code></pre>
+<p>Como decíamos el paquete gtrendsR nos permite consultar la API de Google Trends de forma sencilla y rápida mediante la función <code>gtrends()</code>. Veamos sus posibilidades con los parámetros de la consulta:</p>
+<ul>
+<li><code>keyword</code>, un vector de caracteres con las palabras clave que se quieren consultar en Google Trends.
+<ul>
+<li>Por ejemplo: <code>gtrends(c("investigación de mercados", "investigación comercial"))</code></li>
+</ul></li>
+<li><code>geo</code>, un vector de caracteres con los países o regiones geográficas que se quieren consultar. Estos códigos siguen el estándar ISO-3166-2. Por defecto tienen el valor <code>all</code> para consultas globales.
+<ul>
+<li>Por ejemplo: <code>gtrends("COVID", c("ES", "FR", "PT"))</code> consulta la tendencia de la palabra COVID en España, Francia y Portugal. Si quieres consultar el listado de regiones geográficas disponibles, indicalo con <code>countries</code>.</li>
+</ul></li>
+<li><code>time</code>, texto que especifica el período temporal de consulta; por defecto los últimos cinco años, pero sus posibles valores son:
+<ul>
+<li><code>now 1-H</code>. Última hora.</li>
+<li><code>now 4-H</code>. Últimas cuatro horas.</li>
+<li><code>now 1-d</code>. Último día.</li>
+<li><code>now 7-d</code>. Últimos siete días.</li>
+<li><code>today 1-m</code>. Últimos 30 días.</li>
+<li><code>today 3-m</code>. Últimos 90 días.</li>
+<li><code>today 12-m</code>. Últimos 12 meses.</li>
+<li><code>today+5-y</code>. Últimos cinco años (por defecto).</li>
+<li><code>all</code>. Todo desde el comienzo de Google Trends (2004).</li>
+<li><code>Y-m-d Y-m-d</code>. Rango temporal entre dos fechas (ej.: “2010-01-01 2010-04-03”)</li>
+</ul></li>
+<li><code>gprop</code>, texto que especifica el producto de Google para el cual se pide información. Las opciones válidas son <code>web</code>(por defecto), <code>news</code>, <code>images</code>, <code>froogle</code> y <code>youtube</code>.</li>
+<li>category. Un caracter indicando el identificador de categoría de búsqueda que queremos filtrat. Por defecto es 0 y significa que incluye Todas las categorías. Hay más de 1400 categorías y pueden ser consultadas, una vez cargado el paquete gtrendsR con el comando <code>categories</code>. Si por ejemplo queremos filtrar la búsqueda por el ámbito de las motocicletas podemos especificar category=”273″.</li>
+<li>hl. Una cadena de texto especificando el código ISO-639-1 y que puede ser seguido del código de país. Por defecto es hl=”en-US”. Para español es hl=”es”; para español de España: “es-ES”. Solo afecta a los resultados obtenidos en los temas o búsquedas relacionadas.</li>
+<li>low_search_volume. variable booleana (TRUE / FALSE) que indica si se debe incluir o no en los resultados los de regiones de bajo volumen de búsquedas. Es muy útil ponerlo a TRUE cuando estamos analizando palabras poco buscadas.</li>
+<li>cookie_url, una cadena especificando la URL de la que obtener las cookies. No se debe usar por defecto. Solo para usuarios avanzados.</li>
+</ul>
+<div id="ejemplos-de-búsqueda" class="section level3">
+<h3>Ejemplos de búsqueda</h3>
+<ol style="list-style-type: decimal">
+<li>Búsqueda de la palabra “television 4K” en España durante el último año</li>
+<li>Buscamos ahora dos palabras: “smart TV” y “televisor 4K” en España y Portugal en los últimos 30 días.</li>
+<li>Ahora vamos a ver la búsqueda “Valencia Club de Futbol” en las noticias de España en los últimos 90 días.</li>
+</ol>
+<pre class="r"><code>gtrends(keyword=&quot;VCF&quot;, geo=&quot;ES&quot;, time=&quot;today 12-m&quot;)</code></pre>
+<pre><code>$interest_over_time
+         date hits keyword geo       time gprop category
+1  2020-01-19  100     VCF  ES today 12-m   web        0
+2  2020-01-26   98     VCF  ES today 12-m   web        0
+3  2020-02-02   89     VCF  ES today 12-m   web        0
+4  2020-02-09   52     VCF  ES today 12-m   web        0
+5  2020-02-16   56     VCF  ES today 12-m   web        0
+6  2020-02-23   21     VCF  ES today 12-m   web        0
+7  2020-03-01   71     VCF  ES today 12-m   web        0
+8  2020-03-08   57     VCF  ES today 12-m   web        0
+9  2020-03-15   15     VCF  ES today 12-m   web        0
+10 2020-03-22   20     VCF  ES today 12-m   web        0
+11 2020-03-29   14     VCF  ES today 12-m   web        0
+12 2020-04-05   20     VCF  ES today 12-m   web        0
+13 2020-04-12   19     VCF  ES today 12-m   web        0
+14 2020-04-19   34     VCF  ES today 12-m   web        0
+15 2020-04-26   33     VCF  ES today 12-m   web        0
+16 2020-05-03   30     VCF  ES today 12-m   web        0
+17 2020-05-10   16     VCF  ES today 12-m   web        0
+18 2020-05-17   21     VCF  ES today 12-m   web        0
+19 2020-05-24   19     VCF  ES today 12-m   web        0
+20 2020-05-31   19     VCF  ES today 12-m   web        0
+21 2020-06-07   27     VCF  ES today 12-m   web        0
+22 2020-06-14   29     VCF  ES today 12-m   web        0
+23 2020-06-21   47     VCF  ES today 12-m   web        0
+24 2020-06-28   55     VCF  ES today 12-m   web        0
+25 2020-07-05   48     VCF  ES today 12-m   web        0
+26 2020-07-12   60     VCF  ES today 12-m   web        0
+27 2020-07-19   82     VCF  ES today 12-m   web        0
+28 2020-07-26   26     VCF  ES today 12-m   web        0
+29 2020-08-02   51     VCF  ES today 12-m   web        0
+30 2020-08-09   51     VCF  ES today 12-m   web        0
+31 2020-08-16   57     VCF  ES today 12-m   web        0
+32 2020-08-23   56     VCF  ES today 12-m   web        0
+33 2020-08-30   37     VCF  ES today 12-m   web        0
+34 2020-09-06   41     VCF  ES today 12-m   web        0
+35 2020-09-13   68     VCF  ES today 12-m   web        0
+36 2020-09-20   56     VCF  ES today 12-m   web        0
+37 2020-09-27   55     VCF  ES today 12-m   web        0
+38 2020-10-04   46     VCF  ES today 12-m   web        0
+39 2020-10-11   39     VCF  ES today 12-m   web        0
+40 2020-10-18   42     VCF  ES today 12-m   web        0
+41 2020-10-25   32     VCF  ES today 12-m   web        0
+42 2020-11-01   19     VCF  ES today 12-m   web        0
+43 2020-11-08   29     VCF  ES today 12-m   web        0
+44 2020-11-15   44     VCF  ES today 12-m   web        0
+45 2020-11-22   76     VCF  ES today 12-m   web        0
+46 2020-11-29   15     VCF  ES today 12-m   web        0
+47 2020-12-06   47     VCF  ES today 12-m   web        0
+48 2020-12-13   50     VCF  ES today 12-m   web        0
+49 2020-12-20   41     VCF  ES today 12-m   web        0
+50 2020-12-27   32     VCF  ES today 12-m   web        0
+51 2021-01-03   34     VCF  ES today 12-m   web        0
+52 2021-01-10   86     VCF  ES today 12-m   web        0
+
+$interest_by_country
+NULL
+
+$interest_by_region
+              location hits keyword geo gprop
+1  Valencian Community  100     VCF  ES   web
+2            Catalonia    5     VCF  ES   web
+3               Aragon    5     VCF  ES   web
+4    Castile-La Mancha    4     VCF  ES   web
+5  Community of Madrid    4     VCF  ES   web
+6    Castile and LeÃ³n    3     VCF  ES   web
+7     Balearic Islands    3     VCF  ES   web
+8              Galicia    3     VCF  ES   web
+9            Andalusia    3     VCF  ES   web
+10         Extremadura    2     VCF  ES   web
+11             Navarre    2     VCF  ES   web
+12      Canary Islands    2     VCF  ES   web
+13      Basque Country    1     VCF  ES   web
+14    Region of Murcia    1     VCF  ES   web
+15            La Rioja   NA     VCF  ES   web
+16           Cantabria   NA     VCF  ES   web
+17            Asturias   NA     VCF  ES   web
+18               Ceuta   NA     VCF  ES   web
+19             Melilla   NA     VCF  ES   web
+
+$interest_by_dma
+NULL
+
+$interest_by_city
+  location hits keyword geo gprop
+1 Valencia  100     VCF  ES   web
+
+$related_topics
+    subject related_topics                  value geo keyword category
+1       100            top            Valencia CF  ES     VCF        0
+2        12            top             Supersport  ES     VCF        0
+3        10            top                  vCard  ES     VCF        0
+4         9            top              VCF RADIO  ES     VCF        0
+5         8            top     Radio Broadcasting  ES     VCF        0
+6         5            top          Computer file  ES     VCF        0
+7         4            top            Town square  ES     VCF        0
+8         3            top        Google Contacts  ES     VCF        0
+9         3            top         Las Provincias  ES     VCF        0
+10        2            top            Levante-EMV  ES     VCF        0
+11        2            top     Deporte Valenciano  ES     VCF        0
+12        2            top                 Import  ES     VCF        0
+13        1            top        Microsoft Excel  ES     VCF        0
+14        1            top Comma-separated values  ES     VCF        0
+15        1            top        Valencia Basket  ES     VCF        0
+16        1            top            File format  ES     VCF        0
+17       &lt;1            top           Fichajes.net  ES     VCF        0
+18       &lt;1            top                Liberty  ES     VCF        0
+19 Breakout         rising Comma-separated values  ES     VCF        0
+20 Breakout         rising        Valencia Basket  ES     VCF        0
+21 Breakout         rising            File format  ES     VCF        0
+22 Breakout         rising           Fichajes.net  ES     VCF        0
+23 Breakout         rising                Liberty  ES     VCF        0
+24    +120%         rising            Levante-EMV  ES     VCF        0
+25    +110%         rising        Google Contacts  ES     VCF        0
+26    +100%         rising        Microsoft Excel  ES     VCF        0
+27     +60%         rising          Computer file  ES     VCF        0
+28     +60%         rising                  vCard  ES     VCF        0
+29     +50%         rising         Las Provincias  ES     VCF        0
+
+$related_queries
+    subject related_queries                value geo keyword category
+1       100             top         vcf noticias  ES     VCF        0
+2        79             top         superdeporte  ES     VCF        0
+3        74             top            vcf radio  ES     VCF        0
+4        73             top     superdeporte vcf  ES     VCF        0
+5        73             top            marca vcf  ES     VCF        0
+6        58             top      eldesmarque vcf  ES     VCF        0
+7        42             top          valencia cf  ES     VCF        0
+8        42             top              vcf hoy  ES     VCF        0
+9        37             top          vcf twitter  ES     VCF        0
+10       26             top               as vcf  ES     VCF        0
+11       16             top             vcf shop  ES     VCF        0
+12       16             top superdeporte vcf hoy  ES     VCF        0
+13       16             top         libertad vcf  ES     VCF        0
+14        5             top            vcf media  ES     VCF        0
+15 Breakout          rising         libertad vcf  ES     VCF        0
+16    +250%          rising      eldesmarque vcf  ES     VCF        0
+17     +40%          rising            marca vcf  ES     VCF        0
+
+attr(,&quot;class&quot;)
+[1] &quot;gtrends&quot; &quot;list&quot;   </code></pre>
+<pre class="r"><code>gtrends(keyword=c(&quot;VCF&quot;, &quot;Peter Lim&quot;), geo=c(&quot;ES&quot;,&quot;ES&quot;), time=&quot;today 1-m&quot;)</code></pre>
+<pre><code>$interest_over_time
+         date hits   keyword geo      time gprop category
+1  2020-12-14   24       VCF  ES today 1-m   web        0
+2  2020-12-15   25       VCF  ES today 1-m   web        0
+3  2020-12-16  100       VCF  ES today 1-m   web        0
+4  2020-12-17   26       VCF  ES today 1-m   web        0
+5  2020-12-18   54       VCF  ES today 1-m   web        0
+6  2020-12-19   56       VCF  ES today 1-m   web        0
+7  2020-12-20   28       VCF  ES today 1-m   web        0
+8  2020-12-21   13       VCF  ES today 1-m   web        0
+9  2020-12-22   35       VCF  ES today 1-m   web        0
+10 2020-12-23   27       VCF  ES today 1-m   web        0
+11 2020-12-24   34       VCF  ES today 1-m   web        0
+12 2020-12-25   64       VCF  ES today 1-m   web        0
+13 2020-12-26    0       VCF  ES today 1-m   web        0
+14 2020-12-27   14       VCF  ES today 1-m   web        0
+15 2020-12-28   25       VCF  ES today 1-m   web        0
+16 2020-12-29   26       VCF  ES today 1-m   web        0
+17 2020-12-30   27       VCF  ES today 1-m   web        0
+18 2020-12-31   64       VCF  ES today 1-m   web        0
+19 2021-01-01   15       VCF  ES today 1-m   web        0
+20 2021-01-02   42       VCF  ES today 1-m   web        0
+21 2021-01-03   14       VCF  ES today 1-m   web        0
+22 2021-01-04   76       VCF  ES today 1-m   web        0
+23 2021-01-05   13       VCF  ES today 1-m   web        0
+24 2021-01-06   26       VCF  ES today 1-m   web        0
+25 2021-01-07   82       VCF  ES today 1-m   web        0
+26 2021-01-08   36       VCF  ES today 1-m   web        0
+27 2021-01-09   13       VCF  ES today 1-m   web        0
+28 2021-01-10   27       VCF  ES today 1-m   web        0
+29 2021-01-11   24       VCF  ES today 1-m   web        0
+30 2020-12-14    0 Peter Lim  ES today 1-m   web        0
+31 2020-12-15   12 Peter Lim  ES today 1-m   web        0
+32 2020-12-16    0 Peter Lim  ES today 1-m   web        0
+33 2020-12-17    0 Peter Lim  ES today 1-m   web        0
+34 2020-12-18    0 Peter Lim  ES today 1-m   web        0
+35 2020-12-19    0 Peter Lim  ES today 1-m   web        0
+36 2020-12-20   14 Peter Lim  ES today 1-m   web        0
+37 2020-12-21    0 Peter Lim  ES today 1-m   web        0
+38 2020-12-22    0 Peter Lim  ES today 1-m   web        0
+39 2020-12-23    0 Peter Lim  ES today 1-m   web        0
+40 2020-12-24    0 Peter Lim  ES today 1-m   web        0
+41 2020-12-25    0 Peter Lim  ES today 1-m   web        0
+42 2020-12-26    0 Peter Lim  ES today 1-m   web        0
+43 2020-12-27    0 Peter Lim  ES today 1-m   web        0
+44 2020-12-28   13 Peter Lim  ES today 1-m   web        0
+45 2020-12-29    0 Peter Lim  ES today 1-m   web        0
+46 2020-12-30    0 Peter Lim  ES today 1-m   web        0
+47 2020-12-31    0 Peter Lim  ES today 1-m   web        0
+48 2021-01-01    0 Peter Lim  ES today 1-m   web        0
+49 2021-01-02   28 Peter Lim  ES today 1-m   web        0
+50 2021-01-03   14 Peter Lim  ES today 1-m   web        0
+51 2021-01-04   25 Peter Lim  ES today 1-m   web        0
+52 2021-01-05   27 Peter Lim  ES today 1-m   web        0
+53 2021-01-06    0 Peter Lim  ES today 1-m   web        0
+54 2021-01-07    0 Peter Lim  ES today 1-m   web        0
+55 2021-01-08    0 Peter Lim  ES today 1-m   web        0
+56 2021-01-09    0 Peter Lim  ES today 1-m   web        0
+57 2021-01-10    0 Peter Lim  ES today 1-m   web        0
+58 2021-01-11    0 Peter Lim  ES today 1-m   web        0
+
+$interest_by_country
+NULL
+
+$interest_by_region
+              location hits   keyword geo gprop
+1  Valencian Community  100       VCF  ES   web
+2               Aragon   16       VCF  ES   web
+3  Community of Madrid    9       VCF  ES   web
+4            Catalonia    8       VCF  ES   web
+5       Basque Country    4       VCF  ES   web
+6              Galicia    4       VCF  ES   web
+7            Andalusia    2       VCF  ES   web
+8             La Rioja   NA       VCF  ES   web
+9             Asturias   NA       VCF  ES   web
+10           Cantabria   NA       VCF  ES   web
+11               Ceuta   NA       VCF  ES   web
+12   Castile and LeÃ³n   NA       VCF  ES   web
+13   Castile-La Mancha   NA       VCF  ES   web
+14      Canary Islands   NA       VCF  ES   web
+15         Extremadura   NA       VCF  ES   web
+16    Balearic Islands   NA       VCF  ES   web
+17    Region of Murcia   NA       VCF  ES   web
+18             Melilla   NA       VCF  ES   web
+19             Navarre   NA       VCF  ES   web
+20 Valencian Community  100 Peter Lim  ES   web
+21      Basque Country   41 Peter Lim  ES   web
+22           Andalusia   34 Peter Lim  ES   web
+23 Community of Madrid   12 Peter Lim  ES   web
+24              Aragon   NA Peter Lim  ES   web
+25            Asturias   NA Peter Lim  ES   web
+26           Cantabria   NA Peter Lim  ES   web
+27               Ceuta   NA Peter Lim  ES   web
+28   Castile and LeÃ³n   NA Peter Lim  ES   web
+29   Castile-La Mancha   NA Peter Lim  ES   web
+30      Canary Islands   NA Peter Lim  ES   web
+31           Catalonia   NA Peter Lim  ES   web
+32         Extremadura   NA Peter Lim  ES   web
+33             Galicia   NA Peter Lim  ES   web
+34    Balearic Islands   NA Peter Lim  ES   web
+35    Region of Murcia   NA Peter Lim  ES   web
+36             Melilla   NA Peter Lim  ES   web
+37             Navarre   NA Peter Lim  ES   web
+38            La Rioja   NA Peter Lim  ES   web
+
+$interest_by_dma
+NULL
+
+$interest_by_city
+NULL
+
+$related_topics
+NULL
+
+$related_queries
+NULL
+
+attr(,&quot;class&quot;)
+[1] &quot;gtrends&quot; &quot;list&quot;   </code></pre>
+<pre class="r"><code>gtrends(keyword=&quot;Valencia Club de Futbol&quot;, geo=&quot;ES&quot;, gprop=&quot;web&quot;, time=&quot;today 1-m&quot;)</code></pre>
+<pre><code>$interest_over_time
+         date hits                 keyword geo      time gprop category
+1  2020-12-14    0 Valencia Club de Futbol  ES today 1-m   web        0
+2  2020-12-15    0 Valencia Club de Futbol  ES today 1-m   web        0
+3  2020-12-16    0 Valencia Club de Futbol  ES today 1-m   web        0
+4  2020-12-17    0 Valencia Club de Futbol  ES today 1-m   web        0
+5  2020-12-18    0 Valencia Club de Futbol  ES today 1-m   web        0
+6  2020-12-19    0 Valencia Club de Futbol  ES today 1-m   web        0
+7  2020-12-20    0 Valencia Club de Futbol  ES today 1-m   web        0
+8  2020-12-21    0 Valencia Club de Futbol  ES today 1-m   web        0
+9  2020-12-22    0 Valencia Club de Futbol  ES today 1-m   web        0
+10 2020-12-23    0 Valencia Club de Futbol  ES today 1-m   web        0
+11 2020-12-24    0 Valencia Club de Futbol  ES today 1-m   web        0
+12 2020-12-25    0 Valencia Club de Futbol  ES today 1-m   web        0
+13 2020-12-26    0 Valencia Club de Futbol  ES today 1-m   web        0
+14 2020-12-27    0 Valencia Club de Futbol  ES today 1-m   web        0
+15 2020-12-28    0 Valencia Club de Futbol  ES today 1-m   web        0
+16 2020-12-29    0 Valencia Club de Futbol  ES today 1-m   web        0
+17 2020-12-30    0 Valencia Club de Futbol  ES today 1-m   web        0
+18 2020-12-31    0 Valencia Club de Futbol  ES today 1-m   web        0
+19 2021-01-01    0 Valencia Club de Futbol  ES today 1-m   web        0
+20 2021-01-02    0 Valencia Club de Futbol  ES today 1-m   web        0
+21 2021-01-03  100 Valencia Club de Futbol  ES today 1-m   web        0
+22 2021-01-04    0 Valencia Club de Futbol  ES today 1-m   web        0
+23 2021-01-05    0 Valencia Club de Futbol  ES today 1-m   web        0
+24 2021-01-06    0 Valencia Club de Futbol  ES today 1-m   web        0
+25 2021-01-07    0 Valencia Club de Futbol  ES today 1-m   web        0
+26 2021-01-08    0 Valencia Club de Futbol  ES today 1-m   web        0
+27 2021-01-09    0 Valencia Club de Futbol  ES today 1-m   web        0
+28 2021-01-10    0 Valencia Club de Futbol  ES today 1-m   web        0
+29 2021-01-11    0 Valencia Club de Futbol  ES today 1-m   web        0
+
+$interest_by_country
+NULL
+
+$interest_by_region
+              location hits                 keyword geo gprop
+1  Valencian Community  100 Valencia Club de Futbol  ES   web
+2            Andalusia   NA Valencia Club de Futbol  ES   web
+3               Aragon   NA Valencia Club de Futbol  ES   web
+4             Asturias   NA Valencia Club de Futbol  ES   web
+5            Cantabria   NA Valencia Club de Futbol  ES   web
+6                Ceuta   NA Valencia Club de Futbol  ES   web
+7    Castile and LeÃ³n   NA Valencia Club de Futbol  ES   web
+8    Castile-La Mancha   NA Valencia Club de Futbol  ES   web
+9       Canary Islands   NA Valencia Club de Futbol  ES   web
+10           Catalonia   NA Valencia Club de Futbol  ES   web
+11         Extremadura   NA Valencia Club de Futbol  ES   web
+12             Galicia   NA Valencia Club de Futbol  ES   web
+13    Balearic Islands   NA Valencia Club de Futbol  ES   web
+14    Region of Murcia   NA Valencia Club de Futbol  ES   web
+15 Community of Madrid   NA Valencia Club de Futbol  ES   web
+16             Melilla   NA Valencia Club de Futbol  ES   web
+17             Navarre   NA Valencia Club de Futbol  ES   web
+18      Basque Country   NA Valencia Club de Futbol  ES   web
+19            La Rioja   NA Valencia Club de Futbol  ES   web
+
+$interest_by_dma
+NULL
+
+$interest_by_city
+NULL
+
+$related_topics
+     geo  keyword                   category
+[1,] &quot;ES&quot; &quot;Valencia Club de Futbol&quot; 0       
+
+$related_queries
+NULL
+
+attr(,&quot;class&quot;)
+[1] &quot;gtrends&quot; &quot;list&quot;   </code></pre>
+</div>
+</div>
+<div id="análisis-del-resultados" class="section level2">
+<h2>Análisis del resultados</h2>
+<p>Una búsqueda sencilla en Google Trends con el paquete gtrendsR nos proporciona siete listas de datos que describimos a continuación a partir de la siguiente consulta:</p>
+<pre class="r"><code>tendencias &lt;- gtrends(&quot;VCF&quot;, geo=&quot;ES&quot;, time=&quot;today 1-m&quot;)
+tendencias</code></pre>
+<pre><code>$interest_over_time
+         date hits keyword geo      time gprop category
+1  2020-12-14   20     VCF  ES today 1-m   web        0
+2  2020-12-15   28     VCF  ES today 1-m   web        0
+3  2020-12-16  100     VCF  ES today 1-m   web        0
+4  2020-12-17   30     VCF  ES today 1-m   web        0
+5  2020-12-18   39     VCF  ES today 1-m   web        0
+6  2020-12-19   49     VCF  ES today 1-m   web        0
+7  2020-12-20   24     VCF  ES today 1-m   web        0
+8  2020-12-21   23     VCF  ES today 1-m   web        0
+9  2020-12-22   46     VCF  ES today 1-m   web        0
+10 2020-12-23   31     VCF  ES today 1-m   web        0
+11 2020-12-24   29     VCF  ES today 1-m   web        0
+12 2020-12-25   56     VCF  ES today 1-m   web        0
+13 2020-12-26   17     VCF  ES today 1-m   web        0
+14 2020-12-27   16     VCF  ES today 1-m   web        0
+15 2020-12-28   22     VCF  ES today 1-m   web        0
+16 2020-12-29   29     VCF  ES today 1-m   web        0
+17 2020-12-30   23     VCF  ES today 1-m   web        0
+18 2020-12-31   55     VCF  ES today 1-m   web        0
+19 2021-01-01   17     VCF  ES today 1-m   web        0
+20 2021-01-02   48     VCF  ES today 1-m   web        0
+21 2021-01-03   23     VCF  ES today 1-m   web        0
+22 2021-01-04   87     VCF  ES today 1-m   web        0
+23 2021-01-05   31     VCF  ES today 1-m   web        0
+24 2021-01-06   22     VCF  ES today 1-m   web        0
+25 2021-01-07   81     VCF  ES today 1-m   web        0
+26 2021-01-08   41     VCF  ES today 1-m   web        0
+27 2021-01-09   15     VCF  ES today 1-m   web        0
+28 2021-01-10   55     VCF  ES today 1-m   web        0
+29 2021-01-11   35     VCF  ES today 1-m   web        0
+
+$interest_by_country
+NULL
+
+$interest_by_region
+              location hits keyword geo gprop
+1  Valencian Community  100     VCF  ES   web
+2               Aragon   16     VCF  ES   web
+3  Community of Madrid    9     VCF  ES   web
+4            Catalonia    8     VCF  ES   web
+5       Basque Country    4     VCF  ES   web
+6              Galicia    4     VCF  ES   web
+7            Andalusia    2     VCF  ES   web
+8             La Rioja   NA     VCF  ES   web
+9             Asturias   NA     VCF  ES   web
+10           Cantabria   NA     VCF  ES   web
+11               Ceuta   NA     VCF  ES   web
+12   Castile and LeÃ³n   NA     VCF  ES   web
+13   Castile-La Mancha   NA     VCF  ES   web
+14      Canary Islands   NA     VCF  ES   web
+15         Extremadura   NA     VCF  ES   web
+16    Balearic Islands   NA     VCF  ES   web
+17    Region of Murcia   NA     VCF  ES   web
+18             Melilla   NA     VCF  ES   web
+19             Navarre   NA     VCF  ES   web
+
+$interest_by_dma
+NULL
+
+$interest_by_city
+NULL
+
+$related_topics
+   subject related_topics              value geo keyword category
+1      100            top        Valencia CF  ES     VCF        0
+2       19            top         Supersport  ES     VCF        0
+3       14            top Radio Broadcasting  ES     VCF        0
+4       14            top          VCF RADIO  ES     VCF        0
+5 Breakout         rising Radio Broadcasting  ES     VCF        0
+6 Breakout         rising          VCF RADIO  ES     VCF        0
+7    +300%         rising         Supersport  ES     VCF        0
+8     +50%         rising        Valencia CF  ES     VCF        0
+
+$related_queries
+NULL
+
+attr(,&quot;class&quot;)
+[1] &quot;gtrends&quot; &quot;list&quot;   </code></pre>
+<ul>
+<li>interest_over_time. Este data frame nos proporciona datos temporales de una o varias palabras clave y contiene los siguientes campos:
+<ul>
+<li>fecha (date), de clase Date, en formato yyyy-mm-dd.</li>
+<li>interés (hits), de clase character, es el interés de la búsqueda, siendo 100 el momento de mayor interés y todos los demás valores relativos a él. Es decir, si en septiembre de 2010 hubo un interés 100 y en enero de 2011 un interés 50, quiere decir que el interés por esa búsqueda en enero de 2011 fue la mitad que en septiembre de 2010. IMPORTANTE: En ocasiones, para hits menores de 1 pero que no son 0 se devuelve la cadena “&lt;1”. Habrá que tratarla convenientemente para poder usar este dato como número. Por ejemplo con un comando como este a<span class="math inline">\(interest_over_time\)</span>hits[a<span class="math inline">\(interest_over_time\)</span>hits == “&lt;1”] &lt;- 0 lo convertimos en el caracter 0.
+palabra clave (keyword), de clase character, la palabra clave que ha sido buscada
+localización (geo), de clase character, puede ser world o un código de país.</li>
+<li>gprop, de clase character, producto seleccionado. En consonancia con lo explicado anteriormente. Por defecto es web.
+categoría (category). Identificador de clase integer que identifica la categoría de búsqueda. Por defecto siempre será 0.</li>
+</ul></li>
+</ul>
+<p>Temas relacionados (related_topics). Proporciona información sobre temas relacionados con la palabra clave. Realmente nos presenta dos tipos de resultados:</p>
+<p>Top topics. Los temas más populares con un valor relativo de 100 a 0.
+Rising topics, es decir, los temas que más están creciendo en interés. Algunos temas están marcados con la palabra Breakout, lo que indica que están creciendo de forma muy acelerada. Para el resto se indica un porcentaje de ascenso.</p>
+<p>Búsquedas relacionadas (related_queries). De forma similar al caso anterior muestra las búsquedas relacionadas.</p>
+<p>subject
+related_queries
+value
+geo
+keyword
+category</p>
+<p>tendencias$relate</p>
+<p>Obtenemos los datos de Google Trends, y los almacenamos en un <em>dataframe</em>, reteniendo solo los campos 1 y 2 del mismo.</p>
+<pre class="r"><code># manipular datos
+
+es_trends &lt;- gtrends(c(&quot;Universidad de Valencia&quot;), geo = c(&quot;ES&quot;), gprop = &quot;web&quot;, time = &quot;today 12-m&quot;)
+head(es_trends, 5)</code></pre>
+<pre><code>$interest_over_time
+         date hits                 keyword geo       time gprop category
+1  2020-01-19   26 Universidad de Valencia  ES today 12-m   web        0
+2  2020-01-26   33 Universidad de Valencia  ES today 12-m   web        0
+3  2020-02-02   34 Universidad de Valencia  ES today 12-m   web        0
+4  2020-02-09   30 Universidad de Valencia  ES today 12-m   web        0
+5  2020-02-16   36 Universidad de Valencia  ES today 12-m   web        0
+6  2020-02-23   29 Universidad de Valencia  ES today 12-m   web        0
+7  2020-03-01   32 Universidad de Valencia  ES today 12-m   web        0
+8  2020-03-08   24 Universidad de Valencia  ES today 12-m   web        0
+9  2020-03-15   21 Universidad de Valencia  ES today 12-m   web        0
+10 2020-03-22   27 Universidad de Valencia  ES today 12-m   web        0
+11 2020-03-29   25 Universidad de Valencia  ES today 12-m   web        0
+12 2020-04-05   24 Universidad de Valencia  ES today 12-m   web        0
+13 2020-04-12   26 Universidad de Valencia  ES today 12-m   web        0
+14 2020-04-19   28 Universidad de Valencia  ES today 12-m   web        0
+15 2020-04-26   27 Universidad de Valencia  ES today 12-m   web        0
+16 2020-05-03   28 Universidad de Valencia  ES today 12-m   web        0
+17 2020-05-10   34 Universidad de Valencia  ES today 12-m   web        0
+18 2020-05-17   31 Universidad de Valencia  ES today 12-m   web        0
+19 2020-05-24   34 Universidad de Valencia  ES today 12-m   web        0
+20 2020-05-31   28 Universidad de Valencia  ES today 12-m   web        0
+21 2020-06-07   33 Universidad de Valencia  ES today 12-m   web        0
+22 2020-06-14   34 Universidad de Valencia  ES today 12-m   web        0
+23 2020-06-21   40 Universidad de Valencia  ES today 12-m   web        0
+24 2020-06-28   42 Universidad de Valencia  ES today 12-m   web        0
+25 2020-07-05   42 Universidad de Valencia  ES today 12-m   web        0
+26 2020-07-12   64 Universidad de Valencia  ES today 12-m   web        0
+27 2020-07-19   62 Universidad de Valencia  ES today 12-m   web        0
+28 2020-07-26  100 Universidad de Valencia  ES today 12-m   web        0
+29 2020-08-02   37 Universidad de Valencia  ES today 12-m   web        0
+30 2020-08-09   19 Universidad de Valencia  ES today 12-m   web        0
+31 2020-08-16   22 Universidad de Valencia  ES today 12-m   web        0
+32 2020-08-23   27 Universidad de Valencia  ES today 12-m   web        0
+33 2020-08-30   45 Universidad de Valencia  ES today 12-m   web        0
+34 2020-09-06   47 Universidad de Valencia  ES today 12-m   web        0
+35 2020-09-13   52 Universidad de Valencia  ES today 12-m   web        0
+36 2020-09-20   41 Universidad de Valencia  ES today 12-m   web        0
+37 2020-09-27   34 Universidad de Valencia  ES today 12-m   web        0
+38 2020-10-04   54 Universidad de Valencia  ES today 12-m   web        0
+39 2020-10-11   33 Universidad de Valencia  ES today 12-m   web        0
+40 2020-10-18   33 Universidad de Valencia  ES today 12-m   web        0
+41 2020-10-25   25 Universidad de Valencia  ES today 12-m   web        0
+42 2020-11-01   25 Universidad de Valencia  ES today 12-m   web        0
+43 2020-11-08   28 Universidad de Valencia  ES today 12-m   web        0
+44 2020-11-15   26 Universidad de Valencia  ES today 12-m   web        0
+45 2020-11-22   28 Universidad de Valencia  ES today 12-m   web        0
+46 2020-11-29   34 Universidad de Valencia  ES today 12-m   web        0
+47 2020-12-06   18 Universidad de Valencia  ES today 12-m   web        0
+48 2020-12-13   27 Universidad de Valencia  ES today 12-m   web        0
+49 2020-12-20   30 Universidad de Valencia  ES today 12-m   web        0
+50 2020-12-27   22 Universidad de Valencia  ES today 12-m   web        0
+51 2021-01-03   26 Universidad de Valencia  ES today 12-m   web        0
+52 2021-01-10   33 Universidad de Valencia  ES today 12-m   web        0
+
+$interest_by_country
+NULL
+
+$interest_by_region
+              location hits                 keyword geo gprop
+1  Valencian Community  100 Universidad de Valencia  ES   web
+2     Region of Murcia   17 Universidad de Valencia  ES   web
+3    Castile-La Mancha   16 Universidad de Valencia  ES   web
+4     Balearic Islands   12 Universidad de Valencia  ES   web
+5               Aragon   11 Universidad de Valencia  ES   web
+6              Navarre    8 Universidad de Valencia  ES   web
+7             Asturias    7 Universidad de Valencia  ES   web
+8    Castile and LeÃ³n    7 Universidad de Valencia  ES   web
+9            Cantabria    7 Universidad de Valencia  ES   web
+10           Andalusia    7 Universidad de Valencia  ES   web
+11            La Rioja    6 Universidad de Valencia  ES   web
+12      Canary Islands    6 Universidad de Valencia  ES   web
+13         Extremadura    6 Universidad de Valencia  ES   web
+14             Galicia    6 Universidad de Valencia  ES   web
+15 Community of Madrid    6 Universidad de Valencia  ES   web
+16           Catalonia    5 Universidad de Valencia  ES   web
+17      Basque Country    5 Universidad de Valencia  ES   web
+18               Ceuta   NA Universidad de Valencia  ES   web
+19             Melilla   NA Universidad de Valencia  ES   web
+
+$interest_by_dma
+NULL
+
+$interest_by_city
+   location hits                 keyword geo gprop
+1  Valencia  100 Universidad de Valencia  ES   web
+2    Madrid    4 Universidad de Valencia  ES   web
+3 Barcelona   NA Universidad de Valencia  ES   web</code></pre>
+<pre class="r"><code>df1 &lt;- es_trends$interest_over_time[,1:2]</code></pre>
+<p>Si deseamos pedir ayuda, # Pedir ayuda y ver `<code>?gtrends()</code>. Finalmente creamos el gráfico… veces que han salido en las noticias (datos de Google Trends) la Universitat de València.</p>
+<pre class="r"><code>highchart() %&gt;% 
+     hc_chart(type = &#39;line&#39;) %&gt;% 
+     hc_xAxis(categories = as.Date(df1$date)) %&gt;% 
+     hc_add_series(df1$hits, name=&#39;hits UV&#39;) %&gt;% #*** API
+     hc_credits(enabled=TRUE, text=&#39;InvestigaOnline.com&#39;, href =&#39;https://www.investigaonline.com&#39;) %&gt;%
+     hc_exporting(enabled=TRUE)</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"line"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":true,"text":"InvestigaOnline.com","href":"https://www.investigaonline.com"},"exporting":{"enabled":true},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["2020-01-19","2020-01-26","2020-02-02","2020-02-09","2020-02-16","2020-02-23","2020-03-01","2020-03-08","2020-03-15","2020-03-22","2020-03-29","2020-04-05","2020-04-12","2020-04-19","2020-04-26","2020-05-03","2020-05-10","2020-05-17","2020-05-24","2020-05-31","2020-06-07","2020-06-14","2020-06-21","2020-06-28","2020-07-05","2020-07-12","2020-07-19","2020-07-26","2020-08-02","2020-08-09","2020-08-16","2020-08-23","2020-08-30","2020-09-06","2020-09-13","2020-09-20","2020-09-27","2020-10-04","2020-10-11","2020-10-18","2020-10-25","2020-11-01","2020-11-08","2020-11-15","2020-11-22","2020-11-29","2020-12-06","2020-12-13","2020-12-20","2020-12-27","2021-01-03","2021-01-10"]},"series":[{"data":[26,33,34,30,36,29,32,24,21,27,25,24,26,28,27,28,34,31,34,28,33,34,40,42,42,64,62,100,37,19,22,27,45,47,52,41,34,54,33,33,25,25,28,26,28,34,18,27,30,22,26,33],"name":"hits UV"}]},"theme":{"colors":["#41B5E9","#FA8832","#34393C","#E46151"],"chart":{"style":{"color":"#333","fontFamily":"Open Sans"}},"title":{"style":{"fontFamily":"Raleway","fontWeight":"100"}},"subtitle":{"style":{"fontFamily":"Raleway","fontWeight":"100"}},"legend":{"align":"right","verticalAlign":"bottom"},"xAxis":{"gridLineWidth":1,"gridLineColor":"#F3F3F3","lineColor":"#F3F3F3","minorGridLineColor":"#F3F3F3","tickColor":"#F3F3F3","tickWidth":1},"yAxis":{"gridLineColor":"#F3F3F3","lineColor":"#F3F3F3","minorGridLineColor":"#F3F3F3","tickColor":"#F3F3F3","tickWidth":1},"tooltip":{"valueDecimals":2}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":["Open+Sans","Raleway"],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>¿Añadimos la Politécnica y la Complutense de Madrid?. Lo hacemos de un tirón, fíjate en las diferencias.</p>
+<pre class="r"><code>es_trends &lt;- gtrends(c(&quot;Universitat de Valencia&quot;), geo = c(&quot;ES&quot;), gprop = &quot;web&quot;, hl=&quot;es&quot;, time = &quot;today 12-m&quot;)
+es_trends_interest_over_time &lt;- es_trends$interest_over_time[,1:2]
+df1 &lt;- es_trends_interest_over_time
+es_trends &lt;- gtrends(c(&quot;Universidad Politecnica de Valencia&quot;), geo = c(&quot;ES&quot;), gprop = &quot;web&quot;, hl=&quot;es&quot;, time = &quot;all&quot;)
+es_trends_interest_over_time &lt;- es_trends$interest_over_time[,1:2]
+df2 &lt;- es_trends_interest_over_time
+es_trends &lt;- gtrends(c(&quot;Universidad Complutense&quot;), geo = c(&quot;ES&quot;), gprop = &quot;web&quot;, hl=&quot;es&quot;, time = &quot;all&quot;)
+es_trends_interest_over_time &lt;- es_trends$interest_over_time[,1:2]
+df3 &lt;- es_trends_interest_over_time
+
+highchart() %&gt;% 
+        hc_chart(type = &#39;line&#39;) %&gt;% 
+        hc_xAxis(categories = as.Date(c(df1$date, df2$date, df3$date))) %&gt;% 
+        hc_add_series(df1$hits, name=&#39;hits UV&#39;, marker=list(enabled=FALSE), color=&#39;salmon&#39;) %&gt;%
+        hc_add_series(df2$hits, name=&#39;hits UPV&#39;, marker=list(enabled=FALSE), color=&#39;cadetblue&#39;) %&gt;%
+        hc_add_series(df3$hits, name=&#39;hits UCM&#39;, marker=list(enabled=FALSE), color=&#39;green&#39;) %&gt;%
+        hc_credits(enabled=TRUE, text=&#39;InvestigaOnline.com&#39;, href =&#39;https://www.investigaonline.com&#39;) %&gt;%
+        hc_exporting(enabled=TRUE)</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"line"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":true,"text":"InvestigaOnline.com","href":"https://www.investigaonline.com"},"exporting":{"enabled":true},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["2020-01-19","2020-01-26","2020-02-02","2020-02-09","2020-02-16","2020-02-23","2020-03-01","2020-03-08","2020-03-15","2020-03-22","2020-03-29","2020-04-05","2020-04-12","2020-04-19","2020-04-26","2020-05-03","2020-05-10","2020-05-17","2020-05-24","2020-05-31","2020-06-07","2020-06-14","2020-06-21","2020-06-28","2020-07-05","2020-07-12","2020-07-19","2020-07-26","2020-08-02","2020-08-09","2020-08-16","2020-08-23","2020-08-30","2020-09-06","2020-09-13","2020-09-20","2020-09-27","2020-10-04","2020-10-11","2020-10-18","2020-10-25","2020-11-01","2020-11-08","2020-11-15","2020-11-22","2020-11-29","2020-12-06","2020-12-13","2020-12-20","2020-12-27","2021-01-03","2021-01-10","2004-01-01","2004-02-01","2004-03-01","2004-04-01","2004-05-01","2004-06-01","2004-07-01","2004-08-01","2004-09-01","2004-10-01","2004-11-01","2004-12-01","2005-01-01","2005-02-01","2005-03-01","2005-04-01","2005-05-01","2005-06-01","2005-07-01","2005-08-01","2005-09-01","2005-10-01","2005-11-01","2005-12-01","2006-01-01","2006-02-01","2006-03-01","2006-04-01","2006-05-01","2006-06-01","2006-07-01","2006-08-01","2006-09-01","2006-10-01","2006-11-01","2006-12-01","2007-01-01","2007-02-01","2007-03-01","2007-04-01","2007-05-01","2007-06-01","2007-07-01","2007-08-01","2007-09-01","2007-10-01","2007-11-01","2007-12-01","2008-01-01","2008-02-01","2008-03-01","2008-04-01","2008-05-01","2008-06-01","2008-07-01","2008-08-01","2008-09-01","2008-10-01","2008-11-01","2008-12-01","2009-01-01","2009-02-01","2009-03-01","2009-04-01","2009-05-01","2009-06-01","2009-07-01","2009-08-01","2009-09-01","2009-10-01","2009-11-01","2009-12-01","2010-01-01","2010-02-01","2010-03-01","2010-04-01","2010-05-01","2010-06-01","2010-07-01","2010-08-01","2010-09-01","2010-10-01","2010-11-01","2010-12-01","2011-01-01","2011-02-01","2011-03-01","2011-04-01","2011-05-01","2011-06-01","2011-07-01","2011-08-01","2011-09-01","2011-10-01","2011-11-01","2011-12-01","2012-01-01","2012-02-01","2012-03-01","2012-04-01","2012-05-01","2012-06-01","2012-07-01","2012-08-01","2012-09-01","2012-10-01","2012-11-01","2012-12-01","2013-01-01","2013-02-01","2013-03-01","2013-04-01","2013-05-01","2013-06-01","2013-07-01","2013-08-01","2013-09-01","2013-10-01","2013-11-01","2013-12-01","2014-01-01","2014-02-01","2014-03-01","2014-04-01","2014-05-01","2014-06-01","2014-07-01","2014-08-01","2014-09-01","2014-10-01","2014-11-01","2014-12-01","2015-01-01","2015-02-01","2015-03-01","2015-04-01","2015-05-01","2015-06-01","2015-07-01","2015-08-01","2015-09-01","2015-10-01","2015-11-01","2015-12-01","2016-01-01","2016-02-01","2016-03-01","2016-04-01","2016-05-01","2016-06-01","2016-07-01","2016-08-01","2016-09-01","2016-10-01","2016-11-01","2016-12-01","2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01","2017-06-01","2017-07-01","2017-08-01","2017-09-01","2017-10-01","2017-11-01","2017-12-01","2018-01-01","2018-02-01","2018-03-01","2018-04-01","2018-05-01","2018-06-01","2018-07-01","2018-08-01","2018-09-01","2018-10-01","2018-11-01","2018-12-01","2019-01-01","2019-02-01","2019-03-01","2019-04-01","2019-05-01","2019-06-01","2019-07-01","2019-08-01","2019-09-01","2019-10-01","2019-11-01","2019-12-01","2020-01-01","2020-02-01","2020-03-01","2020-04-01","2020-05-01","2020-06-01","2020-07-01","2020-08-01","2020-09-01","2020-10-01","2020-11-01","2020-12-01","2021-01-01","2004-01-01","2004-02-01","2004-03-01","2004-04-01","2004-05-01","2004-06-01","2004-07-01","2004-08-01","2004-09-01","2004-10-01","2004-11-01","2004-12-01","2005-01-01","2005-02-01","2005-03-01","2005-04-01","2005-05-01","2005-06-01","2005-07-01","2005-08-01","2005-09-01","2005-10-01","2005-11-01","2005-12-01","2006-01-01","2006-02-01","2006-03-01","2006-04-01","2006-05-01","2006-06-01","2006-07-01","2006-08-01","2006-09-01","2006-10-01","2006-11-01","2006-12-01","2007-01-01","2007-02-01","2007-03-01","2007-04-01","2007-05-01","2007-06-01","2007-07-01","2007-08-01","2007-09-01","2007-10-01","2007-11-01","2007-12-01","2008-01-01","2008-02-01","2008-03-01","2008-04-01","2008-05-01","2008-06-01","2008-07-01","2008-08-01","2008-09-01","2008-10-01","2008-11-01","2008-12-01","2009-01-01","2009-02-01","2009-03-01","2009-04-01","2009-05-01","2009-06-01","2009-07-01","2009-08-01","2009-09-01","2009-10-01","2009-11-01","2009-12-01","2010-01-01","2010-02-01","2010-03-01","2010-04-01","2010-05-01","2010-06-01","2010-07-01","2010-08-01","2010-09-01","2010-10-01","2010-11-01","2010-12-01","2011-01-01","2011-02-01","2011-03-01","2011-04-01","2011-05-01","2011-06-01","2011-07-01","2011-08-01","2011-09-01","2011-10-01","2011-11-01","2011-12-01","2012-01-01","2012-02-01","2012-03-01","2012-04-01","2012-05-01","2012-06-01","2012-07-01","2012-08-01","2012-09-01","2012-10-01","2012-11-01","2012-12-01","2013-01-01","2013-02-01","2013-03-01","2013-04-01","2013-05-01","2013-06-01","2013-07-01","2013-08-01","2013-09-01","2013-10-01","2013-11-01","2013-12-01","2014-01-01","2014-02-01","2014-03-01","2014-04-01","2014-05-01","2014-06-01","2014-07-01","2014-08-01","2014-09-01","2014-10-01","2014-11-01","2014-12-01","2015-01-01","2015-02-01","2015-03-01","2015-04-01","2015-05-01","2015-06-01","2015-07-01","2015-08-01","2015-09-01","2015-10-01","2015-11-01","2015-12-01","2016-01-01","2016-02-01","2016-03-01","2016-04-01","2016-05-01","2016-06-01","2016-07-01","2016-08-01","2016-09-01","2016-10-01","2016-11-01","2016-12-01","2017-01-01","2017-02-01","2017-03-01","2017-04-01","2017-05-01","2017-06-01","2017-07-01","2017-08-01","2017-09-01","2017-10-01","2017-11-01","2017-12-01","2018-01-01","2018-02-01","2018-03-01","2018-04-01","2018-05-01","2018-06-01","2018-07-01","2018-08-01","2018-09-01","2018-10-01","2018-11-01","2018-12-01","2019-01-01","2019-02-01","2019-03-01","2019-04-01","2019-05-01","2019-06-01","2019-07-01","2019-08-01","2019-09-01","2019-10-01","2019-11-01","2019-12-01","2020-01-01","2020-02-01","2020-03-01","2020-04-01","2020-05-01","2020-06-01","2020-07-01","2020-08-01","2020-09-01","2020-10-01","2020-11-01","2020-12-01","2021-01-01"]},"series":[{"data":[60,69,100,54,61,61,59,36,21,87,27,51,61,40,47,20,80,56,35,55,55,66,31,53,24,66,42,68,51,25,26,17,49,72,85,62,39,40,60,66,49,31,16,49,16,24,41,33,0,9,24,0],"name":"hits UV","marker":{"enabled":false},"color":"salmon"},{"data":[33,25,30,17,47,79,55,26,77,71,13,24,11,27,34,40,26,50,100,48,33,23,26,15,6,13,9,19,11,37,50,16,35,19,18,22,23,4,17,22,17,36,23,10,30,26,16,10,22,13,7,12,19,23,17,8,26,19,16,15,10,14,13,19,18,25,19,9,23,11,10,8,12,17,9,11,12,25,22,8,12,18,8,13,11,5,9,11,17,27,19,10,25,13,11,6,21,14,9,9,9,21,25,5,17,9,8,5,10,11,10,15,14,13,19,7,10,10,8,8,10,7,11,6,12,19,16,4,12,9,10,3,7,9,10,9,7,20,11,6,9,6,6,6,8,10,6,8,9,15,16,5,10,5,5,7,7,9,6,5,13,17,15,5,5,6,6,5,5,3,7,8,8,11,12,5,9,6,6,3,3,7,3,4,11,10,8,4,8,5,7,3,5,5,8,4,4,8,8,4,6,6,3,4,3],"name":"hits UPV","marker":{"enabled":false},"color":"cadetblue"},{"data":[38,55,38,50,78,100,78,54,92,47,40,31,36,33,30,37,40,77,55,33,70,49,38,17,36,35,25,22,41,57,46,31,54,29,22,16,18,28,25,21,30,44,48,30,41,22,18,16,18,20,17,23,25,26,32,20,30,20,15,10,14,17,16,14,19,30,26,15,27,16,12,9,12,15,13,17,17,25,25,12,26,15,12,8,14,14,16,13,18,36,31,16,27,17,14,11,14,15,15,11,16,22,24,12,22,14,9,7,12,11,10,11,11,21,20,8,16,12,9,7,10,10,10,9,14,20,19,7,16,11,10,7,9,10,10,9,11,18,17,7,15,9,8,8,7,12,9,7,10,17,13,7,13,8,9,7,9,10,8,8,9,14,12,6,8,6,6,5,6,8,8,9,12,16,12,6,8,8,6,5,7,7,8,8,7,12,12,5,9,7,6,6,6,8,5,4,4,7,13,8,8,6,4,3,5],"name":"hits UCM","marker":{"enabled":false},"color":"green"}]},"theme":{"colors":["#41B5E9","#FA8832","#34393C","#E46151"],"chart":{"style":{"color":"#333","fontFamily":"Open Sans"}},"title":{"style":{"fontFamily":"Raleway","fontWeight":"100"}},"subtitle":{"style":{"fontFamily":"Raleway","fontWeight":"100"}},"legend":{"align":"right","verticalAlign":"bottom"},"xAxis":{"gridLineWidth":1,"gridLineColor":"#F3F3F3","lineColor":"#F3F3F3","minorGridLineColor":"#F3F3F3","tickColor":"#F3F3F3","tickWidth":1},"yAxis":{"gridLineColor":"#F3F3F3","lineColor":"#F3F3F3","minorGridLineColor":"#F3F3F3","tickColor":"#F3F3F3","tickWidth":1},"tooltip":{"valueDecimals":2}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":["Open+Sans","Raleway"],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

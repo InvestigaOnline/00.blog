@@ -6,7 +6,16 @@
     <description>Recent content in R on Blog InvestigaOnline.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es-es</language>
-    <lastBuildDate>Sun, 10 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>tendencia en búsquedas Google</title>
+      <link>/2021/01/14/gtrends/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/14/gtrends/</guid>
+      <description>Tendencia de búsquedasR dispone de multitud de paquetes o bibliotecas que nos facilitan la consulta a distintas fuentes de datos web. En concreto, para poder consultar y analizar las tendencias en las búsquedas que se hacen con Google, Google Trends, tenemos entre otros el paquete gtrendsR.</description>
+    </item>
+    
     <item>
       <title>COVID-19 y modo de administración</title>
       <link>/2021/01/10/covidadm/</link>

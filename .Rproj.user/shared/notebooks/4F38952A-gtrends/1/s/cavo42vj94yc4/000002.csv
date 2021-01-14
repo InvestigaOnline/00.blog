@@ -1,0 +1,1 @@
+"0","result2 <- gtrends(keyword=c(""Valencia CF"", ""Peter Lim""), geo=c(""ES"",""ES""), time=""today 1-m"", hl=""es-ES"")"
