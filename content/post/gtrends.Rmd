@@ -1,8 +1,8 @@
 ---
-title: "tendencia en búsquedas Google"
+title: "tendencia en búsquedas Google con R"
 author: "Roberto Gil"
 date: "2021-01-14"
-slug: gtrends
+slug: gtrends_R
 categories:
   - R
   - analisis
@@ -105,13 +105,14 @@ Obtenemos los datos de Google Trends, y los almacenamos en un _dataframe_, reten
 
 ```{r}
 # manipular datos
-
 es_trends <- gtrends(keyword="Valencia CF", geo="ES", time="today 12-m")
-head(es_trends, 5)
+head(es_trends[["interest_over_time"]],25)
 df1 <- es_trends$interest_over_time[,1:2]
 ```
 
-Si deseamos pedir ayuda, # Pedir ayuda y ver ``?gtrends()`. Finalmente creamos el gráfico... veces que han salido en las noticias (datos de Google Trends) el Valencia CF.
+Si deseamos pedir ayuda, sobre la función y saber más escribe `?gtrends()`.
+
+Finalmente creamos el gráfico... veces que han salido en las noticias (datos de Google Trends) el Valencia CF.
 
 ```{r}
 highchart() %>% 
