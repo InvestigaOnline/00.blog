@@ -1,0 +1,146 @@
+---
+title: "tendencia en búsquedas Google con R"
+author: "Roberto Gil"
+date: "2021-01-14"
+slug: gtrends_R
+categories:
+  - R
+  - analisis
+tags:
+  - covid
+  - integra
+  - grafico
+  - grafico tendencia
+  - google
+  - trends
+  - google trends
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+## Tendencia de búsquedas
+
+```{r echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, message = FALSE, fig.pos="H")
+```
+
+R dispone de multitud de paquetes o bibliotecas que nos facilitan la consulta a distintas fuentes de datos web. En concreto, para poder consultar y analizar las tendencias en las búsquedas que se hacen con Google, Google Trends, tenemos entre otros el paquete `gtrendsR`.
+
+A nadie se le escapa el interés que comprender la utilidad de la herramienta Google Trends en el momento de la investigación de las palabras clave o de u_topic_ de trabajo que deseamos analizar. Vamos a ver un modo de analizar rápidamente esos datos con R. El paquete de referencia `gtrends` está alojado en CRAN siendo su uso gratuito. Instálalo en tu entorno de trabajo R y veamos cuales son su posibilidades.
+
+Instalamos los paquetes necesarios para nuestro trabajo; si ya los tienes, obvia la instalación y sólo carga las librerías.
+
+```{r}
+#install.packages("gtrendsR")
+#install.packages("dplyr")
+#install.packages("highcharter")
+library(gtrendsR)
+library(dplyr) 
+library(highcharter)
+```
+
+
+Como decíamos el paquete gtrendsR nos permite consultar la API de Google Trends de forma sencilla y rápida mediante la función `gtrends()`. Veamos sus posibilidades con los parámetros de la consulta:
+
+* `keyword`, un vector de caracteres con las palabras clave que se quieren consultar en Google Trends. 
+  * Por ejemplo: `gtrends(c("investigación de mercados", "investigación comercial"))`
+* `geo`, un vector de caracteres con los países o regiones geográficas que se quieren consultar. Estos códigos siguen el estándar ISO-3166-2. Por defecto tienen el valor `all` para consultas globales. 
+  * Por ejemplo: `gtrends("COVID", c("ES", "FR", "PT"))` consulta la tendencia de la palabra COVID en España, Francia y Portugal. Si quieres consultar el listado de regiones geográficas disponibles, indicalo con `countries`.
+* `time`, texto que especifica el período temporal de consulta; por defecto los últimos cinco años, pero sus posibles valores son: 
+  * `now 1-H`. Última hora.
+  * `now 4-H`. Últimas cuatro horas.
+  * `now 1-d`. Último día.
+  * `now 7-d`. Últimos siete días.
+  * `today 1-m`. Últimos 30 días.
+  * `today 3-m`. Últimos 90 días.
+  * `today 12-m`. Últimos 12 meses.
+  * `today+5-y`. Últimos cinco años (por defecto).
+  * `all`. Todo desde el comienzo de Google Trends (2004).
+  * `Y-m-d Y-m-d`. Rango temporal entre dos fechas (ej.: “2010-01-01 2010-04-03”)
+* `gprop`, texto que especifica el producto de Google para el cual se pide información. Las opciones válidas son `web`(por defecto), `news`, `images`, `froogle` y `youtube`.
+* `category`, un carácter indicando el identificador de categoría de búsqueda que queremos filtrat. Por defecto es 0 y significa que incluye Todas las categorías.  Hay más de 1400 categorías y pueden ser consultadas, una vez cargado el paquete gtrendsR con el comando `categories`. Si por ejemplo queremos filtrar la búsqueda por el ámbito de las motocicletas podemos especificar category=”273″. 
+* `hl`, un texto especificando el código ISO-639-1 y que puede ser seguido del código de país. Por defecto es hl=”en-US”. Para español es hl=”es”; para español de España: “es-ES”. Solo afecta a los resultados obtenidos en los temas o búsquedas relacionadas.
+* `low_search_volume` booleano (TRUE / FALSE) que indica si se debe incluir o no en los resultados, aquellos de regiones con bajo volumen de búsqueda. Es muy útil ponerlo a TRUE cuando estamos analizando palabras poco buscadas.
+* `cookie_url`, un texto especificando la URL de la que obtener las cookies; no se debe usar por defecto y la recomendamos sólo para usuarios avanzados.
+
+### Ejemplos de búsqueda
+
+> Búsqueda de la palabra “VCF” en España durante el último mes
+
+```{r}
+result1 <- gtrends(keyword="Valencia CF", geo="ES", time="today 12-m", hl="es-ES")
+```
+
+> Búsqueda de la palabra “Valencia CF” y también "Peter Lim" en España durante los últimos 30 días.
+
+```{r}
+result2 <- gtrends(keyword=c("Valencia CF", "Peter Lim"), geo=c("ES","ES"), time="today 1-m", hl="es-ES")
+```
+
+## ¿Qué nos dicen los resultados?
+
+### `interest_over_time`
+
+Nos proporciona datos temporales de una o varias palabras clave y contiene los siguientes campos:
+
+* `date`, de clase Date, en formato yyyy-mm-dd.
+* `hits`, de clase carácter, es el interés de la búsqueda, siendo 100 el momento de mayor interés y todos los demás valores relativos a él. Es decir, si en septiembre de 2010 hubo un interés 100 y en enero de 2011 un interés 50, quiere decir que el interés por esa búsqueda en enero de 2011 fue la mitad que en septiembre de 2010. 
+* `keyword`, de clase carácter, la palabra clave que ha sido buscada.
+* `geo` localización de clase carácter, puede ser _world_ o un código de país.
+* `gprop`, producto seleccionado. En consonancia con lo explicado anteriormente. Por defecto es web.
+* `category`, código de categoría; consultar `data("categories")` para conocer todos los códigos.
+
+### Otros datos interesantes
+
+* `related_topics`, que proporciona información sobre temas relacionados con la palabra clave.
+* `related_queries`, que de forma similar al caso anterior muestra las búsquedas relacionadas.
+* `interest_by_country`, interés del término por país.
+* `interest_by_region`,  interés del término por región.
+* `interest_by_city`,  interés del término por ciudad.
+
+## Representar como gráfico
+
+Obtenemos los datos de Google Trends, y los almacenamos en un _dataframe_, reteniendo solo los campos 1 y 2 del mismo.
+
+```{r}
+# manipular datos
+es_trends <- gtrends(keyword="Valencia CF", geo="ES", time="today 12-m")
+head(es_trends[["interest_over_time"]],25)
+df1 <- es_trends$interest_over_time[,1:2]
+```
+
+Si deseamos pedir ayuda, sobre la función y saber más escribe `?gtrends()`.
+
+Finalmente creamos el gráfico... veces que han salido en las noticias (datos de Google Trends) el Valencia CF.
+
+```{r}
+highchart() %>% 
+     hc_chart(type = 'line') %>% 
+     hc_xAxis(categories = as.Date(df1$date)) %>% 
+     hc_add_series(df1$hits, name='hits Valencia CF') %>% #*** API
+     hc_credits(enabled=TRUE, text='InvestigaOnline.com', href ='https://www.investigaonline.com') %>%
+     hc_exporting(enabled=TRUE)
+```
+
+¿Hacemos ahora otra búsqueda pero con más términos y la representamos en el mismo gráfico? Lo hacemos de una vez; fíjate en las diferencias.
+
+```{r}
+es_trends <- gtrends(c("Glenfidich"), geo = c("GB"), gprop = "web", time = "today 3-m")
+df1 <- es_trends$interest_over_time[,1:2]
+es_trends <- gtrends(c("Cardhu"), geo = c("GB"), gprop = "web", time = "today 3-m")
+df2 <- es_trends$interest_over_time[,1:2]
+es_trends <- gtrends(c("Lagavulin"), geo = c("GB"), gprop = "web", time = "today 3-m")
+df3 <- es_trends$interest_over_time[,1:2]
+
+highchart() %>% 
+        hc_chart(type = 'line') %>% 
+        hc_xAxis(categories = as.Date(c(df1$date, df2$date, df3$date))) %>% 
+        hc_add_series(df1$hits, name='hits Glenfidich', marker=list(enabled=FALSE), color='salmon') %>% #<<
+        hc_add_series(df2$hits, name='hits Cardhu', marker=list(enabled=FALSE), color='cadetblue') %>% #<<
+        hc_add_series(df3$hits, name='hits Lagavulin', marker=list(enabled=FALSE), color='green') %>% #<<
+        hc_credits(enabled=TRUE, text='InvestigaOnline.com', href ='https://www.investigaonline.com') %>%
+        hc_exporting(enabled=TRUE)
+```
+
+Y hasta aquí este post. Espero sea de utilidad. Como siempre decimos... ¡explora y experimenta!

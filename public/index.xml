@@ -19,11 +19,11 @@ Además tengo la inmensa suerte de estar en una de las empresas líder en este m
     </item>
     
     <item>
-      <title>tendencia en búsquedas Google</title>
-      <link>/2021/01/14/gtrends/</link>
+      <title>tendencia en búsquedas Google con R</title>
+      <link>/2021/01/14/gtrends_r/</link>
       <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
       
-      <guid>/2021/01/14/gtrends/</guid>
+      <guid>/2021/01/14/gtrends_r/</guid>
       <description>Tendencia de búsquedasR dispone de multitud de paquetes o bibliotecas que nos facilitan la consulta a distintas fuentes de datos web. En concreto, para poder consultar y analizar las tendencias en las búsquedas que se hacen con Google, Google Trends, tenemos entre otros el paquete gtrendsR.</description>
     </item>
     
