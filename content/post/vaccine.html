@@ -1,0 +1,249 @@
+---
+title: "los españoles y la/s vacuna/s"
+author: "Roberto Gil"
+date: "2021-01-27"
+slug: vaccine
+categories:
+  - R
+  - analisis
+tags:
+  - covid
+  - fecyt
+  - highcharter
+codeMaxLines: 10
+codeLineNumbers: no
+figurePositionShow: yes
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+<link href="/rmarkdown-libs/lightable/lightable.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<div id="nos-ponemos-la-vacuna" class="section level2">
+<h2>¿¿Nos ponemos la vacuna?</h2>
+<p>Leo este trabajo de campo del <a href="https://www.fecyt.es/es/noticia/la-disposicion-vacunarse-de-la-covid-19-aumenta-hasta-el-60-en-enero">FECYT</a> donde sitúa la predisposición de vacunación contra COVID en España hasta el 60%, cuando hasta hace poco había mucha desconfianza. Las noticias de hoy de la lucha de la Unión Europea con la multinacional Astrazeneca no es muy halagüeña, y ya siembra de comentarios en las noticias acerca de la no disponibilidad de la vacuna para las segundas dosis, etc. etc. …</p>
+<p>Estos son los datos de evolución que el FECYT presenta a partir de su investigación donde a la pregunta “<strong>Si mañana mismo estuviese disponible una vacuna para prevenir la COVID-19, ¿se la pondría? Por favor responda en una escala en la que 1 es <em>no se la pondría en absoluto</em> y el 7 es <em>totalmente seguro que me la pondría</em> </strong>”.</p>
+<table class=" lightable-material lightable-striped lightable-hover" style="font-family: &quot;Source Sans Pro&quot;, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Escala
+</th>
+<th style="text-align:right;">
+Julio (25 junio a 15 julio - Telefónico)
+</th>
+<th style="text-align:right;">
+3ª y 4ª semana Julio (CAPI)
+</th>
+<th style="text-align:right;">
+Septiembre (CAPI)
+</th>
+<th style="text-align:right;">
+Octubre (CAPI)
+</th>
+<th style="text-align:right;">
+4 a 22 enero (Telefónico)*
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+<td style="text-align:right;">
+18.37
+</td>
+<td style="text-align:right;">
+35.16
+</td>
+<td style="text-align:right;">
+32.46
+</td>
+<td style="text-align:right;">
+8.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+5.29
+</td>
+<td style="text-align:right;">
+5.62
+</td>
+<td style="text-align:right;">
+7.08
+</td>
+<td style="text-align:right;">
+2.4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4.8
+</td>
+<td style="text-align:right;">
+7.39
+</td>
+<td style="text-align:right;">
+5.37
+</td>
+<td style="text-align:right;">
+8.46
+</td>
+<td style="text-align:right;">
+5.7
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+9.8
+</td>
+<td style="text-align:right;">
+10.13
+</td>
+<td style="text-align:right;">
+9.45
+</td>
+<td style="text-align:right;">
+13.27
+</td>
+<td style="text-align:right;">
+4.9
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+19.3
+</td>
+<td style="text-align:right;">
+12.07
+</td>
+<td style="text-align:right;">
+8.70
+</td>
+<td style="text-align:right;">
+9.19
+</td>
+<td style="text-align:right;">
+8.4
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+16.5
+</td>
+<td style="text-align:right;">
+10.98
+</td>
+<td style="text-align:right;">
+7.36
+</td>
+<td style="text-align:right;">
+6.78
+</td>
+<td style="text-align:right;">
+10.1
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+32.2
+</td>
+<td style="text-align:right;">
+32.41
+</td>
+<td style="text-align:right;">
+24.17
+</td>
+<td style="text-align:right;">
+20.20
+</td>
+<td style="text-align:right;">
+58.1
+</td>
+</tr>
+</tbody>
+</table>
+<p>Representado en forma de gráfico de modo conjunto vemos que partiendo de un suelodel 32.2% en la medición de julio de 2020, alcanzamos el 58.1 en la medición de enero de 2021.</p>
+<div id="htmlwidget-1" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"column"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"dataLabels":{"enabled":true}},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["No se la pondría en absoluto","2","3","4","5","6","Totalmente seguro que se la pondría"]},"series":[{"data":[6.6,2,4.8,9.8,19.3,16.5,32.2],"name":"Julio 2020","color":"salmon"},{"data":[18.37,5.29,7.39,10.13,12.07,10.98,32.41],"name":"3ª y 4ª semana Julio (CAPI)","color":"darksalmon"},{"data":[35.16,5.62,5.37,9.45,8.7,7.36,24.17],"name":"Septiembre (CAPI)","color":"pink"},{"data":[32.46,7.08,8.46,13.27,9.19,6.78,20.2],"name":"Octubre (CAPI)","color":"teal"},{"data":[8.7,2.4,5.7,4.9,8.4,10.1,58.1],"name":"4 a 22 enero (Telefónico)","color":"gold"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Se puede ver claramente cuál ha sido la evolución, lógica la desconfianza y ahora que ya sabemos que funciona bien, (ayer 26/01/2021) se inundaban los noticieros con una falta de efectos secundarios (con alguna mínima excepción), lo que disparará más la confianza. Puede verse más claro en este gráfico.</p>
+<div id="htmlwidget-2" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"bar"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"dataLabels":{"enabled":true}},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["Julio (25 junio a 15 julio - Telefónico)","3ª y 4ª semana Julio (CAPI)","Septiembre (CAPI)","Octubre (CAPI)","4 a 22 enero (Telefónico)*"]},"series":[{"data":[32.2,32.41,24.17,20.2,58.1],"name":"Totalmente seguro que se la pondría","color":"teal"},{"data":[6.6,18.37,35.16,32.46,8.7],"name":"No se la pondría","color":"#eb6909"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Sin embargo, este gráfico muestra otro dato. Si consideremos las agrupaciones 1 a 4 en la escala a las que otorgamos el papel de desconfianza y dejamos solo el 6-7 para aquellos que están convencidos de vacunarse el resultados es éste.</p>
+<div id="htmlwidget-3" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"hc_opts":{"chart":{"reflow":true,"type":"bar"},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0,"dataLabels":{"enabled":true}},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"categories":["Julio (25 junio a 15 julio - Telefónico)","3ª y 4ª semana Julio (CAPI)","Septiembre (CAPI)","Octubre (CAPI)","4 a 22 enero (Telefónico)*"]},"series":[{"data":[48.7,43.39,31.53,26.98,68.2],"name":"Totalmente seguro que se la pondría","color":"teal"},{"data":[42.5,53.25,64.3,70.46,30.1],"name":"No se la pondría","color":"#eb6909"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Claramente se observa que fue aumentando poco a poco la desconfianza en las sucesivas mediciones, hasta esta última, primera ya con la vacuna y con el plan de vacunación en marcha.</p>
+<p>Como indica el post “<em>las tres encuestas se corresponden por un lado con las dos ediciones del estudio de percepción social sobre aspectos científicos de la COVID-19, aplicada por teléfono en julio de 2020 y enero de 2021, respectivamente. Y, por otro lado, con los resultados para la misma pregunta de la encuesta de Percepción Social de la Ciencia y la Tecnología 2020, encuesta bienal de FECYT que se realizó en julio, septiembre y octubre de 2020 mediante entrevistas personales</em>”; no obstante no parece apreciarse ningún efecto <em>modo de administración</em> en ningún caso.</p>
+<p>Si deseas más información acerca de la estrategia d evacunación del gobierno de España, accede <a href="https://www.vacunacovid.gob.es/">aquí</a>.</p>
+<p>Hasta la próxima.</p>
+</div>

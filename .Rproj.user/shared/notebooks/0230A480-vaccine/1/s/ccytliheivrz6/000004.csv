@@ -1,0 +1,25 @@
+"0","library(expss)
+"
+"2","
+Attaching package: ‘expss’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    between, compute, contains, first, last, na_if, recode, vars
+
+"
+"0","library(expss)"
+"0","df <- read_csv(""vaccine.csv"")"
+"2","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m------------------------------------------------------------------------------------------------[39m
+cols(
+  Escala = [32mcol_double()[39m,
+  `Julio (25 junio a 15 julio - Telefónico)` = [32mcol_double()[39m,
+  `3ª y 4ª semana Julio (CAPI)` = [32mcol_double()[39m,
+  `Septiembre (CAPI)` = [32mcol_double()[39m,
+  `Octubre (CAPI)` = [32mcol_double()[39m,
+  `4 a 22 enero (Telefónico)*` = [32mcol_double()[39m
+)
+
+"

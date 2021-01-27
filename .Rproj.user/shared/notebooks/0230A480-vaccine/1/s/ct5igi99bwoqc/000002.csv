@@ -1,0 +1,6 @@
+"0","highchart() %>% "
+"0","     hc_chart(type='bar') %>%"
+"0","     hc_xAxis(categories=colnames(df1[,2:6])) %>% "
+"0","     hc_plotOptions(series=list(dataLabels=list(enabled=TRUE))) %>% "
+"0","     hc_add_series(data=as.vector(as.numeric(df1[7,2:6])), name='Totalmente seguro que se la pondría', color='teal' ) %>% "
+"0","     hc_add_series(data=as.vector(as.numeric(df1[1,2:6])), name='No se la pondría', color='#eb6909' )"

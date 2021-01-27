@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>fecyt on Blog InvestigaOnline.com</title>
+    <link>/tags/fecyt/</link>
+    <description>Recent content in fecyt on Blog InvestigaOnline.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>es-es</language>
+    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/fecyt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>los españoles y la/s vacuna/s</title>
+      <link>/2021/01/27/vaccine/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/27/vaccine/</guid>
+      <description>¿¿Nos ponemos la vacuna?Leo este trabajo de campo del FECYT donde sitúa la predisposición de vacunación contra COVID en España hasta el 60%, cuando hasta hace poco había mucha desconfianza.</description>
+    </item>
+    
+  </channel>
+</rss>

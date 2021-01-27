@@ -19,7 +19,7 @@ For the full documentation, please see this section in the **blogdown** book: ht
 - Responsive
 - Disqus
 - Google Analytics
-- Google web fonts (Merriweather and Lato)
+- Google web fonts (Roboto and Lato)
 - MathJax
 - highlight.js
 
