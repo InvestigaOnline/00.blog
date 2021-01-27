@@ -35,7 +35,7 @@ Estos son los datos de evolución que el FECYT presenta a partir de su investiga
 ```{r echo=FALSE}
 df1 %>%
   kable() %>%
-  kable_material(c('striped','hover'))
+  kable_material(c('striped','hover'), full_width=F)
 ```
 
 Representado en forma de gráfico de modo conjunto vemos que partiendo de un suelodel 32.2% en la medición de julio de 2020, alcanzamos el 58.1 en la medición de enero de 2021.
@@ -45,11 +45,11 @@ highchart() %>%
      hc_chart(type='column') %>%
      hc_xAxis(categories=c('No se la pondría en absoluto',2,3,4,5,6,'Totalmente seguro que se la pondría')) %>%
      hc_plotOptions(series=list(dataLabels=list(enabled=TRUE))) %>% 
-     hc_add_series(data=df1$`Julio (25 junio a 15 julio - Telefónico)`, name='Julio 2020', color='salmon' ) %>% 
-     hc_add_series(data=df1$`3ª y 4ª semana Julio (CAPI)`, name='3ª y 4ª semana Julio (CAPI)', color='darksalmon' ) %>% 
-     hc_add_series(data=df1$`Septiembre (CAPI)`, name='Septiembre (CAPI)', color='pink' ) %>% 
-     hc_add_series(data=df1$`Octubre (CAPI)`, name='Octubre (CAPI)', color='teal' ) %>% 
-     hc_add_series(data=df1$`4 a 22 enero (Telefónico)*`, name='4 a 22 enero (Telefónico)', color='gold' )
+     hc_add_series(data=df1$`Jun-Jul20-CATI`, name='Jun-Jul20-CATI', color='salmon' ) %>% 
+     hc_add_series(data=df1$`3ª/4ª Jul20-CAPI`, name='3ª/4ª Jul20-CAPI', color='darksalmon' ) %>% 
+     hc_add_series(data=df1$`Sep20-CAPI`, name='Sep20-CAPI', color='pink' ) %>% 
+     hc_add_series(data=df1$`Oct20-CAPI`, name='Oct20-CAPI', color='teal' ) %>% 
+     hc_add_series(data=df1$`Ene21-CATI`, name='Ene21-CATI', color='gold' )
 ```
 
 Se puede ver claramente cuál ha sido la evolución, lógica la desconfianza y ahora que ya sabemos que funciona bien, (ayer 26/01/2021) se inundaban los noticieros con una falta de efectos secundarios (con alguna mínima excepción), lo que disparará más la confianza. Puede verse más claro en este gráfico.
@@ -86,4 +86,4 @@ Como indica el post "_las tres encuestas se corresponden por un lado con las dos
 
 Si deseas más información acerca de la estrategia d evacunación del gobierno de España, accede [aquí](https://www.vacunacovid.gob.es/).
 
-Hasta la próxima.
+¡Hasta la próxima!
