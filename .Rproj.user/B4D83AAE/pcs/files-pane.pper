@@ -1,13 +1,13 @@
 {
     "sortOrder": [
         {
-            "columnIndex": 4,
-            "ascending": false
-        },
-        {
             "columnIndex": 2,
             "ascending": true
+        },
+        {
+            "columnIndex": 4,
+            "ascending": false
         }
     ],
-    "path": "~/R/r-data/00.blog00/content/post"
+    "path": "~"
 }

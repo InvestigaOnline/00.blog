@@ -32,7 +32,7 @@ Es un gráfico muy simple, utilizamos los paquetes `readr` para leer los datos e
 El primer gráfico muestra la serie desde la celebración de las elecciones, mientras que el segundo muestra el total de los datos. Si deseas cualquier otro período intermedio, puedes hacerlo utilizando los intervalos de fecha o ajustando el selector inferior del gráfico.
 
 
-```{r echo = FALSE}
+```{r echo = TRUE}
 #carga
 options(highcharter.theme = hc_theme_hcrt(tooltip = list(valueDecimals = 2)))
 data0 <- suppressMessages(read_delim(file="https://drive.google.com/uc?export=download&id=1vg2KxfhLaT4-FgVIuXvq_YIFyuQxtnkC",
@@ -77,7 +77,7 @@ highchart() %>%
 
 Aquí, el gráfico completo desde que existen datos.
 
-```{r echo = FALSE}
+```{r echo = TRUE}
 #tabla y ajuste de fecha a timestamp
 tab <- data0 %>% 
         tab_weight(fiabilidad) %>% 
@@ -106,7 +106,7 @@ highchart(type='stock') %>%
 
 **Últimas 10 publicaciones**
 
-```{r echo = FALSE}
+```{r echo = TRUE}
 tab <- data0 %>% 
         tab_weight(fiabilidad) %>% 
         tab_cols('|'=unvr(publicacion)) %>%

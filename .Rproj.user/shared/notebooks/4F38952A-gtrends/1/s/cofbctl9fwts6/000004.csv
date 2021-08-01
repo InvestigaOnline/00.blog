@@ -1,6 +1,0 @@
-"0","highchart() %>% "
-"0","     hc_chart(type = 'line') %>% "
-"0","     hc_xAxis(categories = as.Date(df1$date)) %>% "
-"0","     hc_add_series(df1$hits, name='hits Valencia CF') %>% #*** API"
-"0","     hc_credits(enabled=TRUE, text='InvestigaOnline.com', href ='https://www.investigaonline.com') %>%"
-"0","     hc_exporting(enabled=TRUE)"

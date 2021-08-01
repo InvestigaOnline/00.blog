@@ -1,3 +1,0 @@
-"0","df1 %>%"
-"0","  kable() %>%"
-"0","  kable_material(c('striped','hover'), full_width=F)"

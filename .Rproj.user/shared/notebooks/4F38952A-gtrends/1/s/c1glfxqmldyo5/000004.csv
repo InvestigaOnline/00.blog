@@ -1,4 +1,0 @@
-"0","# manipular datos"
-"0",""
-"0","es_trends <- gtrends(keyword=""Valencia CF"", geo=""ES"", time=""today 12-m"")"
-"0","head(es_trends[[""interest_over_time""]],25)"

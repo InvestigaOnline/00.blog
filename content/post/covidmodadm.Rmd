@@ -21,7 +21,7 @@ Esta entrada muestra de forma muy sucinta, pero muy gráfica la caída en el nú
 
 
 ```{r echo=FALSE, message= FALSE, warning= FALSE, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 library(highcharter)

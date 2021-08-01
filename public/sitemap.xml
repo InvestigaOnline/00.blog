@@ -8,26 +8,46 @@
   
   <url>
     <loc>/categories/analisis/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/covid/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/</loc>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/expss/</loc>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2021/07/24/net_subtotal_top_bottom/</loc>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/r/</loc>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2021-07-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/covid/</loc>
     <lastmod>2021-01-27T00:00:00+00:00</lastmod>
   </url>
   
@@ -43,16 +63,6 @@
   
   <url>
     <loc>/2021/01/27/vaccine/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/r/</loc>
-    <lastmod>2021-01-27T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2021-01-27T00:00:00+00:00</lastmod>
   </url>
   
@@ -173,11 +183,6 @@
   
   <url>
     <loc>/tags/dashboard/</loc>
-    <lastmod>2020-08-16T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/expss/</loc>
     <lastmod>2020-08-16T00:00:00+00:00</lastmod>
   </url>
   

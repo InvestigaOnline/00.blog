@@ -1,4 +1,0 @@
-"0","dato1 <- as.numeric(tab[2,4]-tab[3,4])"
-"0","dato2 <- as.numeric(tab[3,6]-tab[2,6])"
-"0","dato3 <- as.numeric(tab[3,8]-tab[2,8])"
-"0","dato4 <- as.numeric(tab[2,2]-tab[3,2])"

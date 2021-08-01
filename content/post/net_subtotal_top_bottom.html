@@ -1,0 +1,589 @@
+---
+title: "net y subtotal en una crosstab"
+author: "Gil-Saura, Roberto"
+date: '2021-07-24'
+slug: net_subtotal_top_bottom
+categories:
+- analisis
+- R
+tags: expss
+output: 
+  html_document: 
+    theme: simplex
+    fig_caption: yes
+    df_print: kable
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+
+
+<p>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo <em>post</em> con una explicación de cuatro elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:</p>
+<ul>
+<li>Net</li>
+<li>Subtotal</li>
+</ul>
+<p>Normalmente los encontramos por separado. Pero vamos primero con contextualizar su uso, porque se supone que debes saber qué significan. Ya sabéis de esa tendencia en los cargos de decisión a dar una gran relevancia a términos que después son muy sencillos. Ya tuvimos un ejemplo de ello con el <a href="https://blog.investigaonline.com/2020/08/16/npsmovil/">NPS</a>.</p>
+<p><strong>¿Qué es un NET?</strong></p>
+<p>El término NET hace referencia a la agrupación de determinados valores (códigos, niveles, factores) de una variable cualitativa en un <em>grupo</em> de nivel superior, cuya frecuencia es el resultado de la suma de las frecuencias de los valores (códigos, niveles o factores) que lo componen.</p>
+<p>Imagina una pregunta en un cuestionario, cualitativa, que hace referencia a los <em>likes</em> y <em>dislikes</em> de un producto determinado. Tomemos los <em>likes</em> y en este caso, los entrevistados responden cosas como:</p>
+<ul>
+<li>su color azul, y verde me atrae, me recuerda el mar (1;2;3)</li>
+<li>es una gama de matices muy atrayente, mar, cielo, todo se une (2;3;4)</li>
+<li>casi huele a mar (3;7)</li>
+<li>me recuerda a mi infancia en el apartamento de la playa (3;5)</li>
+<li>su color azul tiene como reflejos de sol en su superficie, mucha luz (1;6)</li>
+<li>me encanta el olor que deja en mi piel al ser aplicada (7)</li>
+<li>aunque su aspecto es denso, se aplica con una gran facilidad y se absorbe muy rápidamente; me encanta su olor y su color (8;9;10)</li>
+<li>…</li>
+</ul>
+<p>Esto es un pequeño ejemplo de respuestas abiertas que posteriormente deberían ser codificadas. La codificación que reciben genera el siguiente libro de claves</p>
+<ol style="list-style-type: decimal">
+<li>Color azul</li>
+<li>Color verde</li>
+<li>Mar, playa,</li>
+<li>Cielo</li>
+<li>Infancia</li>
+<li>Sol, luz</li>
+<li>Olor</li>
+<li>Densidad</li>
+<li>Capacidad de aplicación</li>
+<li>Absorción</li>
+</ol>
+<p>Como puedes observar, los valores entre paréntesis en el listado de <em>verbatim</em> se corresponden con los valores (códigos) del libro de claves. Vamos a poner esta información en un <em>dataframe</em> y tratamos de procesar la información que de ello deriva.</p>
+<pre class="r"><code>library(expss)</code></pre>
+<pre><code>
+Use &#39;expss_output_viewer()&#39; to display tables in the RStudio Viewer.
+ To return to the console output, use &#39;expss_output_default()&#39;.</code></pre>
+<pre class="r"><code>df &lt;- data.frame(id=seq(1:7), p56_1=c(1,2,3,3,1,7,8), p56_2=c(2,3,7,5,6,NA,9), p56_3=c(3,4,NA,NA,NA,NA,10))
+df</code></pre>
+<pre><code>  id p56_1 p56_2 p56_3
+1  1     1     2     3
+2  2     2     3     4
+3  3     3     7    NA
+4  4     3     5    NA
+5  5     1     6    NA
+6  6     7    NA    NA
+7  7     8     9    10</code></pre>
+<p>Puede observarse que al ser una pregunta de respuesta múltiple, se han requerido hasta tres variables (caso con máximo nº de menciones, 3) para poder recoger toda la información multi-respuesta.</p>
+<p>Usaremos ahora nuestro paquete de referencia <code>expss</code> que ya hemos cargado en el paso anterior, para hacer varias cosas que necesitamos:</p>
+<ul>
+<li>etiquetar la variable</li>
+<li>etiquetar los valores de la variable</li>
+<li>hacer un recuento o tabla marginal</li>
+</ul>
+<pre class="r"><code>var_lab(df$p56_1) &lt;- &#39;Likes de la crema&#39; #etiquetamos la variable
+val_lab(df$p56_1) &lt;- c(
+    &#39;Color azul&#39;=1,
+    &#39;Color verde&#39;=2,
+    &#39;Mar, playa&#39; =3,
+    &#39;Cielo&#39;=4,
+    &#39;Infancia&#39;=5,
+    &#39;Sol, luz&#39; =6,
+    &#39;Olor&#39;=7,
+    &#39;Densidad&#39;=8,
+    &#39;Capacidad de aplicación&#39;=9,
+    &#39;Absorción&#39;=10) #etiquetamos los valores de la variable
+df %&gt;% tab_cells(mrset_f(p56_)) %&gt;% tab_stat_cases() %&gt;% tab_pivot() %&gt;% as.datatable_widget() # hacemos un marginal de frecuencias</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","data":[["Likes de la crema","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción","#Total cases"],[2,2,4,1,1,1,2,1,1,1,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Nótese que en la tabla de frecuencias el resultados son 7 casos, aunque la suma de respuestas es mayor que 7. Recordemos, es multi-respuesta. Estamos hablando de los <em>NETS</em> y ha llegado la hora de definirlos con el ejemplo que nos ocupa. En nuestro ejemplo un NET sería la agregación de todas las menciones realizadas un factor de nivel mayor. Sobre el ejemplo, si quisiéramos crear una agregación de mayor nivel como por ejemplo COLOR, deberíamos sumar los códigos. Y eso vamos a hacer en nuestro script…</p>
+<pre class="r"><code>df %&gt;%
+    tab_cols(total()) %&gt;%
+    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6), &quot;OTROS&quot;=c(5,7:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
+    tab_stat_cases(total_row_position=&quot;below&quot;) %&gt;%
+    tab_pivot() %&gt;%
+    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<td colspan="2" style="text-align: left;">
+Tabla nº 1
+</td>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" style="font-weight: 900;">
+ Likes de la crema 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color azul 
+</td>
+<td style="text-align: right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color verde 
+</td>
+<td style="text-align: right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Mar, playa 
+</td>
+<td style="text-align: right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Cielo 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Sol, luz 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Infancia 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Olor 
+</td>
+<td style="text-align: right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Densidad 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Capacidad de aplicación 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Absorción 
+</td>
+<td style="text-align: right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   COLOR 
+</td>
+<td style="text-align: right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   NATURALEZA 
+</td>
+<td style="text-align: right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   OTROS 
+</td>
+<td style="text-align: right;">
+4
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   #Total cases 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+7
+</td>
+</tr>
+</tbody>
+</table>
+<p>Nótese que los NET aparecen al final por el uso del modificador <code>position</code>. Pero me parece más importante que veamos un detalle. Si sumamos el valor en marginal de <em>color azul</em> y <em>color verde</em> la frecuencia sería 4, pero sin embargo el NET de <em>COLOR</em> suma 3. ¿Por qué?, Esto es debido a que los NET se muestran en función de los casos y no tiene en cuenta la multi-respuesta. Se leería como que hay tres casos (personas en este caso) que han respondido atributos de tipo <em>like</em> que hacen referencia al <em>COLOR</em>.</p>
+<p>Sin embargo si obtenemos la misma tabla en porcentajes…</p>
+<pre class="r"><code>df %&gt;%
+    tab_cols(total()) %&gt;%
+    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6:7), &quot;OTROS&quot;=c(5,8:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
+    tab_stat_cpct(total_row_position=&quot;below&quot;) %&gt;%
+    tab_pivot() %&gt;%
+    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<td colspan="2" style="text-align: left;">
+Tabla nº 1
+</td>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" style="font-weight: 900;">
+ Likes de la crema 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color azul 
+</td>
+<td style="text-align: right;">
+28.6
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color verde 
+</td>
+<td style="text-align: right;">
+28.6
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Mar, playa 
+</td>
+<td style="text-align: right;">
+57.1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Cielo 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Sol, luz 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Olor 
+</td>
+<td style="text-align: right;">
+28.6
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Infancia 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Densidad 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Capacidad de aplicación 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Absorción 
+</td>
+<td style="text-align: right;">
+14.3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   COLOR 
+</td>
+<td style="text-align: right;">
+42.9
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   NATURALEZA 
+</td>
+<td style="text-align: right;">
+85.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   OTROS 
+</td>
+<td style="text-align: right;">
+28.6
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   #Total cases 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+7
+</td>
+</tr>
+</tbody>
+</table>
+<p>Y si esos porcentajes los calculamos sobre las repuestas y no sobre los casos …</p>
+<pre class="r"><code>df %&gt;%
+    tab_cols(total()) %&gt;%
+    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6:7), &quot;OTROS&quot;=c(5,8:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
+    tab_stat_cpct_responses(total_row_position=&quot;below&quot;) %&gt;%
+    tab_pivot() %&gt;%
+    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<td colspan="2" style="text-align: left;">
+Tabla nº 1
+</td>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" style="font-weight: 900;">
+ Likes de la crema 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color azul 
+</td>
+<td style="text-align: right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Color verde 
+</td>
+<td style="text-align: right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Mar, playa 
+</td>
+<td style="text-align: right;">
+14.8
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Cielo 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Sol, luz 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Olor 
+</td>
+<td style="text-align: right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Infancia 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Densidad 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Capacidad de aplicación 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   Absorción 
+</td>
+<td style="text-align: right;">
+3.7
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   COLOR 
+</td>
+<td style="text-align: right;">
+11.1
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   NATURALEZA 
+</td>
+<td style="text-align: right;">
+22.2
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   OTROS 
+</td>
+<td style="text-align: right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   #Total responses 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+27
+</td>
+</tr>
+</tbody>
+</table>
+<p>Nótese que aunque el cçalculo del NET ha variado, este siempre se mantiene en casos y no en respuestas.</p>
+<p>¿En que se diferencia el subototal del NET? <code>subtotal</code> agrega una fila al conjunto de categorías, sin embargo <code>net</code> reemplaza las categorías con su valor agregado o neto. Esa es la diferencia. En nuestra jerga, también podemos decir que el término NET se utiliza más con las multrespuesta, y el término subtotal se asocia más con respuetas agregadas de tipo simple.</p>
+<p>Veamos como quedaría la misma tabla, pero usando la función NET en lugar de SUBOTOTAL.</p>
+<pre class="r"><code>df %&gt;%
+    tab_cols(total()) %&gt;%
+    tab_cells(net(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6), &quot;OTROS&quot;=c(5,7:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
+    tab_stat_cases(total_row_position=&quot;below&quot;) %&gt;%
+    tab_pivot() %&gt;%
+    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<td colspan="2" style="text-align: left;">
+Tabla nº 1
+</td>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey; font-weight: 900; border-top: 2px solid grey; text-align: center;">
+</th>
+<th style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+ #Total 
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" style="font-weight: 900;">
+ Likes de la crema 
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   COLOR 
+</td>
+<td style="text-align: right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   NATURALEZA 
+</td>
+<td style="text-align: right;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align: left;">
+   OTROS 
+</td>
+<td style="text-align: right;">
+4
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid grey; text-align: left;">
+   #Total cases 
+</td>
+<td style="border-bottom: 2px solid grey; text-align: right;">
+7
+</td>
+</tr>
+</tbody>
+</table>
+<p>Y hasta aquí un post más.</p>

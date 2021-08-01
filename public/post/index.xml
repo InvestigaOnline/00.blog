@@ -6,7 +6,17 @@
     <description>Recent content in Entradas on Blog InvestigaOnline.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es-es</language>
-    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 24 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>net y subtotal en una crosstab</title>
+      <link>/2021/07/24/net_subtotal_top_bottom/</link>
+      <pubDate>Sat, 24 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/07/24/net_subtotal_top_bottom/</guid>
+      <description>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo post con una explicación de cuatro elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:
+NetSubtotalNormalmente los encontramos por separado. Pero vamos primero con contextualizar su uso, porque se supone que debes saber qué significan. Ya sabéis de esa tendencia en los cargos de decisión a dar una gran relevancia a términos que después son muy sencillos.</description>
+    </item>
+    
     <item>
       <title>los españoles y la/s vacuna/s</title>
       <link>/2021/01/27/vaccine/</link>
