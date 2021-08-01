@@ -1,12 +1,12 @@
 {
-    "id": "96CA9CE0",
-    "path": "~/R/r-data/92.expss/010_nets y subtotales.R",
-    "project_path": null,
-    "type": "r_source",
-    "hash": "236918983",
+    "id": "234C6AAF",
+    "path": "~/R/r-projects/00.blog00/content/post/net_subtotal_top_bottom.Rmd",
+    "project_path": "content/post/net_subtotal_top_bottom.Rmd",
+    "type": "r_markdown",
+    "hash": "2917242220",
     "contents": "",
     "dirty": false,
-    "created": 1627802797385.0,
+    "created": 1627117185595.0,
     "source_on_save": false,
     "relative_order": 2,
     "properties": {
@@ -14,11 +14,11 @@
         "Source": "Source"
     },
     "folds": "",
-    "lastKnownWriteTime": 1562315750,
+    "lastKnownWriteTime": 1627833732,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1562315750,
+    "last_content_update": 1627833732961,
     "read_only": false,
     "read_only_alternatives": []
 }

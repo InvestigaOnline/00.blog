@@ -53,7 +53,13 @@ Como puedes observar, los valores entre paréntesis en el listado de _verbatim_ 
 
 ```{r fig.cap='tabla de datos', comment=NA}
 library(expss)
-df <- data.frame(id=seq(1:7), p56_1=c(1,2,3,3,1,7,8), p56_2=c(2,3,7,5,6,NA,9), p56_3=c(3,4,NA,NA,NA,NA,10))
+df <-
+  data.frame(
+    id = seq(1:7),
+    p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+    p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+    p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+  )
 df
 ```
 
@@ -68,16 +74,17 @@ Usaremos ahora nuestro paquete de referencia `expss` que ya hemos cargado en el 
 ```{r}
 var_lab(df$p56_1) <- 'Likes de la crema' #etiquetamos la variable
 val_lab(df$p56_1) <- c(
-    'Color azul'=1,
-    'Color verde'=2,
-    'Mar, playa' =3,
-    'Cielo'=4,
-    'Infancia'=5,
-    'Sol, luz' =6,
-    'Olor'=7,
-    'Densidad'=8,
-    'Capacidad de aplicación'=9,
-    'Absorción'=10) #etiquetamos los valores de la variable
+  'Color azul' = 1,
+  'Color verde' = 2,
+  'Mar, playa' = 3,
+  'Cielo' = 4,
+  'Infancia' = 5,
+  'Sol, luz' = 6,
+  'Olor' = 7,
+  'Densidad' = 8,
+  'Capacidad de aplicación' = 9,
+  'Absorción' = 10
+) #etiquetamos los valores de la variable
 df %>% tab_cells(mrset_f(p56_)) %>% tab_stat_cases() %>% tab_pivot() %>% as.datatable_widget() # hacemos un marginal de frecuencias
 ```
 
@@ -85,11 +92,20 @@ Nótese que en la tabla de frecuencias el resultados son 7 casos, aunque la suma
 
 ```{r}
 df %>%
-    tab_cols(total()) %>%
-    tab_cells(subtotal(mrset_f(p56_), "COLOR"=c(1:2), "NATURALEZA"=c(3:4,6), "OTROS"=c(5,7:10), position="bottom", new_label="range")) %>%
-    tab_stat_cases(total_row_position="below") %>%
-    tab_pivot() %>%
-    set_caption("Tabla nº 1")
+  tab_cols(total()) %>%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      "COLOR" = c(1:2),
+      "NATURALEZA" = c(3:4, 6),
+      "OTROS" = c(5, 7:10),
+      position = "bottom",
+      new_label = "range"
+    )
+  ) %>%
+  tab_stat_cases(total_row_position = "below") %>%
+  tab_pivot() %>%
+  set_caption("Tabla nº 1")
 ```
 
 Nótese que los NET aparecen al final por el uso del modificador `position`. Pero me parece más importante que veamos un detalle. Si sumamos el valor en marginal de _color azul_ y _color verde_ la frecuencia sería 4, pero sin embargo el NET de _COLOR_ suma 3. ¿Por qué?, Esto es debido a que los NET se muestran en función de los casos y no tiene en cuenta la multi-respuesta. Se leería como que hay tres casos (personas en este caso) que han respondido atributos de tipo _like_ que hacen referencia al _COLOR_.
@@ -98,22 +114,40 @@ Sin embargo si obtenemos la misma tabla en porcentajes...
 
 ```{r}
 df %>%
-    tab_cols(total()) %>%
-    tab_cells(subtotal(mrset_f(p56_), "COLOR"=c(1:2), "NATURALEZA"=c(3:4,6:7), "OTROS"=c(5,8:10), position="bottom", new_label="range")) %>%
-    tab_stat_cpct(total_row_position="below") %>%
-    tab_pivot() %>%
-    set_caption("Tabla nº 1")
+  tab_cols(total()) %>%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      "COLOR" = c(1:2),
+      "NATURALEZA" = c(3:4, 6:7),
+      "OTROS" = c(5, 8:10),
+      position = "bottom",
+      new_label = "range"
+    )
+  ) %>%
+  tab_stat_cpct(total_row_position = "below") %>%
+  tab_pivot() %>%
+  set_caption("Tabla nº 2")
 ```
 
 Y si esos porcentajes los calculamos sobre las repuestas y no sobre los casos ...
 
 ```{r}
 df %>%
-    tab_cols(total()) %>%
-    tab_cells(subtotal(mrset_f(p56_), "COLOR"=c(1:2), "NATURALEZA"=c(3:4,6:7), "OTROS"=c(5,8:10), position="bottom", new_label="range")) %>%
-    tab_stat_cpct_responses(total_row_position="below") %>%
-    tab_pivot() %>%
-    set_caption("Tabla nº 1")
+  tab_cols(total()) %>%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      "COLOR" = c(1:2),
+      "NATURALEZA" = c(3:4, 6:7),
+      "OTROS" = c(5, 8:10),
+      position = "bottom",
+      new_label = "range"
+    )
+  ) %>%
+  tab_stat_cpct_responses(total_row_position = "below") %>%
+  tab_pivot() %>%
+  set_caption("Tabla nº 3")
 ```
 
 Nótese que aunque el cçalculo del NET ha variado, este siempre se mantiene en casos y no en respuestas.
@@ -125,11 +159,20 @@ Veamos como quedaría la misma tabla, pero usando la función NET en lugar de SU
 
 ```{r}
 df %>%
-    tab_cols(total()) %>%
-    tab_cells(net(mrset_f(p56_), "COLOR"=c(1:2), "NATURALEZA"=c(3:4,6), "OTROS"=c(5,7:10), position="bottom", new_label="range")) %>%
-    tab_stat_cases(total_row_position="below") %>%
-    tab_pivot() %>%
-    set_caption("Tabla nº 1")
+  tab_cols(total()) %>%
+  tab_cells(
+    net(
+      mrset_f(p56_),
+      "COLOR" = c(1:2),
+      "NATURALEZA" = c(3:4, 6),
+      "OTROS" = c(5, 7:10),
+      position = "bottom",
+      new_label = "range"
+    )
+  ) %>%
+  tab_stat_cases(total_row_position = "below") %>%
+  tab_pivot() %>%
+  set_caption("Tabla nº 4")
 ```
 
 Y hasta aquí un post más. 

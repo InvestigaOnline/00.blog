@@ -132,9 +132,15 @@ if (!doNotTrack) {
 <p>Como puedes observar, los valores entre paréntesis en el listado de <em>verbatim</em> se corresponden con los valores (códigos) del libro de claves. Vamos a poner esta información en un <em>dataframe</em> y tratamos de procesar la información que de ello deriva.</p>
 <pre class="r"><code>library(expss)</code></pre>
 <pre><code>
-Use &#39;expss_output_viewer()&#39; to display tables in the RStudio Viewer.
+Use &#39;expss_output_rnotebook()&#39; to display tables inside R Notebooks.
  To return to the console output, use &#39;expss_output_default()&#39;.</code></pre>
-<pre class="r"><code>df &lt;- data.frame(id=seq(1:7), p56_1=c(1,2,3,3,1,7,8), p56_2=c(2,3,7,5,6,NA,9), p56_3=c(3,4,NA,NA,NA,NA,10))
+<pre class="r"><code>df &lt;-
+  data.frame(
+    id = seq(1:7),
+    p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+    p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+    p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+  )
 df</code></pre>
 <pre><code>  id p56_1 p56_2 p56_3
 1  1     1     2     3
@@ -153,26 +159,36 @@ df</code></pre>
 </ul>
 <pre class="r"><code>var_lab(df$p56_1) &lt;- &#39;Likes de la crema&#39; #etiquetamos la variable
 val_lab(df$p56_1) &lt;- c(
-    &#39;Color azul&#39;=1,
-    &#39;Color verde&#39;=2,
-    &#39;Mar, playa&#39; =3,
-    &#39;Cielo&#39;=4,
-    &#39;Infancia&#39;=5,
-    &#39;Sol, luz&#39; =6,
-    &#39;Olor&#39;=7,
-    &#39;Densidad&#39;=8,
-    &#39;Capacidad de aplicación&#39;=9,
-    &#39;Absorción&#39;=10) #etiquetamos los valores de la variable
+  &#39;Color azul&#39; = 1,
+  &#39;Color verde&#39; = 2,
+  &#39;Mar, playa&#39; = 3,
+  &#39;Cielo&#39; = 4,
+  &#39;Infancia&#39; = 5,
+  &#39;Sol, luz&#39; = 6,
+  &#39;Olor&#39; = 7,
+  &#39;Densidad&#39; = 8,
+  &#39;Capacidad de aplicación&#39; = 9,
+  &#39;Absorción&#39; = 10
+) #etiquetamos los valores de la variable
 df %&gt;% tab_cells(mrset_f(p56_)) %&gt;% tab_stat_cases() %&gt;% tab_pivot() %&gt;% as.datatable_widget() # hacemos un marginal de frecuencias</code></pre>
 <div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","data":[["Likes de la crema","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción","#Total cases"],[2,2,4,1,1,1,2,1,1,1,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
 <p>Nótese que en la tabla de frecuencias el resultados son 7 casos, aunque la suma de respuestas es mayor que 7. Recordemos, es multi-respuesta. Estamos hablando de los <em>NETS</em> y ha llegado la hora de definirlos con el ejemplo que nos ocupa. En nuestro ejemplo un NET sería la agregación de todas las menciones realizadas un factor de nivel mayor. Sobre el ejemplo, si quisiéramos crear una agregación de mayor nivel como por ejemplo COLOR, deberíamos sumar los códigos. Y eso vamos a hacer en nuestro script…</p>
 <pre class="r"><code>df %&gt;%
-    tab_cols(total()) %&gt;%
-    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6), &quot;OTROS&quot;=c(5,7:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
-    tab_stat_cases(total_row_position=&quot;below&quot;) %&gt;%
-    tab_pivot() %&gt;%
-    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6),
+      &quot;OTROS&quot; = c(5, 7:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cases(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 1&quot;)</code></pre>
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
 <thead>
 <tr>
@@ -311,16 +327,25 @@ Tabla nº 1
 <p>Nótese que los NET aparecen al final por el uso del modificador <code>position</code>. Pero me parece más importante que veamos un detalle. Si sumamos el valor en marginal de <em>color azul</em> y <em>color verde</em> la frecuencia sería 4, pero sin embargo el NET de <em>COLOR</em> suma 3. ¿Por qué?, Esto es debido a que los NET se muestran en función de los casos y no tiene en cuenta la multi-respuesta. Se leería como que hay tres casos (personas en este caso) que han respondido atributos de tipo <em>like</em> que hacen referencia al <em>COLOR</em>.</p>
 <p>Sin embargo si obtenemos la misma tabla en porcentajes…</p>
 <pre class="r"><code>df %&gt;%
-    tab_cols(total()) %&gt;%
-    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6:7), &quot;OTROS&quot;=c(5,8:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
-    tab_stat_cpct(total_row_position=&quot;below&quot;) %&gt;%
-    tab_pivot() %&gt;%
-    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6:7),
+      &quot;OTROS&quot; = c(5, 8:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cpct(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 2&quot;)</code></pre>
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
 <thead>
 <tr>
 <td colspan="2" style="text-align: left;">
-Tabla nº 1
+Tabla nº 2
 </td>
 </tr>
 <tr>
@@ -453,16 +478,25 @@ Tabla nº 1
 </table>
 <p>Y si esos porcentajes los calculamos sobre las repuestas y no sobre los casos …</p>
 <pre class="r"><code>df %&gt;%
-    tab_cols(total()) %&gt;%
-    tab_cells(subtotal(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6:7), &quot;OTROS&quot;=c(5,8:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
-    tab_stat_cpct_responses(total_row_position=&quot;below&quot;) %&gt;%
-    tab_pivot() %&gt;%
-    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6:7),
+      &quot;OTROS&quot; = c(5, 8:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cpct_responses(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 3&quot;)</code></pre>
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
 <thead>
 <tr>
 <td colspan="2" style="text-align: left;">
-Tabla nº 1
+Tabla nº 3
 </td>
 </tr>
 <tr>
@@ -597,16 +631,25 @@ Tabla nº 1
 <p>¿En que se diferencia el subototal del NET? <code>subtotal</code> agrega una fila al conjunto de categorías, sin embargo <code>net</code> reemplaza las categorías con su valor agregado o neto. Esa es la diferencia. En nuestra jerga, también podemos decir que el término NET se utiliza más con las multrespuesta, y el término subtotal se asocia más con respuetas agregadas de tipo simple.</p>
 <p>Veamos como quedaría la misma tabla, pero usando la función NET en lugar de SUBOTOTAL.</p>
 <pre class="r"><code>df %&gt;%
-    tab_cols(total()) %&gt;%
-    tab_cells(net(mrset_f(p56_), &quot;COLOR&quot;=c(1:2), &quot;NATURALEZA&quot;=c(3:4,6), &quot;OTROS&quot;=c(5,7:10), position=&quot;bottom&quot;, new_label=&quot;range&quot;)) %&gt;%
-    tab_stat_cases(total_row_position=&quot;below&quot;) %&gt;%
-    tab_pivot() %&gt;%
-    set_caption(&quot;Tabla nº 1&quot;)</code></pre>
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    net(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6),
+      &quot;OTROS&quot; = c(5, 7:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cases(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 4&quot;)</code></pre>
 <table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
 <thead>
 <tr>
 <td colspan="2" style="text-align: left;">
-Tabla nº 1
+Tabla nº 4
 </td>
 </tr>
 <tr>
