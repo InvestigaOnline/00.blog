@@ -52,7 +52,7 @@ Esto es un pequeño ejemplo de respuestas abiertas que posteriormente deberían 
 Como puedes observar, los valores entre paréntesis en el listado de _verbatim_ se corresponden con los valores (códigos) del libro de claves. Vamos a poner esta información en un _dataframe_ y tratamos de procesar la información que de ello deriva.
 
 ```{r fig.cap='tabla de datos', comment=NA}
-library(expss)
+suppressMessages(library(expss))
 df <-
   data.frame(
     id = seq(1:7),
@@ -85,7 +85,11 @@ val_lab(df$p56_1) <- c(
   'Capacidad de aplicación' = 9,
   'Absorción' = 10
 ) #etiquetamos los valores de la variable
-df %>% tab_cells(mrset_f(p56_)) %>% tab_stat_cases() %>% tab_pivot() %>% as.datatable_widget() # hacemos un marginal de frecuencias
+df %>% 
+  tab_cells(mrset_f(p56_)) %>% 
+  tab_stat_cases() %>% 
+  tab_pivot() %>% 
+  as.datatable_widget() # hacemos un marginal de frecuencias
 ```
 
 Nótese que en la tabla de frecuencias el resultados son 7 casos, aunque la suma de respuestas es mayor que 7. Recordemos, es multi-respuesta. Estamos hablando de los *NETS* y ha llegado la hora de definirlos con el ejemplo que nos ocupa. En nuestro ejemplo un NET sería la agregación de todas las menciones realizadas un factor de nivel mayor. Sobre el ejemplo, si quisiéramos crear una agregación de mayor nivel como por ejemplo COLOR,  deberíamos sumar los códigos. Y eso vamos a hacer en nuestro script...
@@ -105,7 +109,8 @@ df %>%
   ) %>%
   tab_stat_cases(total_row_position = "below") %>%
   tab_pivot() %>%
-  set_caption("Tabla nº 1")
+  set_caption("Tabla nº 1") %>%
+  as.datatable_widget()
 ```
 
 Nótese que los NET aparecen al final por el uso del modificador `position`. Pero me parece más importante que veamos un detalle. Si sumamos el valor en marginal de _color azul_ y _color verde_ la frecuencia sería 4, pero sin embargo el NET de _COLOR_ suma 3. ¿Por qué?, Esto es debido a que los NET se muestran en función de los casos y no tiene en cuenta la multi-respuesta. Se leería como que hay tres casos (personas en este caso) que han respondido atributos de tipo _like_ que hacen referencia al _COLOR_.
@@ -127,7 +132,8 @@ df %>%
   ) %>%
   tab_stat_cpct(total_row_position = "below") %>%
   tab_pivot() %>%
-  set_caption("Tabla nº 2")
+  set_caption("Tabla nº 2") %>%
+  as.datatable_widget()
 ```
 
 Y si esos porcentajes los calculamos sobre las repuestas y no sobre los casos ...
@@ -147,7 +153,8 @@ df %>%
   ) %>%
   tab_stat_cpct_responses(total_row_position = "below") %>%
   tab_pivot() %>%
-  set_caption("Tabla nº 3")
+  set_caption("Tabla nº 3") %>%
+  as.datatable_widget()
 ```
 
 Nótese que aunque el cçalculo del NET ha variado, este siempre se mantiene en casos y no en respuestas.
@@ -172,7 +179,8 @@ df %>%
   ) %>%
   tab_stat_cases(total_row_position = "below") %>%
   tab_pivot() %>%
-  set_caption("Tabla nº 4")
+  set_caption("Tabla nº 4") %>%
+  as.datatable_widget()
 ```
 
 Y hasta aquí un post más. 
