@@ -1,0 +1,97 @@
+---
+title: "análisis de datos factorizados con wordcloud"
+author: "Gil-Saura, Roberto"
+date: '2021-08-23'
+slug: wordcloud_factor
+categories:
+- analisis
+- R
+tags: expss
+output: 
+  html_document: 
+    theme: simplex
+    fig_caption: yes
+    df_print: kable
+editor_options: 
+  chunk_output_type: console
+---
+
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+
+
+<p>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo <em>post</em> con la explicación de cómo hacer un wordclou y no con palabras sino con las etiquetas de una variable factorizada o etiquetada desde SPSS.</p>
+<p>Veamos los siguientes datos utilizados en el post anteriory mostramos los datos.</p>
+<pre class="r"><code>suppressMessages(library(expss))
+suppressMessages(library(wordcloud))
+df &lt;-
+  data.frame(
+    id = seq(1:7),
+    p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+    p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+    p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+  )</code></pre>
+<p>Mostramos el <code>dataframe</code>creado …</p>
+<pre class="r"><code>df</code></pre>
+<pre><code>  id p56_1 p56_2 p56_3
+1  1     1     2     3
+2  2     2     3     4
+3  3     3     7    NA
+4  4     3     5    NA
+5  5     1     6    NA
+6  6     7    NA    NA
+7  7     8     9    10</code></pre>
+<p>Etiquetamos ahora los datos que como bien sabes, vienen del proceso de codificación.</p>
+<pre class="r"><code>var_lab(df$p56_1) &lt;- &#39;Likes de la crema&#39; #etiquetamos la variable
+val_lab(df$p56_1) &lt;- c(
+  &#39;Color azul&#39; = 1,
+  &#39;Color verde&#39; = 2,
+  &#39;Mar, playa&#39; = 3,
+  &#39;Cielo&#39; = 4,
+  &#39;Infancia&#39; = 5,
+  &#39;Sol, luz&#39; = 6,
+  &#39;Olor&#39; = 7,
+  &#39;Densidad&#39; = 8,
+  &#39;Capacidad de aplicación&#39; = 9,
+  &#39;Absorción&#39; = 10)</code></pre>
+<p>Y hacemos la tabla utilizando la librería <code>expss</code>. Mostramos su resultado.</p>
+<pre class="r"><code>tab &lt;- as.data.frame(df %&gt;% 
+                         tab_cells(&#39;|&#39;=unvr(mrset_f(p56_))) %&gt;% 
+                         tab_total_row_position(total_row_position=&#39;none&#39;) %&gt;%
+                         tab_stat_cases() %&gt;% 
+                         tab_pivot())
+as.datatable_widget(tab)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10"],["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción"],[2,2,4,1,1,1,2,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>row_labels<\/th>\n      <th>#Total<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1: tabla de frecuencias
+</p>
+</div>
+<p>Podemos observar que en la tabla resultante, las etiquetas cotntienen espacios en blanco y símbolos de puntuación. Normalmente una nube de palabras eliminaría estas expresiones y mostraría palabra a plaabra. Pero nosotros no queremos que sea así y por eso queremos obtener la nube directamente sobre esta tabla de marginales.</p>
+<p>Nuestro gráfico de nube sólo necesita los datos que tenemo. Por facilitar las cosas, en lugar de mantener los nombres de columna que originalmente nos da la tabla, vamos a cambiarlos y a llamarlos <code>word</code> para la expresión a mostrar y <code>freq</code>para el peso o freuencia de esa expresión en el mapa.</p>
+<pre class="r"><code>colnames(tab) &lt;- c(&#39;word&#39;, &#39;freq&#39;) # cambiamos los nombres a las columnas y hacemos el gráfico
+set.seed(311265) #fijamos la semilla de aleatorización para que el mapa si no cambian los datos siempre salga igual.
+wordcloud(words = tab$word, 
+          freq = tab$freq, 
+          min.freq = 1,           
+          max.words=200, 
+          random.order=FALSE, 
+          rot.per=0.15,            
+          colors=brewer.pal(8, &quot;Set1&quot;)) #hacemos la nube más simple</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<img src="/post/wordcloud_factor_files/figure-html/unnamed-chunk-5-1.png" alt="nube de factores o etiquetas" width="672" />
+<p class="caption">
+Figure 2: nube de factores o etiquetas
+</p>
+</div>
+<p>Y ya está. Nuestra nube representa ahora los datos factorizados o como me gusta a mi decirlo etiquetados. Ya ves que simple y qué ilustrativo.</p>
+<p>Nuestro próximo post generará un gráfico denominado <code>sunburnst</code> que presenta muy bien y de forma muy gráfica los net y/o subtotales para un sólo vistazo.</p>

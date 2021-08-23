@@ -2,7 +2,7 @@
 title: "net y subtotal en una crosstab"
 author: "Gil-Saura, Roberto"
 date: '2021-07-24'
-slug: net_subtotal_top_bottom
+slug: net_subtotal
 categories:
 - analisis
 - R
@@ -14,7 +14,7 @@ output:
     df_print: kable
 ---
 
-Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo _post_ con una explicación de cuatro elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:
+Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo _post_ con una explicación de dos elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:
 
 * Net
 * Subtotal
