@@ -1,21 +1,90 @@
----
-title: "análisis de datos factorizados con wordcloud"
-author: "Gil-Saura, Roberto"
-date: '2021-08-23'
-slug: wordcloud_factor
-categories:
-- analisis
-- R
-tags: expss
-output: 
-  html_document: 
-    theme: simplex
-    fig_caption: yes
-    df_print: kable
-editor_options: 
-  chunk_output_type: console
----
+<!DOCTYPE html>
+<html lang="es-es">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.0" />
 
+
+<title>análisis de datos factorizados con wordcloud - Blog InvestigaOnline.com</title>
+<meta property="og:title" content="análisis de datos factorizados con wordcloud - Blog InvestigaOnline.com">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">Acerca de</a></li>
+    
+    <li><a href="https://www.investigaonline.com">InvestigaOnline.com</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">análisis de datos factorizados con wordcloud</h1>
+
+    
+    <span class="article-date">2021-08-23</span>
+    
+
+    <div class="article-content">
+      
 <script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 <script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
 <script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
@@ -41,7 +110,7 @@ df &lt;-
     p56_2 = c(2, 3, 7, 5, 6, NA, 9),
     p56_3 = c(3, 4, NA, NA, NA, NA, 10)
   )</code></pre>
-<p>Mostramos el <code>dataframe</code> creado …</p>
+<p>Mostramos el <code>dataframe</code>creado …</p>
 <pre class="r"><code>datatable(df)</code></pre>
 <div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
 <div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
@@ -97,3 +166,60 @@ Figure 3: nube de factores o etiquetas
 </div>
 <p>Y ya está. Nuestra nube representa ahora los datos factorizados o como me gusta a mi decirlo etiquetados. Ya ves que simple y qué ilustrativo.</p>
 <p>Nuestro próximo post generará un gráfico denominado <code>sunburnst</code> que presenta muy bien y de forma muy gráfica los net y/o subtotales para un sólo vistazo.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </body>
+</html>
+

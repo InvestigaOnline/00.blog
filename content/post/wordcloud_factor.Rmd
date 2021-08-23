@@ -23,6 +23,8 @@ Veamos los siguientes datos utilizados en el post anteriory mostramos los datos.
 ```{r fig.cap='generación de datos', comment=NA}
 suppressMessages(library(expss))
 suppressMessages(library(wordcloud))
+suppressMessages(library(DT))
+
 df <-
   data.frame(
     id = seq(1:7),
@@ -32,10 +34,10 @@ df <-
   )
 ```
 
-Mostramos el `dataframe`creado ...
+Mostramos el `dataframe` creado ...
 
 ```{r fig.cap='tabla de datos', comment=NA}
-df
+datatable(df)
 ```
 
 Etiquetamos ahora los datos que como bien sabes, vienen del proceso de codificación.
@@ -58,12 +60,13 @@ val_lab(df$p56_1) <- c(
 Y hacemos la tabla utilizando la librería `expss`. Mostramos su resultado.
 
 ```{r fig.cap='tabla de frecuencias', comment=NA}
-tab <- as.data.frame(df %>% 
+tab <- df %>% 
                          tab_cells('|'=unvr(mrset_f(p56_))) %>% 
                          tab_total_row_position(total_row_position='none') %>%
                          tab_stat_cases() %>% 
-                         tab_pivot())
+                         tab_pivot()
 as.datatable_widget(tab)
+tab <- as.data.frame(tab)
 ```
 
 Podemos observar que en la tabla resultante, las etiquetas cotntienen espacios en blanco y símbolos de puntuación. Normalmente una nube de palabras eliminaría estas expresiones y mostraría palabra a plaabra. Pero nosotros no queremos que sea así y por eso queremos obtener la nube directamente sobre esta tabla de marginales.

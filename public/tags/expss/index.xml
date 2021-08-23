@@ -6,11 +6,22 @@
     <description>Recent content in expss on Blog InvestigaOnline.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es-es</language>
-    <lastBuildDate>Sat, 24 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/expss/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 23 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/expss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>análisis de datos factorizados con wordcloud</title>
+      <link>/2021/08/23/wordcloud_factor/</link>
+      <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/08/23/wordcloud_factor/</guid>
+      <description>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo post con la explicación de cómo hacer un wordclou y no con palabras sino con las etiquetas de una variable factorizada o etiquetada desde SPSS.
+Veamos los siguientes datos utilizados en el post anteriory mostramos los datos.
+suppressMessages(library(expss))suppressMessages(library(wordcloud))suppressMessages(library(DT))df &amp;lt;-data.frame(id = seq(1:7),p56_1 = c(1, 2, 3, 3, 1, 7, 8),p56_2 = c(2, 3, 7, 5, 6, NA, 9),p56_3 = c(3, 4, NA, NA, NA, NA, 10))Mostramos el dataframecreado …</description>
+    </item>
+    
     <item>
       <title>Entradas</title>
       <link>/post/</link>
-      <pubDate>Sat, 24 Jul 2021 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
       
       <guid>/post/</guid>
       <description></description>
@@ -18,11 +29,11 @@
     
     <item>
       <title>net y subtotal en una crosstab</title>
-      <link>/2021/07/24/net_subtotal_top_bottom/</link>
+      <link>/2021/07/24/net_subtotal/</link>
       <pubDate>Sat, 24 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/2021/07/24/net_subtotal_top_bottom/</guid>
-      <description>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo post con una explicación de cuatro elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:
+      <guid>/2021/07/24/net_subtotal/</guid>
+      <description>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo post con una explicación de dos elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:
 NetSubtotalNormalmente los encontramos por separado. Pero vamos primero con contextualizar su uso, porque se supone que debes saber qué significan. Ya sabéis de esa tendencia en los cargos de decisión a dar una gran relevancia a términos que después son muy sencillos.</description>
     </item>
     

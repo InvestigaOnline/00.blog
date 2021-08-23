@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es-es">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+<title>net y subtotal en una crosstab - Blog InvestigaOnline.com</title>
+<meta property="og:title" content="net y subtotal en una crosstab - Blog InvestigaOnline.com">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">Acerca de</a></li>
+    
+    <li><a href="https://www.investigaonline.com">InvestigaOnline.com</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">7 min read</span>
+    
+
+    <h1 class="article-title">net y subtotal en una crosstab</h1>
+
+    
+    <span class="article-date">2021-07-24</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+
+
+<p>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo <em>post</em> con una explicación de dos elementos que en muchos casos utilizamos en nuestro análisis de datos. Los conceptos a los que me refiero son:</p>
+<ul>
+<li>Net</li>
+<li>Subtotal</li>
+</ul>
+<p>Normalmente los encontramos por separado. Pero vamos primero con contextualizar su uso, porque se supone que debes saber qué significan. Ya sabéis de esa tendencia en los cargos de decisión a dar una gran relevancia a términos que después son muy sencillos. Ya tuvimos un ejemplo de ello con el <a href="https://blog.investigaonline.com/2020/08/16/npsmovil/">NPS</a>.</p>
+<p><strong>¿Qué es un NET?</strong></p>
+<p>El término NET hace referencia a la agrupación de determinados valores (códigos, niveles, factores) de una variable cualitativa en un <em>grupo</em> de nivel superior, cuya frecuencia es el resultado de la suma de las frecuencias de los valores (códigos, niveles o factores) que lo componen.</p>
+<p>Imagina una pregunta en un cuestionario, cualitativa, que hace referencia a los <em>likes</em> y <em>dislikes</em> de un producto determinado. Tomemos los <em>likes</em> y en este caso, los entrevistados responden cosas como:</p>
+<ul>
+<li>su color azul, y verde me atrae, me recuerda el mar (1;2;3)</li>
+<li>es una gama de matices muy atrayente, mar, cielo, todo se une (2;3;4)</li>
+<li>casi huele a mar (3;7)</li>
+<li>me recuerda a mi infancia en el apartamento de la playa (3;5)</li>
+<li>su color azul tiene como reflejos de sol en su superficie, mucha luz (1;6)</li>
+<li>me encanta el olor que deja en mi piel al ser aplicada (7)</li>
+<li>aunque su aspecto es denso, se aplica con una gran facilidad y se absorbe muy rápidamente; me encanta su olor y su color (8;9;10)</li>
+<li>…</li>
+</ul>
+<p>Esto es un pequeño ejemplo de respuestas abiertas que posteriormente deberían ser codificadas. La codificación que reciben genera el siguiente libro de claves</p>
+<ol style="list-style-type: decimal">
+<li>Color azul</li>
+<li>Color verde</li>
+<li>Mar, playa,</li>
+<li>Cielo</li>
+<li>Infancia</li>
+<li>Sol, luz</li>
+<li>Olor</li>
+<li>Densidad</li>
+<li>Capacidad de aplicación</li>
+<li>Absorción</li>
+</ol>
+<p>Como puedes observar, los valores entre paréntesis en el listado de <em>verbatim</em> se corresponden con los valores (códigos) del libro de claves. Vamos a poner esta información en un <em>dataframe</em> y tratamos de procesar la información que de ello deriva.</p>
+<pre class="r"><code>suppressMessages(library(expss))
+df &lt;-
+  data.frame(
+    id = seq(1:7),
+    p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+    p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+    p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+  )
+df</code></pre>
+<pre><code>  id p56_1 p56_2 p56_3
+1  1     1     2     3
+2  2     2     3     4
+3  3     3     7    NA
+4  4     3     5    NA
+5  5     1     6    NA
+6  6     7    NA    NA
+7  7     8     9    10</code></pre>
+<p>Puede observarse que al ser una pregunta de respuesta múltiple, se han requerido hasta tres variables (caso con máximo nº de menciones, 3) para poder recoger toda la información multi-respuesta.</p>
+<p>Usaremos ahora nuestro paquete de referencia <code>expss</code> que ya hemos cargado en el paso anterior, para hacer varias cosas que necesitamos:</p>
+<ul>
+<li>etiquetar la variable</li>
+<li>etiquetar los valores de la variable</li>
+<li>hacer un recuento o tabla marginal</li>
+</ul>
+<pre class="r"><code>var_lab(df$p56_1) &lt;- &#39;Likes de la crema&#39; #etiquetamos la variable
+val_lab(df$p56_1) &lt;- c(
+  &#39;Color azul&#39; = 1,
+  &#39;Color verde&#39; = 2,
+  &#39;Mar, playa&#39; = 3,
+  &#39;Cielo&#39; = 4,
+  &#39;Infancia&#39; = 5,
+  &#39;Sol, luz&#39; = 6,
+  &#39;Olor&#39; = 7,
+  &#39;Densidad&#39; = 8,
+  &#39;Capacidad de aplicación&#39; = 9,
+  &#39;Absorción&#39; = 10
+) #etiquetamos los valores de la variable
+df %&gt;% 
+  tab_cells(mrset_f(p56_)) %&gt;% 
+  tab_stat_cases() %&gt;% 
+  tab_pivot() %&gt;% 
+  as.datatable_widget() # hacemos un marginal de frecuencias</code></pre>
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","data":[["Likes de la crema","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción","#Total cases"],[2,2,4,1,1,1,2,1,1,1,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Nótese que en la tabla de frecuencias el resultados son 7 casos, aunque la suma de respuestas es mayor que 7. Recordemos, es multi-respuesta. Estamos hablando de los <em>NETS</em> y ha llegado la hora de definirlos con el ejemplo que nos ocupa. En nuestro ejemplo un NET sería la agregación de todas las menciones realizadas un factor de nivel mayor. Sobre el ejemplo, si quisiéramos crear una agregación de mayor nivel como por ejemplo COLOR, deberíamos sumar los códigos. Y eso vamos a hacer en nuestro script…</p>
+<pre class="r"><code>df %&gt;%
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6),
+      &quot;OTROS&quot; = c(5, 7:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cases(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 1&quot;) %&gt;%
+  as.datatable_widget()</code></pre>
+<div id="htmlwidget-2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","caption":"<caption>Tabla nº 1<\/caption>","data":[["Likes de la crema","","","","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Sol, luz","Infancia","Olor","Densidad","Capacidad de aplicación","Absorción","COLOR","NATURALEZA","OTROS","#Total cases"],[2,2,4,1,1,1,2,1,1,1,3,5,4,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Nótese que los NET aparecen al final por el uso del modificador <code>position</code>. Pero me parece más importante que veamos un detalle. Si sumamos el valor en marginal de <em>color azul</em> y <em>color verde</em> la frecuencia sería 4, pero sin embargo el NET de <em>COLOR</em> suma 3. ¿Por qué?, Esto es debido a que los NET se muestran en función de los casos y no tiene en cuenta la multi-respuesta. Se leería como que hay tres casos (personas en este caso) que han respondido atributos de tipo <em>like</em> que hacen referencia al <em>COLOR</em>.</p>
+<p>Sin embargo si obtenemos la misma tabla en porcentajes…</p>
+<pre class="r"><code>df %&gt;%
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6:7),
+      &quot;OTROS&quot; = c(5, 8:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cpct(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 2&quot;) %&gt;%
+  as.datatable_widget()</code></pre>
+<div id="htmlwidget-3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","caption":"<caption>Tabla nº 2<\/caption>","data":[["Likes de la crema","","","","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Sol, luz","Olor","Infancia","Densidad","Capacidad de aplicación","Absorción","COLOR","NATURALEZA","OTROS","#Total cases"],[28.6,28.6,57.1,14.3,14.3,28.6,14.3,14.3,14.3,14.3,42.9,85.7,28.6,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Y si esos porcentajes los calculamos sobre las repuestas y no sobre los casos …</p>
+<pre class="r"><code>df %&gt;%
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    subtotal(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6:7),
+      &quot;OTROS&quot; = c(5, 8:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cpct_responses(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 3&quot;) %&gt;%
+  as.datatable_widget()</code></pre>
+<div id="htmlwidget-4" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","caption":"<caption>Tabla nº 3<\/caption>","data":[["Likes de la crema","","","","","","","","","","","","",""],["Color azul","Color verde","Mar, playa","Cielo","Sol, luz","Olor","Infancia","Densidad","Capacidad de aplicación","Absorción","COLOR","NATURALEZA","OTROS","#Total responses"],[7.4,7.4,14.8,3.7,3.7,7.4,3.7,3.7,3.7,3.7,11.1,22.2,7.4,27]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Nótese que aunque el cçalculo del NET ha variado, este siempre se mantiene en casos y no en respuestas.</p>
+<p>¿En que se diferencia el subototal del NET? <code>subtotal</code> agrega una fila al conjunto de categorías, sin embargo <code>net</code> reemplaza las categorías con su valor agregado o neto. Esa es la diferencia. En nuestra jerga, también podemos decir que el término NET se utiliza más con las multrespuesta, y el término subtotal se asocia más con respuetas agregadas de tipo simple.</p>
+<p>Veamos como quedaría la misma tabla, pero usando la función NET en lugar de SUBOTOTAL.</p>
+<pre class="r"><code>df %&gt;%
+  tab_cols(total()) %&gt;%
+  tab_cells(
+    net(
+      mrset_f(p56_),
+      &quot;COLOR&quot; = c(1:2),
+      &quot;NATURALEZA&quot; = c(3:4, 6),
+      &quot;OTROS&quot; = c(5, 7:10),
+      position = &quot;bottom&quot;,
+      new_label = &quot;range&quot;
+    )
+  ) %&gt;%
+  tab_stat_cases(total_row_position = &quot;below&quot;) %&gt;%
+  tab_pivot() %&gt;%
+  set_caption(&quot;Tabla nº 4&quot;) %&gt;%
+  as.datatable_widget()</code></pre>
+<div id="htmlwidget-5" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","caption":"<caption>Tabla nº 4<\/caption>","data":[["Likes de la crema","","",""],["COLOR","NATURALEZA","OTROS","#Total cases"],[3,5,4,7]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"2\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1,2]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 2).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p>Y hasta aquí un post más.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </body>
+</html>
+
