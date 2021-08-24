@@ -388,9 +388,6 @@
 				value: category.name,
 				pos: tick.pos
 			}));
-
-			//update with new text length, since textSetter removes the size caches when text changes. #137
-			tick.label.textPxLength = tick.label.getBBox().width;
 		}
 		
 		// create elements for parent categories
@@ -434,12 +431,8 @@
 
 				label = chart.renderer.text(name, 0, 0, useHTML)
 					.attr(mergedAttrs)
+					.css(mergedCSS)
 					.add(axis.labelGroup);
-
-				//css should only be set for non styledMode configuration. #167
-				if (label && !chart.styledMode) {
-					label.css(mergedCSS);
-				}
 
 				// tick properties
 				tick.startAt = this.pos;

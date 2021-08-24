@@ -1,0 +1,101 @@
+---
+title: "gráficos multinivel: sunburnst y treemap"
+author: "Gil-Saura, Roberto"
+date: '2021-08-24'
+slug: graficos_multinivel
+categories:
+- analisis
+- R
+tags: expss
+output: 
+     html_document: 
+     theme: simplex
+fig_caption: yes
+df_print: kable
+editor_options: 
+     chunk_output_type: console
+---
+     
+Hola de nuevo. Esta vez fue rápido. De nuevo por aquí. El siguiente post, siguiendo con la línea de simplicidad nos ayudará a conocer una funcionalidad del paquete `highcharter` que nos permite preparar los datos para una gráfico multinivel, que nosotros vamos a aplicar a la representación de un gráfico los NET y los literales desagrupados.
+
+Volvemos a utilizar los datos de los dos últimos post. Muy sencillos.
+
+```{r fig.cap='generación de datos', comment=NA}
+suppressMessages(library(highcharter))
+suppressMessages(library(DT))
+suppressMessages(library(dplyr))
+suppressMessages(library(expss))
+df <-
+     data.frame(
+          id = seq(1:7),
+          p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+          p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+          p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+     )
+```
+
+Mostramos el `dataframe` creado ...
+
+```{r fig.cap='tabla de datos', comment=NA}
+datatable(df)
+```
+
+Etiquetamos ahora los datos que como bien sabes, vienen del proceso de codificación que se pudo ver en el anterior [post](https://blog.investigaonline.com/2021/07/24/net_subtotal/).
+
+```{r fig.cap='etiquetado de datos', comment=NA}
+var_lab(df$p56_1) <- 'Likes de la crema' #etiquetamos la variable
+val_lab(df$p56_1) <- c(
+     'Color azul' = 1,
+     'Color verde' = 2,
+     'Mar, playa' = 3,
+     'Cielo' = 4,
+     'Infancia' = 5,
+     'Sol, luz' = 6,
+     'Olor' = 7,
+     'Densidad' = 8,
+     'Capacidad de aplicación' = 9,
+     'Absorción' = 10)
+```
+
+Y hacemos la tabla utilizando la librería `expss`. Mostramos su resultado.
+
+```{r fig.cap='tabla de frecuencias', comment=NA}
+tab <- df %>% 
+     tab_cells('|'=unvr(mrset_f(p56_))) %>% 
+     tab_total_row_position(total_row_position='none') %>%
+     tab_stat_cases() %>% 
+     tab_pivot()
+as.datatable_widget(tab)
+```
+
+Nos trabajamos un poco el resultado para conseguir tener un dataframe con la información de los dos niveles: el NET y el literal desagrupado. Mostramos el objeto `tab` editado para que se aprdecie el cálculo de la variable `group`.
+
+```{r fig.cap='añadiendo la variable de nivel 1 o NET', comment=NA}
+# convertimos la tabla en un dataframe
+tab <- as.data.frame(tab)
+# etiquetamos los nombres de las variables de ese dataframe
+colnames(tab) <- c('label', 'freq')
+# calculamos la variable de grupo
+# rownames(tab) hace referencia al nº de fila en el dataframe
+tab$group <- case_when(rownames(tab) %in% c(1,2) ~ 'COLOR',
+                       rownames(tab) %in% c(3,4,6) ~ 'NATURALEZA',
+                       rownames(tab) %in% c(5,7,8,9,10) ~ 'OTROS')
+datatable(tab)
+# jerarquizamos los datos tal como los necesita el gráfico sunburnst
+# de Highcharter en el objeto dout
+dout <- data_to_hierarchical(tab, c(group,label), freq)
+```
+
+Y aquí tenemos el resultado ...
+
+```{r fig.cap='Gráfico multinivel o _sunburnst_', comment=NA}
+hchart(dout, type = "sunburst")
+```
+
+Y sin hacer nada más, también esta segunda forma de presentación ...elt()
+
+```{r fig.cap='Gráfico multinivel o _treemap_', comment=NA}
+hchart(dout, type = "treemap")
+```
+
+No hay más. Es así de simple, pero en los dos casos gráficos muy vistosos, como todos los que permite `highcharter` sobre la base de Highcharts.
