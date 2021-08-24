@@ -1,5 +1,5 @@
 ---
-title: "gráficos multinivel: sunburnst y treemap"
+title: "gráficos multinivel: sunburst y treemap"
 author: "Gil-Saura, Roberto"
 date: '2021-08-24'
 slug: graficos_multinivel
@@ -81,7 +81,7 @@ tab$group <- case_when(rownames(tab) %in% c(1,2) ~ 'COLOR',
                        rownames(tab) %in% c(3,4,6) ~ 'NATURALEZA',
                        rownames(tab) %in% c(5,7,8,9,10) ~ 'OTROS')
 datatable(tab)
-# jerarquizamos los datos tal como los necesita el gráfico sunburnst
+# jerarquizamos los datos tal como los necesita el gráfico sunburst
 # de Highcharter en el objeto dout
 dout <- data_to_hierarchical(tab, c(group,label), freq)
 ```
