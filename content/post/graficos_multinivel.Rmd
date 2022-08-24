@@ -95,7 +95,8 @@ hchart(dout, type = "sunburst")
 Y sin hacer nada más, también esta segunda forma de presentación ...elt()
 
 ```{r fig.cap='Gráfico multinivel o _treemap_', comment=NA}
-hchart(dout, type = "treemap")
+hchart(dout, type = "treemap") %>% 
+    hc_tooltip(pointFormat = "<span  style='color: {series.color}'> {series.name} <b>{point.y}</b><br/></span>")
 ```
 
 No hay más. Es así de simple, pero en los dos casos gráficos muy vistosos, como todos los que permite `highcharter` sobre la base de Highcharts.

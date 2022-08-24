@@ -6,7 +6,25 @@
     <description>Recent content in expss on Blog InvestigaOnline.com</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es-es</language>
-    <lastBuildDate>Mon, 23 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/expss/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 24 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/expss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Entradas</title>
+      <link>/post/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/post/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gráficos multinivel: sunburst y treemap</title>
+      <link>/2021/08/24/graficos_multinivel/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/08/24/graficos_multinivel/</guid>
+      <description>Hola de nuevo. Esta vez fue rápido. De nuevo por aquí. El siguiente post, siguiendo con la línea de simplicidad nos ayudará a conocer una funcionalidad del paquete highcharter que nos permite preparar los datos para una gráfico multinivel, que nosotros vamos a aplicar a la representación de un gráfico los NET y los literales desagrupados.</description>
+    </item>
+    
     <item>
       <title>análisis de datos factorizados con wordcloud</title>
       <link>/2021/08/23/wordcloud_factor/</link>
@@ -15,16 +33,7 @@
       <guid>/2021/08/23/wordcloud_factor/</guid>
       <description>Hola de nuevo. Como siempre hemos tardado mucho, pero aquí dejamos este nuevo post con la explicación de cómo hacer un wordclou y no con palabras sino con las etiquetas de una variable factorizada o etiquetada desde SPSS.
 Veamos los siguientes datos utilizados en el post anteriory mostramos los datos.
-suppressMessages(library(expss))suppressMessages(library(wordcloud))suppressMessages(library(DT))df &amp;lt;-data.frame(id = seq(1:7),p56_1 = c(1, 2, 3, 3, 1, 7, 8),p56_2 = c(2, 3, 7, 5, 6, NA, 9),p56_3 = c(3, 4, NA, NA, NA, NA, 10))Mostramos el dataframecreado …</description>
-    </item>
-    
-    <item>
-      <title>Entradas</title>
-      <link>/post/</link>
-      <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/post/</guid>
-      <description></description>
+suppressMessages(library(expss))suppressMessages(library(wordcloud))suppressMessages(library(DT))df &amp;lt;-data.frame(id = seq(1:7),p56_1 = c(1, 2, 3, 3, 1, 7, 8),p56_2 = c(2, 3, 7, 5, 6, NA, 9),p56_3 = c(3, 4, NA, NA, NA, NA, 10))Mostramos el dataframe creado …</description>
     </item>
     
     <item>

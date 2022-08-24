@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es-es">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.79.0" />
+
+
+<title>gráficos multinivel: sunburst y treemap - Blog InvestigaOnline.com</title>
+<meta property="og:title" content="gráficos multinivel: sunburst y treemap - Blog InvestigaOnline.com">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">Acerca de</a></li>
+    
+    <li><a href="https://www.investigaonline.com">InvestigaOnline.com</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">gráficos multinivel: sunburst y treemap</h1>
+
+    
+    <span class="article-date">2021-08-24</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/datatables-binding/datatables.js"></script>
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/rmarkdown-libs/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/dt-core/js/jquery.dataTables.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<script src="/rmarkdown-libs/proj4js/proj4.js"></script>
+<link href="/rmarkdown-libs/highcharts/css/motion.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/highcharts/highcharts.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-3d.js"></script>
+<script src="/rmarkdown-libs/highcharts/highcharts-more.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/stock.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/map.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/annotations.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/drilldown.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/item-series.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/offline-exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/overlapping-datalabels.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/exporting.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/export-data.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/funnel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/heatmap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/treemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sankey.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dependency-wheel.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/organization.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/solid-gauge.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/streamgraph.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/sunburst.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/vector.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/wordcloud.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/xrange.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/tilemap.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/venn.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/gantt.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/timeline.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/parallel-coordinates.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/bullet.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/coloraxis.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/dumbbell.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/lollipop.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/series-label.js"></script>
+<script src="/rmarkdown-libs/highcharts/plugins/motion.js"></script>
+<script src="/rmarkdown-libs/highcharts/custom/reset.js"></script>
+<script src="/rmarkdown-libs/highcharts/modules/boost.js"></script>
+<script src="/rmarkdown-libs/highchart-binding/highchart.js"></script>
+
+
+<p>Hola de nuevo. Esta vez fue rápido. De nuevo por aquí. El siguiente post, siguiendo con la línea de simplicidad nos ayudará a conocer una funcionalidad del paquete <code>highcharter</code> que nos permite preparar los datos para una gráfico multinivel, que nosotros vamos a aplicar a la representación de un gráfico los NET y los literales desagrupados.</p>
+<p>Volvemos a utilizar los datos de los dos últimos post. Muy sencillos.</p>
+<pre class="r"><code>suppressMessages(library(highcharter))
+suppressMessages(library(DT))
+suppressMessages(library(dplyr))
+suppressMessages(library(expss))
+df &lt;-
+     data.frame(
+          id = seq(1:7),
+          p56_1 = c(1, 2, 3, 3, 1, 7, 8),
+          p56_2 = c(2, 3, 7, 5, 6, NA, 9),
+          p56_3 = c(3, 4, NA, NA, NA, NA, 10)
+     )</code></pre>
+<p>Mostramos el <code>dataframe</code> creado …</p>
+<pre class="r"><code>datatable(df)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<div id="htmlwidget-1" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7"],[1,2,3,4,5,6,7],[1,2,3,3,1,7,8],[2,3,7,5,6,null,9],[3,4,null,null,null,null,10]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>id<\/th>\n      <th>p56_1<\/th>\n      <th>p56_2<\/th>\n      <th>p56_3<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1: tabla de datos
+</p>
+</div>
+<p>Etiquetamos ahora los datos que como bien sabes, vienen del proceso de codificación que se pudo ver en el anterior <a href="https://blog.investigaonline.com/2021/07/24/net_subtotal/">post</a>.</p>
+<pre class="r"><code>var_lab(df$p56_1) &lt;- &#39;Likes de la crema&#39; #etiquetamos la variable
+val_lab(df$p56_1) &lt;- c(
+     &#39;Color azul&#39; = 1,
+     &#39;Color verde&#39; = 2,
+     &#39;Mar, playa&#39; = 3,
+     &#39;Cielo&#39; = 4,
+     &#39;Infancia&#39; = 5,
+     &#39;Sol, luz&#39; = 6,
+     &#39;Olor&#39; = 7,
+     &#39;Densidad&#39; = 8,
+     &#39;Capacidad de aplicación&#39; = 9,
+     &#39;Absorción&#39; = 10)</code></pre>
+<p>Y hacemos la tabla utilizando la librería <code>expss</code>. Mostramos su resultado.</p>
+<pre class="r"><code>tab &lt;- df %&gt;% 
+     tab_cells(&#39;|&#39;=unvr(mrset_f(p56_))) %&gt;% 
+     tab_total_row_position(total_row_position=&#39;none&#39;) %&gt;%
+     tab_stat_cases() %&gt;% 
+     tab_pivot()
+as.datatable_widget(tab)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<div id="htmlwidget-2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"filter":"none","class":"stripe hover cell-border row-border order-column compact","data":[["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción"],[2,2,4,1,1,1,2,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        \n      <\/th>\n      <th rowspan=\"1\" colspan=\"1\">\n        <style type=\"text/css\">th { text-align: center; } <\/style>\n        <style type=\"text/css\">th {border: 1px solid #DDD}<\/style>\n        #Total\n      <\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"paging":false,"searching":false,"sorting":false,"ordering":false,"bFilter":false,"bInfo":false,"columnDefs":[{"className":"dt-head-left","targets":[0,1]}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'text-align':'right'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+<p class="caption">
+Figure 2: tabla de frecuencias
+</p>
+</div>
+<p>Nos trabajamos un poco el resultado para conseguir tener un dataframe con la información de los dos niveles: el NET y el literal desagrupado. Mostramos el objeto <code>tab</code> editado para que se aprdecie el cálculo de la variable <code>group</code>.</p>
+<pre class="r"><code># convertimos la tabla en un dataframe
+tab &lt;- as.data.frame(tab)
+# etiquetamos los nombres de las variables de ese dataframe
+colnames(tab) &lt;- c(&#39;label&#39;, &#39;freq&#39;)
+# calculamos la variable de grupo
+# rownames(tab) hace referencia al nº de fila en el dataframe
+tab$group &lt;- case_when(rownames(tab) %in% c(1,2) ~ &#39;COLOR&#39;,
+                       rownames(tab) %in% c(3,4,6) ~ &#39;NATURALEZA&#39;,
+                       rownames(tab) %in% c(5,7,8,9,10) ~ &#39;OTROS&#39;)
+datatable(tab)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
+<div id="htmlwidget-3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10"],["Color azul","Color verde","Mar, playa","Cielo","Infancia","Sol, luz","Olor","Densidad","Capacidad de aplicación","Absorción"],[2,2,4,1,1,1,2,1,1,1],["COLOR","COLOR","NATURALEZA","NATURALEZA","OTROS","NATURALEZA","OTROS","OTROS","OTROS","OTROS"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>label<\/th>\n      <th>freq<\/th>\n      <th>group<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 3: añadiendo la variable de nivel 1 o NET
+</p>
+</div>
+<pre class="r"><code># jerarquizamos los datos tal como los necesita el gráfico sunburst
+# de Highcharter en el objeto dout
+dout &lt;- data_to_hierarchical(tab, c(group,label), freq)</code></pre>
+<p>Y aquí tenemos el resultado …</p>
+<pre class="r"><code>hchart(dout, type = &quot;sunburst&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-6"></span>
+<div id="htmlwidget-4" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"data":[{"name":"NATURALEZA","id":"naturaleza","color":"#7cb5ec","level":1},{"name":"COLOR","id":"color","color":"#434348","level":1},{"name":"OTROS","id":"otros","color":"#90ed7d","level":1},{"name":"Mar, playa","id":"naturaleza_mar,_playa","parent":"naturaleza","value":4,"level":2},{"name":"Color azul","id":"color_color_azul","parent":"color","value":2,"level":2},{"name":"Color verde","id":"color_color_verde","parent":"color","value":2,"level":2},{"name":"Olor","id":"otros_olor","parent":"otros","value":2,"level":2},{"name":"Cielo","id":"naturaleza_cielo","parent":"naturaleza","value":1,"level":2},{"name":"Sol, luz","id":"naturaleza_sol,_luz","parent":"naturaleza","value":1,"level":2},{"name":"Absorción","id":"otros_absorción","parent":"otros","value":1,"level":2},{"name":"Capacidad de aplicación","id":"otros_capacidad_de_aplicación","parent":"otros","value":1,"level":2},{"name":"Densidad","id":"otros_densidad","parent":"otros","value":1,"level":2},{"name":"Infancia","id":"otros_infancia","parent":"otros","value":1,"level":2}],"type":"sunburst"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 4: Gráfico multinivel o <em>sunburnst</em>
+</p>
+</div>
+<p>Y sin hacer nada más, también esta segunda forma de presentación …elt()</p>
+<pre class="r"><code>hchart(dout, type = &quot;treemap&quot;) %&gt;% 
+    hc_tooltip(pointFormat = &quot;&lt;span  style=&#39;color: {series.color}&#39;&gt; {series.name} &lt;b&gt;{point.y}&lt;/b&gt;&lt;br/&gt;&lt;/span&gt;&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-7"></span>
+<div id="htmlwidget-5" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5">{"x":{"hc_opts":{"chart":{"reflow":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"data":[{"name":"NATURALEZA","id":"naturaleza","color":"#7cb5ec","level":1},{"name":"COLOR","id":"color","color":"#434348","level":1},{"name":"OTROS","id":"otros","color":"#90ed7d","level":1},{"name":"Mar, playa","id":"naturaleza_mar,_playa","parent":"naturaleza","value":4,"level":2},{"name":"Color azul","id":"color_color_azul","parent":"color","value":2,"level":2},{"name":"Color verde","id":"color_color_verde","parent":"color","value":2,"level":2},{"name":"Olor","id":"otros_olor","parent":"otros","value":2,"level":2},{"name":"Cielo","id":"naturaleza_cielo","parent":"naturaleza","value":1,"level":2},{"name":"Sol, luz","id":"naturaleza_sol,_luz","parent":"naturaleza","value":1,"level":2},{"name":"Absorción","id":"otros_absorción","parent":"otros","value":1,"level":2},{"name":"Capacidad de aplicación","id":"otros_capacidad_de_aplicación","parent":"otros","value":1,"level":2},{"name":"Densidad","id":"otros_densidad","parent":"otros","value":1,"level":2},{"name":"Infancia","id":"otros_infancia","parent":"otros","value":1,"level":2}],"type":"treemap"}],"tooltip":{"pointFormat":"<span  style='color: {series.color}'> {series.name} <b>{point.y}<\/b><br/><\/span>"}},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 5: Gráfico multinivel o <em>treemap</em>
+</p>
+</div>
+<p>No hay más. Es así de simple, pero en los dos casos gráficos muy vistosos, como todos los que permite <code>highcharter</code> sobre la base de Highcharts.</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-6815741-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+  </body>
+</html>
+
