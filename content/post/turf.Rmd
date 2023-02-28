@@ -20,9 +20,9 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA)
 options(width=9999)
 ```
 
-Hacía tiempo que no escuchaba hablar de él, pero ha vuelto a mi. TURF es un acrónimo anglosajón para Total Unduplicated Reach and Frequency. Este análisis es ampliamente utilizado en el mundo del marketing desde hace años, ya que nos da pistas y repsuestas a dos situaciones muy habituales en el análisis de cartera de productos, aunque su uso se puede extender a otros ámbitos muy diferentes:
+Hacía tiempo que no escuchaba hablar de él, pero ha vuelto a mi. TURF es un acrónimo anglosajón para Total Unduplicated Reach and Frequency. Este análisis es ampliamente utilizado en el mundo del marketing desde hace años, ya que nos da pistas y respuestas a dos situaciones muy habituales en el análisis de cartera de productos, aunque su uso se puede extender a otros ámbitos muy diferentes:
 
-- Por un lado, cuando una compañía dispone de una cartera de productos que quiere extender, pero teniendo las limitaciones de producción o prespuestarias que le impiden desarrollar sólo algunos de ellos, TURF les ayudará aleegir cuáles son los más apropiados.
+- Por un lado, cuando una compañía dispone de una cartera de productos que quiere extender, pero teniendo las limitaciones de producción o presupuestarias que le impiden desarrollar sólo algunos de ellos, TURF les ayudará a elegir cuáles son los más apropiados.
 
 - otro ámbito de trabajo podría ser en qué medios de comunicación debe enfocarse una empresa al distribuir contenido; ¿en qué redes publicitarias y medios debería centrarse?
 
@@ -48,7 +48,7 @@ Un estudio TURF requiere un conjunto de datos que consiste en:
 
 - Para cada persona, las mediciones del atractivo de tres o más alternativas diferentes, que generalmente son productos o contenido. Estas mediciones pueden ser de escalas de calificación, datos históricos de compra, MaxDiff o utilidades conjuntas o predicciones de preferencias.
 
-En nuestro caso, la base de datos [enlace](bubble_gum_flavors.xlsx) es una hoja de cálculo EXCEL con 712 registros (713 filas) y dispone de 15 columnas (primera fila), donde la primera columna es el id (identificador) del individuo la segunda el peso del individuo en la muestra (representatividad de la pobalación) y el resto son las diferentes alternativas de producto en la cartera de producto de una empresa fabricante de goma de mascar, las 11 siguientes son las diferentes alternativas testadas en un hall test y por último edad y género del individuo. En nuestro caso el peso es en todos los casos igual a 1, de forma que ningún individuo pondera más que otro. No ha existido equilibraje de la muestra.
+En nuestro caso, la base de datos [enlace](bubble_gum_flavors.xlsx) es una hoja de cálculo EXCEL con 712 registros (713 filas) y dispone de 15 columnas (primera fila), donde la primera columna es el id (identificador) del individuo la segunda el peso del individuo en la muestra (representatividad de la población) y el resto son las diferentes alternativas de producto en la cartera de producto de una empresa fabricante de goma de mascar, las 11 siguientes son las diferentes alternativas testadas en un hall test y por último edad y género del individuo. En nuestro caso el peso es en todos los casos igual a 1, de forma que ningún individuo pondera más que otro. No ha existido equilibraje de la muestra.
 
 > Un fabricante de chicles estaba vendiendo dos sabores de chicle, Classic y Cola, y decide extender la gama a cuatro sabores.
 Se realizó una encuesta a 712 padres, donde los padres les preguntaron a sus hijos cuál de los 11 sabores les gustaba. Los porcentajes que gustan de cada uno de los sabores se muestran a la derecha. Esto se conoce como alcance total no duplicado, que es un término de la planificación de medios, donde el enfoque se centraba en comprender los medios de comunicación (por ejemplo, qué combinación de cuatro revistas llegaría al mayor número de personas). Por lo general, se llama simplemente "alcance" (**reach**) para abreviar.
@@ -101,7 +101,7 @@ Los datos pueden ser medidos de diferentes formas (que luego se binarizan).
 
 - Los **datos de conjoint analysis** también se pueden usar de la misma manera que con MaxDiff, utilizando niveles de un atributo o productos simulados.
 
-En nuestro caso vamos a realizar un análisis TURF para portfolio de productos que tenga de 4 alternativas. De este modo, veremos que conceptos de resultado se manejan en un TURF. Solo mostraremos las cinco alternativas mejores en base a los resultados.
+En nuestro caso vamos a realizar un análisis TURF para _portfolio_ de productos que tenga de 4 alternativas. De este modo, veremos que conceptos de resultado se manejan en un TURF. Solo mostraremos las cinco alternativas mejores en base a los resultados.
 
 
 ```{r}
@@ -131,7 +131,7 @@ También, ten en cuenta que si bien las dos primeras carteras están muy cerca e
 
 ## Tabla de duplicaciones       
 
-El siguiente paso en el análisis es la tabla de duplicaciones. dado que el conjunto de repsuestas puede tratarse como una variable de tipo múltiple (binarizada) el cruce la variable por sí misma nos revelará todas las duplicaciones realizadas en la muestra entre todos los sabores.
+El siguiente paso en el análisis es la tabla de duplicaciones. dado que el conjunto de respuestas puede tratarse como una variable de tipo múltiple (binarizada) el cruce la variable por sí misma nos revelará todas las duplicaciones realizadas en la muestra entre todos los sabores.
 
 ```{r}
 tab1 <- data %>%
@@ -143,6 +143,7 @@ tab1
 tab1 <- tab1[,-1]
 
 ```
+
 Por otro lado, la diagonal principal de la tabla de duplicaciones, que como puede verse en la tabla inferior es el marginal de la variable múltiple (binarizada) muestra el alcance sobre la muestra de cada sabor por separado.
 
 ```{r}
@@ -155,7 +156,7 @@ tab2
 
 ## Análisis de correspondencias de la tabla de duplicaciones
 
-La tabla de duplicaciones muestra qué porcentaje de la muestra intersecciona o combina entre sí. Sin embargo, esta tabla de contingencia, puede analizarse con un análisis de correspondencias. Este análisis, revela la relaciones que existen entre los distitnos sabores que se presentan. El gráfico resultante se muestra a continuación, con cada burbuja indicando el atractivo de cada alternativa. Cuanto más separadas están las burbujas, menos son sustitutos. Idealmente, queremos elegir alternativas que estén muy separadas. Esto plantea problemas con nuestra cartera actual preferida de Classic + Grape + Strawberry + Cola, con Classic y Grape superpuestos, y Cola está en la misma vecindad.
+La tabla de duplicaciones muestra qué porcentaje de la muestra intersecciona o combina entre sí. Sin embargo, esta tabla de contingencia, puede analizarse con un análisis de correspondencias. Este análisis, revela la relaciones que existen entre los distintos sabores que se presentan. El gráfico resultante se muestra a continuación, con cada burbuja indicando el atractivo de cada alternativa. Cuanto más separadas están las burbujas, menos son sustitutos. Idealmente, queremos elegir alternativas que estén muy separadas. Esto plantea problemas con nuestra cartera actual preferida de Classic + Grape + Strawberry + Cola, con Classic y Grape superpuestos, y Cola está en la misma vecindad.
 
 
 ```{r}
@@ -175,7 +176,7 @@ ggplot(tab4, aes(x=Dim1, y=Dim2, size = z))  +
     
 ## Análisis de componentes principales
 
-El análisis de correspondencia proporciona un gran resumen de los datos. Pero, lo obliga a una trama bidimensional, lo que significa que ofrece algo de información pero no de modo completo. Con un mayor número de alternativas, esto se convierte en un problema grave. De este modo, podemos obtener una comprensión con un enfoque más amplio de la sustitución mediante el uso de análisis de componentes principales. 
+El análisis de correspondencias proporciona un gran resumen de los datos. Pero, lo obliga a una trama bidimensional, lo que significa que ofrece algo de información pero no de modo completo. Con un mayor número de alternativas, esto se convierte en un problema grave. De este modo, podemos obtener una comprensión con un enfoque más amplio de la sustitución mediante el uso de análisis de componentes principales. 
 
 ```{r}
 #analisis de componentes principales (psych)
@@ -183,6 +184,7 @@ data <- data[,c(-1,-2)]
 pcaanalysis <- principal(data, nfactors = 3, rotate='varimax')
 pcaanalysis
 ```
+
 Las cargas para los datos se muestran a continuación y sugieren que hay tres grupos básicos de sabores: ácidos, tradicionales y los sabores de fruta y chocolate. Esto sugiere que deberíamos considerar tener uno de Sour / Orange en nuestro portafolio. Como Sour está más lejos de Strawberry (ver el análisis de correspondencia). Esto respalda aún más la opinión de que Classic + Sour + Strawberry + Cola es la mejor cartera. Los gráficos derivados de este nuevo análisis, nos revelan la estructura subyacente de los datos analizados.
 
 ```{r }
@@ -202,7 +204,7 @@ La forma en que se hace esta pregunta es ejecutar TURF varias veces, y luego cre
 
 Todo parece sugerir que tres o cuatro son probablemente la mayor cantidad de productos que tienen sentido en este ejemplo, pero en última instancia, esta es una compensación que necesita considerar los costos marginales de fabricación, comercialización y distribución de cada producto adicional.
 
-De la misma forma, se debe pensar en las restricciones. No puede ser una combinación cualquiera, sino que los dos sabores básicos de la empresa Classic y Cola deben figurar sí o sí en la combinación, siendo irrenunciable su partcipación el portfolio de prodcutos de la empresa.
+De la misma forma, se debe pensar en las restricciones. No puede ser una combinación cualquiera, sino que los dos sabores básicos de la empresa Classic y Cola deben figurar sí o sí en la combinación, siendo irrenunciable su partcipación el _portfolio_ de prodcutos de la empresa.
 
 ## Iteración del TURF
 
@@ -232,7 +234,7 @@ turf.1b <- round((turf$rchX[[1]]-turf.1a)*100,2)
 turf
 ```
 
-Podemos observar en la tabla anterior que la mejor alternativa para tener mayor **alcance** a elegir es incoporar al portfolio es Strawberry, con un alcance de **`r round(turf$rchX[[1]]*100,2)`%**. Así hemos mejorado un alcance del **`r turf.1b`%**; ¿queremos sólo uno más o dos más?. Dando por buena esta combinación, ¿que aportaría más?
+Podemos observar en la tabla anterior que la mejor alternativa para tener mayor **alcance** a elegir es incorporar al _portfolio_ es Strawberry, con un alcance de **`r round(turf$rchX[[1]]*100,2)`%**. Así hemos mejorado un alcance del **`r turf.1b`%**; ¿queremos sólo uno más o dos más?. Dando por buena esta combinación, ¿que aportaría más?
 
 ```{r}
 turfprods <- turf(data, 11, 4)
@@ -246,14 +248,11 @@ Ya podemos observar que la mejor alternativa sería Sour. Podríamos seguir hast
 
 Espero os haya gustado el post y os pueda ser de utilidad.
 
-
-
-
 ```{r}
 df <- data.frame(z=c(1,2,3,4,5), rchX=c(36.7, 2.9, 3.6, 7.8, 9.2))
 library(highcharter)
 highchart() %>%
-    hc_title(text = "Inrementos de alcance",style = list(fontSize = "2em")) %>% 
+    hc_title(text = "Incrementos de alcance",style = list(fontSize = "2em")) %>% 
     hc_chart(type = 'waterfall') %>% 
     hc_xAxis(categories = df$z) %>% 
     hc_yAxis(min=0,max=100) %>% 
